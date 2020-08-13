@@ -1,0 +1,23 @@
+.custom-avatar{
+    max-width: 128px;
+    max-height: 128px;
+    border-radius: 50%;
+}
+
+.custom-avatar-medium{
+    max-width: 64px;
+    max-height: 64px;
+}
+
+.custom-avatar-mini{
+    max-width: 24px;
+    max-height: 24px;
+}
+
+.custom-avatar-micro{
+    max-width: 20px;
+    max-height: 20px;
+}
+.reduce{
+    font-size: 1.2rem !important;
+}

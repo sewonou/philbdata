@@ -1,0 +1,240 @@
+<div class="menu-mobile menu-activated-on-click color-scheme-dark">
+    <div class="mm-logo-buttons-w">
+        <a class="mm-logo" href="{{ path('homePage') }}"><img src="{{ asset('assets/img/logo.png') }}"><span>PhilbData : Administration</span></a>
+        <div class="mm-buttons">
+            <div class="content-panel-open">
+                <div class="os-icon os-icon-grid-circles"></div>
+            </div>
+            <div class="mobile-menu-trigger">
+                <div class="os-icon os-icon-hamburger-menu-1"></div>
+            </div>
+        </div>
+    </div>
+    <div class="menu-and-user">
+        {% if app.user %}
+        <div class="logged-user-w">
+            <div class="avatar-w">
+                {% if app.user.pictureName %}
+                    <img alt="{{ app.user.login }}" src="{{ vich_uploader_asset(app.user, 'pictureFile') }}">
+                {% else %}
+                    <img alt="{{ app.user.login }}" src="{{ asset('uploads/images/user.png') }}">
+                {% endif %}
+            </div>
+            <div class="logged-user-info-w">
+                <div class="logged-user-name">
+                    {{ app.user.fullName }}
+                </div>
+                <div class="logged-user-role"> 
+                    {{ app.user.office }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <ul class="main-menu">
+            <li class="sub-header">
+                <span>Général</span>
+            </li>
+            <li class="has-sub-menu">
+                <a href="#">
+                    <div class="icon-w">
+                        <div class="os-icon os-icon-layout"></div>
+                    </div>
+                    <span>Tableau de bord</span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="{{ path('homePage') }}">Résumé journalier</a>
+                    </li>
+                    <li>
+                        <a href="#">Résumé périodique périodique</a>
+                    </li>
+                    <li>
+                        <a href="#">Tableau des Performances par zone</a>
+                    </li>
+                    <li>
+                        <a href="#">Tableau financier</a>
+                    </li>
+                    <li>
+                        <a href="#">Tableau des PDV</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=" has-sub-menu">
+                <a href="#">
+                    <div class="icon-w">
+                        <div class="os-icon os-icon-feather"></div>
+                    </div>
+                    <span>Syntaxe</span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="#">Syntaxe flooz</a>
+                    </li>
+                    <li>
+                        <a href="#">Frais de retrait</a>
+                    </li>
+                    <li>
+                        <a href="">Frais de retrait autres pays</a>
+                    </li>
+                    <li>
+                        <a href="#">Grille des commissions</a>
+                    </li>
+                </ul>
+            </li>
+
+
+            <li class="sub-header">
+                <span>Univers</span>
+            </li>
+            <li class=" has-sub-menu">
+                <a href="#">
+                    <div class="icon-w">
+                        <div class="os-icon os-icon-package"></div>
+                    </div>
+                    <span>Transactions</span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="#">Dépôt</a>
+                    </li>
+                    <li>
+                        <a href="#">Retrait</a>
+                    </li>
+                    <li>
+                        <a href="#">Transfert</a>
+                    </li>
+                    <li>
+                        <a href="#">Autres</a>
+                    </li>
+                    <li>
+                        <a href="#">Uploader</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class=" has-sub-menu">
+                <a href="#">
+                    <div class="icon-w">
+                        <div class="os-icon os-icon-life-buoy"></div>
+                    </div>
+                    <span>Gestion de l'univers</span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="#">Les numéros</a>
+                    </li>
+                    <li>
+                        <a href="#">Les Centraux Agents</a>
+                    </li>
+                    <li>
+                        <a href="#">Les PDVs / Commerciaux</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=" has-sub-menu">
+                <a href="#">
+                    <div class="icon-w">
+                        <div class="os-icon os-icon-file-text"></div>
+                    </div>
+                    <span>Gestion des zones</span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="#">Zone</a>
+                    </li>
+                    <li>
+                        <a href="#">Régions</a>
+                    </li>
+                    <li>
+                        <a href="#">Communes</a>
+                    </li>
+                    <li>
+                        <a href="#">Préfectures</a>
+                    </li>
+                    <li>
+                        <a href="#">Cantons</a>
+                    </li>
+                    <li>
+                        <a href="#">Quartiers</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="sub-header">
+                <span>Personnel</span>
+            </li>
+            <li class=" has-sub-menu">
+                <a href="#">
+                    <div class="icon-w">
+                        <div class="os-icon os-icon-users"></div>
+                    </div>
+                    <span>Commerciaux</span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="#">Liste complète</a>
+                    </li>
+                    <li>
+                        <a href="#">Tableaux des Performances</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=" has-sub-menu">
+                <a href="#">
+                    <div class="icon-w">
+                        <div class="os-icon os-icon-mail"></div>
+                    </div>
+                    <span>Gestion des Equipements</span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="#">Matériels de bureaux</a>
+                    </li>
+                    <li>
+                        <a href="#">Matériels de transport</a>
+                    </li>
+                    <li>
+                        <a href="#">Dotation carburant</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=" has-sub-menu">
+                <a href="#">
+                    <div class="icon-w">
+                        <div class="os-icon os-icon-user"></div>
+                    </div>
+                    <span>Utilisateurs</span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="#">Ajouter</a>
+                    </li>
+                    <li>
+                        <a href="#">Les utilisateurs</a>
+                    </li>
+                </ul>
+            </li>
+            <li class=" has-sub-menu">
+                <a href="#">
+                    <div class="icon-w">
+                        <div class="os-icon os-icon-layers"></div>
+                    </div>
+                    <span>Paramètres</span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="#">Paramétrage</a>
+                    </li>
+                    <li>
+                        <a href="#">Profil de SIM Card</a>
+                    </li>
+                    <li>
+                        <a href="#">Segment</a>
+                    </li>
+                    <li>
+                        <a href="#">Les types de transactions</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

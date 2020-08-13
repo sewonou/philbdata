@@ -1,0 +1,56 @@
+<div class="dataTables_paginate">
+    {% set perPage = total/pages %}
+    <div class="row">
+        <div class="col-lg-4">
+            {{ start }} enregistrement sur {{ total }}
+        </div>
+        <div class="col-lg-8 ">
+            <ul class="pagination float-right">
+                <li class="page-item {% if page ==1 %}disabled{% endif %}">
+                    <a class="page-link " href="{{ path(route, {'page' : page-1 }) }}"><i class="fa fa-angle-double-left"></i></a>
+                </li>
+                {% if pages > 5 %}
+                    {% if page != 1 %}
+                        <li><a href="{{ path(route, {'page' : 1 }) }}" class="page-link">1</a></li>
+                    {% endif %}
+                    {% if page >=3 %}
+                    <li class="page-item disabled"><a href="#" class="page-link">...</a></li>
+                    {% endif %}
+                    {% if page != pages %}
+                        {% if page+2 < pages %}
+                        {% for i in page.. page+2 %}
+                            <li  class="page-item {% if page == i %}active{% endif %}">
+                                <a  class="page-link"  href="{{ path(route, {'page' : i }) }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                            <li class="page-item disabled"><a href="#" class="page-link">...</a></li>
+                            <li><a href="{{ path(route, {'page' : pages }) }}" class="page-link">{{ pages }}</a></li>
+                        {% else %}
+                            {% for i in page.. pages %}
+                                <li  class="page-item {% if page == i %}active{% endif %}">
+                                    <a  class="page-link"  href="{{ path(route, {'page' : i }) }}">{{ i }}</a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                        {% for i in page-2.. pages %}
+                            <li  class="page-item {% if page == i %}active{% endif %}">
+                                <a  class="page-link"  href="{{ path(route, {'page' : i }) }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                {% else %}
+                    {% for i in 1 .. pages %}
+                        <li  class="page-item {% if page == i %}active{% endif %}">
+                            <a  class="page-link"  href="{{ path(route, {'page' : i }) }}">{{ i }}</a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+
+                <li  class="page-item {% if page == pages %}disabled{% endif %}">
+                    <a class="page-link " href="{{ path(route, {'page' : page+1}) }}"><i class="fa fa-angle-double-right"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

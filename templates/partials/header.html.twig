@@ -1,0 +1,120 @@
+<div class="top-bar color-scheme-transparent">
+    <div class="top-menu-controls">
+        <div class="messages-notifications os-dropdown-trigger os-dropdown-position-left">
+            <i class="os-icon os-icon-mail-14"></i>
+            <div class="new-messages-count">
+                12
+            </div>
+            <div class="os-dropdown light message-list">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <div class="user-avatar-w">
+                                <img alt="" src="img/avatar1.jpg">
+                            </div>
+                            <div class="message-content">
+                                <h6 class="message-from">
+                                    John Mayers
+                                </h6>
+                                <h6 class="message-title">
+                                    Account Update
+                                </h6>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="user-avatar-w">
+                                <img alt="" src="img/avatar2.jpg">
+                            </div>
+                            <div class="message-content">
+                                <h6 class="message-from">
+                                    Phil Jones
+                                </h6>
+                                <h6 class="message-title">
+                                    Secutiry Updates
+                                </h6>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="user-avatar-w">
+                                <img alt="" src="img/avatar3.jpg">
+                            </div>
+                            <div class="message-content">
+                                <h6 class="message-from">
+                                    Bekky Simpson
+                                </h6>
+                                <h6 class="message-title">
+                                    Vacation Rentals
+                                </h6>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="user-avatar-w">
+                                <img alt="" src="img/avatar4.jpg">
+                            </div>
+                            <div class="message-content">
+                                <h6 class="message-from">
+                                    Alice Priskon
+                                </h6>
+                                <h6 class="message-title">
+                                    Payment Confirmation
+                                </h6>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {% if app.user %}
+        <div class="logged-user-w">
+            <div class="logged-user-i">
+                <div class="avatar-w">
+                    {% if app.user.pictureName %}
+                        <img alt="{{ app.user.login }}" src="{{ vich_uploader_asset(app.user, 'pictureFile') }}">
+                    {% else %}
+                        <img alt="{{ app.user.login }}" src="{{ asset('uploads/images/user.png') }}">
+                    {% endif %}
+                </div>
+                <div class="logged-user-menu color-style-bright">
+                    <div class="logged-user-avatar-info">
+                        <div class="avatar-w">
+                            {% if app.user.pictureName %}
+                                <img alt="{{ app.user.login }}{{ app.user.login }}" src="{{ vich_uploader_asset(app.user, 'pictureFile') }}">
+                            {% else %}
+                                <img alt="" src="{{ asset('uploads/images/user.png') }}">
+                            {% endif %}
+                        </div>
+                        <div class="logged-user-info-w">
+                            <div class="logged-user-name">
+                               {{ app.user.fullName }}
+                            </div>
+                            <div class="logged-user-role">
+                                {{ app.user.office }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-icon">
+                        <i class="os-icon os-icon-wallet-loaded"></i>
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="{{ path('account_index') }}"><i class="os-icon os-icon-cv-2"></i><span>Mon compte</span></a>
+                        </li>
+                        <li>
+                            <a href="{{ path('account_password') }}"><i class="os-icon os-icon-pencil-2"></i><span>Changer mot de passe</span></a>
+                        </li>
+                        <li>
+                            <a href="{{ path('account_logout') }}"><i class="os-icon os-icon-signs-11"></i><span>Déconnexion</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>

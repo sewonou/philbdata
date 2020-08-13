@@ -1,12 +1,92 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>PhilB Data : {% block title %}{% endblock %}</title>
+        <meta content="ie=edge" http-equiv="x-ua-compatible">
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+        <link href="{{ asset('assets/favicon.png') }}" rel="shortcut icon">
+        <link href="{{ asset('assets/favicon.png') }}" rel="apple-touch-icon">
+        <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet" type="text/css">
+        <link href="{{ asset('assets/bower_components/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/bower_components/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/bower_components/dropzone/dist/dropzone.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/bower_components/fullcalendar/dist/fullcalendar.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/bower_components/slick-carousel/slick/slick.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/icon_fonts_assets/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
         {% block stylesheets %}{% endblock %}
+        <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
+
+
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="menu-position-side menu-side-left full-screen">
+        <div class="all-wrapper solid-bg-all">
+            <div class="layout-w">
+                {{ include('partials/mobile_header.html.twig') }}
+                {{ include('partials/nav.html.twig') }}
+                <div class="content-w">
+                    {{ include('partials/header.html.twig') }}
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="#">PHILBDATA : Plateforme de gestion de l'univers de Phil Business SARL</a>
+                        </li>
+                    </ul>
+                    <div class="content-i">
+                        {% for label, messages in app.flashes %}
+                            <div class="container">
+                                <div class="alert alert-{{ label }}">
+                                    {% for message in messages %}
+                                        <button aria-label="Close" class="close" data-dismiss="alert" type="button"><span aria-hidden="true"> &times; </span></button>
+                                        <p>{{ message | raw }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% block body %}{% endblock %}
+                    </div>
+                    <div class="display-type"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <script src="{{ asset('assets/bower_components/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/popper.js/dist/umd/popper.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/moment/moment.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/chart.js/dist/Chart.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/jquery-bar-rating/dist/jquery.barrating.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/ckeditor/ckeditor.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/bootstrap-validator/dist/validator.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/ion.rangeSlider/js/ion.rangeSlider.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/dropzone/dist/dropzone.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/editable-table/mindmup-editabletable.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/fullcalendar/dist/fullcalendar.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/tether/dist/js/tether.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/slick-carousel/slick/slick.min.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/bootstrap/js/dist/util.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/bootstrap/js/dist/alert.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/bootstrap/js/dist/button.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/bootstrap/js/dist/carousel.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/bootstrap/js/dist/collapse.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/bootstrap/js/dist/dropdown.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/bootstrap/js/dist/modal.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/bootstrap/js/dist/tab.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/bootstrap/js/dist/tooltip.js') }}"></script>
+        <script src="{{ asset('assets/bower_components/bootstrap/js/dist/popover.js') }}"></script>
+        <script src="{{ asset('assets/js/dataTables.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('assets/js/demo_customizer.js') }}"></script>
+        <script src="{{ asset('assets/js/main.js') }}"></script>
         {% block javascripts %}{% endblock %}
+        <script src="{{ asset('assets/js/app.js') }}"></script>
+
     </body>
 </html>

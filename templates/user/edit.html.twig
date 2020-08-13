@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un utilisateur{% endblock %}
+{% block body %}
+    <div class="content-box">
+        <div class="element-wrapper">
+
+            <div class="element-box">
+                <h5 class="form-header">
+                    Mofification de l'utilisateur {% if user %}{{ user.fullName }}{% endif %}
+                </h5>
+                {% include 'user/_form.html.twig' %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
