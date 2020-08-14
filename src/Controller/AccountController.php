@@ -17,17 +17,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class AccountController extends AbstractController
 {
     /**
-     * @Route("/account", name="account_index")
-     * @IsGranted("ROLE_USER")
-     */
-    public function index()
-    {
-        return $this->render('account/index.html.twig', [
-
-        ]);
-    }
-
-    /**
      * @Route("/login", name="account_login")
      * @param AuthenticationUtils $utils
      * @return Response
@@ -87,8 +76,5 @@ class AccountController extends AbstractController
             'form' => $form->createView(),
         ]) ;
     }
-
-
-
 
 }

@@ -21,8 +21,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *      message = "Un utilisateur utilise déja ce login",
  * )
  * @ORM\HasLifecycleCallbacks()
+ * @Vich\Uploadable
  */
-class User implements UserInterface
+class User implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id()
@@ -59,9 +60,7 @@ class User implements UserInterface
      * @Assert\NotBlank(message="Le mot de passe n'est pas valide")
      * @Assert\Length(
      *     min = 8,
-     *     max = 50,
-     *     minMessage = "Votre mot de passe ne peut pas contenir moins de 8 caractères",
-     *     maxMessage = "Votre mot de passe ne peut pa contenir plus de 50 caractères")
+     *     minMessage = "Votre mot de passe ne peut pas contenir moins de 8 caractères")
      */
     private $password;
 
@@ -79,15 +78,21 @@ class User implements UserInterface
     private $office;
 
     /**
+     * @Assert\File(
+     *     maxSize="1024k",
+     *     maxSizeMessage="Le fichier ne doit pas excéder 1024Ko"
+     * )
+     * @Vich\UploadableField(mapping="user_image", fileNameProperty="pictureName")
+     * @var File|null
+     */
+    private $pictureFile;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $pictureName;
 
-    /**
-     * @Vich\UploadableField(mapping="user", fileNameProperty="pictureName")
-     * @var File|null
-     */
-    private $pictureFile;
+
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -175,15 +180,15 @@ class User implements UserInterface
         return $this;
     }
 
+
     public function getPictureName(): ?string
     {
         return $this->pictureName;
     }
 
-    public function setPicture(?string $pictureName): self
+    public function setPictureName(?string $pictureName): self
     {
         $this->pictureName = $pictureName;
-
         return $this;
     }
 
@@ -194,10 +199,12 @@ class User implements UserInterface
     public function setPictureFile(?File  $pictureFile = null): void
     {
         $this->pictureFile = $pictureFile;
-
         if (null !== $pictureFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
             $this->updateAt = new \DateTimeImmutable();
         }
+
     }
 
     public function getPictureFile(): ?File
@@ -271,4 +278,29 @@ class User implements UserInterface
     {
         return $this->firstName .' '. $this->lastName;
     }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->login,
+            $this->password,
+            $this->userRoles,
+            $this->firstName,
+            $this->lastName,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->login,
+            $this->password,
+            $this->userRoles,
+            $this->firstName,
+            $this->lastName,
+            ) = unserialize($serialized);
+    }
+
 }

@@ -29,10 +29,10 @@
                     <tr>
                         <td>{{ loop.index0 + 1  }}</td>
                         <td class="cell-image-list">
-                            {% if user.pictureFile %}
-                                <img class="custom-avatar-micro" src="{{ vich_uploader_asset(user, 'pictureFile') }}" alt="{{ user.login }}">
+                            {% if user.pictureName %}
+                                <img class="custom-avatar custom-avatar-mini" src="{{ vich_uploader_asset(user, 'pictureFile') }}" alt="{{ user.login }}">
                             {% else %}
-                                <img class="custom-avatar-micro" src="{{ asset('uploads/images/user.png') }}" alt="{{ user.login }}">
+                                <img class="custom-avatar custom-avatar-mini" src="{{ asset('uploads/images/user.png') }}" alt="{{ user.login }}">
                             {% endif %}
                         </td>
                         <td>{{ user.fullName }}</td>

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Role;
 use App\Entity\User;
+use App\Form\AccountEditType;
 use App\Form\AccountType;
 use App\Form\RoleType;
 use App\Repository\UserRepository;
@@ -13,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
@@ -33,10 +35,11 @@ class UserController extends AbstractController
      * @Route("/users/add", name="user_add")
      * @param Request $request
      * @param EntityManagerInterface $manager
+     * @param UserPasswordEncoderInterface $encoder
      * @return Response
      * @IsGranted("ROLE_ADMIN")
      */
-    public function create(Request $request, EntityManagerInterface $manager)
+    public function create(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
     {
         $user = new User();
         $form = $this->createForm(AccountType::class, $user);
@@ -50,6 +53,9 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_add');
         }
         if($form->isSubmitted() && $form->isValid()){
+            $password = $user->getPassword();
+            $password = $encoder->encodePassword($user, $password);
+            $user->setPassword($password);
             $this->addFlash('success', "L'utilisateur <strong>{$user->getFullName()}</strong> a bien été ajouter");
             $manager->persist($user);
             $manager->flush();
@@ -73,7 +79,7 @@ class UserController extends AbstractController
      */
     public function edit(User $user,Request $request, EntityManagerInterface $manager)
     {
-        $form = $this->createForm(AccountType::class, $user);
+        $form = $this->createForm(AccountEditType::class, $user);
         $role = new Role();
         $roleForm = $this->createForm(RoleType::class, $role);
         $roleForm->handleRequest($request);
