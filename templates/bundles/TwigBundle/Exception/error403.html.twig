@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %} Erreur 403 {% endblock %}
+
+{% block body %}
+    <div class="content-box">
+        <div class="big-error-w">
+            <h1>
+                403
+            </h1>
+            <h5>
+                Accès non authoriser
+            </h5>
+            <h4>
+                Oops, Vous n'avez pas les droits nécessaire.
+                <br>
+                Contacter <a href="mailto:slokossou@philbdata.com">le développeur</a> .
+            </h4>
+            <a href="" class="btn btn-primary">Revenir en lieu sur</a>
+            <a href="{{ path('homePage') }}" class="btn btn-primary">Revenir à l'acceuil</a>
+        </div>
+    </div>
+{% endblock %}

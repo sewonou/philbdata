@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zoning{% endblock %}
+
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <h5 class="form-header">
+                           Détails de la commune {% if town %}{{ town.name }}{% endif %}
+                        </h5>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

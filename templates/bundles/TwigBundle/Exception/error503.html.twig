@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %} Erreur 503 {% endblock %}
+
+{% block body %}
+    <div class="content-box">
+        <div class="big-error-w">
+            <h1>
+                503
+            </h1>
+            <h5>
+                Service temporairement indisponible ou en maintenance.
+            </h5>
+            <h4>
+                Oops, Cette page n'a pas été trouver.
+                <br>
+                Contacter <a href="mailto:slokossou@philbdata.com">le développeur</a> .
+            </h4>
+            <a href="" class="btn btn-primary">Revenir en lieu sur</a>
+            <a href="{{ path('homePage') }}" class="btn btn-primary">Revenir à l'acceuil</a>
+        </div>
+    </div>
+{% endblock %}

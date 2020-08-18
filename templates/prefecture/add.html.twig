@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}Zoning{% endblock %}
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <h5 class="form-header">
+                            Enregistrement d'une nouvelle préfecture
+                        </h5>
+                        {{ include('prefecture/_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

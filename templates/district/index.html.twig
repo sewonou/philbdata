@@ -1,20 +1,51 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DistrictController!{% endblock %}
+{% block title %}Zoning{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/htdocs/philbdata/src/Controller/DistrictController.php'|file_link(0) }}">src/Controller/DistrictController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/htdocs/philbdata/templates/district/index.html.twig'|file_link(0) }}">templates/district/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="content-box">
+        <div class="element-wrapper">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h5 class="element-header">Liste des quartiers</h5>
+                </div>
+                <div class="col-lg-2">
+                    <a href="{{ path('district_add') }}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Ajouter</a>
+                </div>
+            </div>
+            <div class="element-box">
+                <div class="table-responsive">
+                    <table id="dataTable1" width="100%" class="table table-striped table-lightfont">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Commune</th>
+                            <th>Préfecture</th>
+                            <th>Quartier</th>
+                            <th>Dernière mise à jour</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if districts %}
+                            {% for district in districts  %}
+                                <tr>
+                                    <td>{{ loop.index0 + 1  }}</td>
+                                    <td>{% if district.township %}{{ district.township.prefecture.town.name }}{% elseif %}Commune inexistante{% endif %}</td>
+                                    <td>{% if district.township %}{{ district.township.prefecture.name }}{% elseif %}Préfecture inexistante{% endif %}</td>
+                                    <td>{{ district.name }}</td>
+                                    <td>{{ district.updateAt | date("F jS à g:ia") }}</td>
+                                    <td class="row-actions">
+                                        <a href="{{ path('district_edit', {'id': district.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
+                                        <a class="danger" href="{{ path('district_delete', {'id':district.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer le quartier{{ district.name }}')"><i class="os-icon os-icon-ui-15"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}Zoning{% endblock %}
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <h5 class="form-header">
+                            Modification du quartier {% if district %}{{ district.name }}{% endif %}
+                        </h5>
+                        {{ include('district/_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

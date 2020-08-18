@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+{% block title %} Erreur 401 {% endblock %}
+
+{% block body %}
+    <div class="content-box">
+        <div class="big-error-w">
+            <h1>
+                401
+            </h1>
+            <h5>
+                Désolé une erreur c'est produite
+            </h5>
+            <h4>
+                Oops, Utilisateur non authentifié ;
+                <br>
+                Contacter <a href="mailto:slokossou@philbdata.com">le développeur</a> .
+            </h4>
+            <a href="{{ path('account_login') }}" class="btn btn-primary">Connexion</a>
+        </div>
+    </div>
+{% endblock %}
