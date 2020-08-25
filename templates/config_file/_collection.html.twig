@@ -1,0 +1,40 @@
+{% block _config_files_widget %}
+    <p>Ajouter les fichiers de configurations ici</p>
+    {{ form_widget(form) }}
+    <input type="hidden" id="widgets-counter" value="0">
+    <div class="form-buttons-w text-right compact">
+        <button type="button" id="add-file" class="btn btn-secondary"><i class="fa fa-plus"></i>Ajouter un fichier</button>
+    </div>
+{% endblock %}
+
+{% block _config_files_entry_row %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block _config_files_entry_widget %}
+    <div class="element-box" id="block_{{ id }}">
+        <div class="row">
+            <div class="col-lg-11">
+                <div class="row">
+                    <div class="col-lg-4 mt-1">
+                        {{ form_errors(form.createdAt) }}
+                        {{ form_widget(form.createdAt) }}
+                    </div>
+                    <div class="col-lg-4 mt-1">
+                        {{ form_errors(form.category) }}
+                        {{ form_widget(form.category) }}
+                    </div>
+                    <div class="col-lg-4 mt-1">
+                        {{ form_errors(form.file) }}
+                        {{ form_widget(form.file) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-1 mt-1 text-right">
+                <button type="button" data-action="delete" data-target="#block_{{ id }}" class="btn
+                btn-danger"><i class="fa fa-trash"></i></button>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

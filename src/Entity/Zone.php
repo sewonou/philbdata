@@ -6,9 +6,16 @@ use App\Repository\ZoneRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ZoneRepository::class)
+ * @UniqueEntity(
+ *      fields={"name"},
+ *      message = "Une zone a été déja enregistrer avec le même nom",
+ * )
+ * @ORM\HasLifecycleCallbacks()
  */
 class Zone
 {
@@ -21,6 +28,7 @@ class Zone
 
     /**
      * @ORM\Column(type="string", length=155, nullable=true)
+     * @Assert\NotBlank(message="Veuillez saisir un nom de zone valide")
      */
     private $name;
 
@@ -42,6 +50,17 @@ class Zone
     public function __construct()
     {
         $this->regions = new ArrayCollection();
+    }
+
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     *
+     */
+    public function initialized()
+    {
+        $this->updateAt = new \DateTime();
     }
 
     public function getId(): ?int

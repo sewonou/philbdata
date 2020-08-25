@@ -24,6 +24,7 @@ class AccountEditType extends ApplicationType
                 'class' => Role::class,
                 'choice_label' => 'description',
                 'multiple' => true,
+                'placeholder' => "Choisir le niveau d'accès ...",
             ]))
         ;
     }

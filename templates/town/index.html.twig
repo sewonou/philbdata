@@ -6,10 +6,10 @@
     <div class="content-box">
         <div class="element-wrapper">
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-10">
                     <h5 class="element-header">Liste des communes</h5>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-2 text-right">
                     <a href="{{ path('town_add') }}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Ajouter</a>
                 </div>
             </div>
@@ -35,6 +35,7 @@
                                     <td>{{ town.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">
                                         <a href="{{ path('town_edit', {'id': town.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
+                                        <a href="{{ path('zone_show', {'id': zone.id}) }}"><i class="fa fa-eye"></i></a>
                                         <a class="danger" href="{{ path('town_delete', {'id':town.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer la commune{{ town.name }}')"><i class="os-icon os-icon-ui-15"></i></a>
                                     </td>
                                 </tr>

@@ -17,9 +17,10 @@ class TownType extends ApplicationType
         $builder
             ->add('name', TextType::class, $this->getConfiguration('Dénommination', "Saisir la dénommination de la Commune"))
             ->add('region',EntityType::class, $this->getConfiguration("Région", "Choisir la région d'appartenance", [
-                    'class' => Region::class,
-                    'choice_label' => 'name',
-                ]))
+                'class' => Region::class,
+                'choice_label' => 'name',
+                'placeholder' => "Choisir la région d'appartenance ..."
+            ]))
         ;
     }
 

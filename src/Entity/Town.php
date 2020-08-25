@@ -6,9 +6,16 @@ use App\Repository\TownRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TownRepository::class)
+ * @UniqueEntity(
+ *      fields={"name"},
+ *      message = "Un canton est déja enregistrer avec le même nom",
+ * )
+ * @ORM\HasLifecycleCallbacks()
  */
 class Town
 {
@@ -21,11 +28,13 @@ class Town
 
     /**
      * @ORM\Column(type="string", length=155, nullable=true)
+     * @Assert\NotBlank(message="Veuillez saisir un nom de commune valide")
      */
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=Region::class, inversedBy="towns")
+     * @Assert\NotBlank(message="Veuillez choisir une région valide")
      */
     private $region;
 
@@ -47,6 +56,17 @@ class Town
     public function __construct()
     {
         $this->prefectures = new ArrayCollection();
+    }
+
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     *
+     */
+    public function initialized()
+    {
+        $this->updateAt = new \DateTime();
     }
 
     public function getId(): ?int

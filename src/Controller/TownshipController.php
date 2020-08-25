@@ -6,6 +6,7 @@ use App\Entity\Township;
 use App\Form\TownshipType;
 use App\Repository\TownshipRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,11 +40,13 @@ class TownshipController extends AbstractController
      */
     public function create(Request $request):Response
     {
+        $user = $this->getUser();
         $township = new Township();
         $form = $this->createForm(TownshipType::class, $township);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            $township->setAuthor($user);
             $this->addFlash('success', "Le canton <strong>{$township->getName()}</strong> a bien été ajouter.");
             $this->manager->persist($township);
             $this->manager->flush();
@@ -63,10 +66,12 @@ class TownshipController extends AbstractController
      */
     public function edit(Request $request, Township $township):Response
     {
+        $user = $this->getUser();
         $form = $this->createForm(TownshipType::class, $township);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            $township->setAuthor($user);
             $this->addFlash('success', "Le canton <strong>{$township->getName()}</strong> a bien été modifier.");
             $this->manager->persist($township);
             $this->manager->flush();
@@ -83,6 +88,7 @@ class TownshipController extends AbstractController
      * @Route("/townships/{id}/delete", name="township_delete")
      * @param Township $township
      * @return Response
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Township $township):Response
     {

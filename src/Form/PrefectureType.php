@@ -18,6 +18,7 @@ class PrefectureType extends ApplicationType
             ->add('town',EntityType::class, $this->getConfiguration("Commune", "Choisir la commune d'appartenance", [
                 'class' => Town::class,
                 'choice_label' => 'name',
+                'placeholder' => "Choisir la commune d'appartenance ..."
             ]))
         ;
     }

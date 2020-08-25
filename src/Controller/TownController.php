@@ -6,6 +6,7 @@ use App\Entity\Town;
 use App\Form\TownType;
 use App\Repository\TownRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,11 +40,13 @@ class TownController extends AbstractController
      */
     public function create(Request $request):Response
     {
+        $user = $this->getUser();
         $town = new Town();
         $form = $this->createForm(TownType::class, $town);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            $town->setAuthor($user);
             $this->addFlash('success', "La commune <strong>{$town->getName()}</strong> a bien été ajouter.");
             $this->manager->persist($town);
             $this->manager->flush();
@@ -63,10 +66,12 @@ class TownController extends AbstractController
      */
     public function edit(Request $request, Town $town):Response
     {
+        $user = $this->getUser();
         $form = $this->createForm(TownType::class, $town);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            $town->setAuthor($user);
             $this->addFlash('success', "La commune <strong>{$town->getName()}</strong> a bien été modifier.");
             $this->manager->persist($town);
             $this->manager->flush();
@@ -83,6 +88,7 @@ class TownController extends AbstractController
      * @Route("/towns/{id}/delete", name="town_delete")
      * @param Town $town
      * @return Response
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Town $town):Response
     {

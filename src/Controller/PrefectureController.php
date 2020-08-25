@@ -6,6 +6,7 @@ use App\Entity\Prefecture;
 use App\Form\PrefectureType;
 use App\Repository\PrefectureRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,11 +40,13 @@ class PrefectureController extends AbstractController
      */
     public function create(Request $request):Response
     {
+        $user = $this->getUser();
         $prefecture = new Prefecture();
         $form = $this->createForm(PrefectureType::class, $prefecture);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            $prefecture->setAuthor($user);
             $this->addFlash('success', "La préfecture <strong>{$prefecture->getName()}</strong> a bien été ajouter.");
             $this->manager->persist($prefecture);
             $this->manager->flush();
@@ -63,10 +66,12 @@ class PrefectureController extends AbstractController
      */
     public function edit(Request $request, Prefecture $prefecture):Response
     {
+        $user = $this->getUser();
         $form = $this->createForm(PrefectureType::class, $prefecture);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            $prefecture->setAuthor($user);
             $this->addFlash('success', "La préfecture <strong>{$prefecture->getName()}</strong> a bien été modifier.");
             $this->manager->persist($prefecture);
             $this->manager->flush();
@@ -83,6 +88,7 @@ class PrefectureController extends AbstractController
      * @Route("/prefectures/{id}/delete", name="prefecture_delete")
      * @param Prefecture $prefecture
      * @return Response
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Prefecture $prefecture):Response
     {
@@ -94,7 +100,7 @@ class PrefectureController extends AbstractController
     }
 
     /**
-     * @Route("/prefectures/{id}/show", name="prefecure_show")
+     * @Route("/prefectures/{id}/show", name="prefecture_show")
      * @param Prefecture $prefecture
      * @return Response
      */

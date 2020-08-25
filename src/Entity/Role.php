@@ -6,9 +6,16 @@ use App\Repository\RoleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RoleRepository::class)
+ * @UniqueEntity(
+ *      fields={"title"},
+ *      message = "Un role est déja enregistrer avec le même titre",
+ * )
+ * @ORM\HasLifecycleCallbacks()
  */
 class Role
 {
@@ -21,11 +28,13 @@ class Role
 
     /**
      * @ORM\Column(type="string", length=85, nullable=true)
+     * @Assert\NotBlank(message="Veuillez sasir un titre valide")
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=155, nullable=true)
+     * @Assert\NotBlank(message="Veuillez sasir un description valide")
      */
     private $description;
 
@@ -42,6 +51,17 @@ class Role
     public function __construct()
     {
         $this->users = new ArrayCollection();
+    }
+
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     *
+     */
+    public function initialized()
+    {
+        $this->updateAt = new \DateTime();
     }
 
     public function getId(): ?int

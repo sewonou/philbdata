@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% block title %}Sim Card{% endblock %}
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <h5 class="form-header">
+                            {% if simCard is defined %}
+                                Modification du numéro {{ simCard.msisdn }}
+                            {% else %}
+                                Enregistrement d'un nouveau numéro
+                            {% endif %}
+                        </h5>
+                        {{ form_start(form) }}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <fieldset class="form-group">
+                                    {{ form_row(form.profile) }}
+                                    <div class="mt-4">
+                                        {{ form_row(form.isActive) }}
+                                    </div>
+
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset class="form-group">
+                                    {{ form_row(form.master) }}
+                                    {{ form_row(form.msisdn) }}
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="form-buttons-w text-right compact">
+                            <button class="btn btn-primary" type="submit"> Valider</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+

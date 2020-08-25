@@ -6,6 +6,7 @@ use App\Entity\Zone;
 use App\Form\ZoneType;
 use App\Repository\ZoneRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,10 +40,12 @@ class ZoneController extends AbstractController
      */
     public function create(Request $request):Response
     {
+        $user = $this->getUser();
         $zone = new  Zone();
         $form = $this->createForm(ZoneType::class, $zone);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            $zone->setAuthor($user);
             $this->addFlash('success', "La zone <strong>{$zone->getName()}</strong> a bien été ajouter");
             $this->manager->persist($zone);
             $this->manager->flush();
@@ -62,10 +65,11 @@ class ZoneController extends AbstractController
      */
     public function edit(Request $request, Zone $zone):Response
     {
-
+        $user = $this->getUser();
         $form = $this->createForm(ZoneType::class, $zone);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            $zone->setAuthor($user);
             $this->addFlash('success', "La zone <strong>{$zone->getName()}</strong> a bien été modifier");
             $this->manager->persist($zone);
             $this->manager->flush();
@@ -82,6 +86,7 @@ class ZoneController extends AbstractController
      * @Route("/zones/{id}/delete", name="zone_delete")
      * @param Zone $zone
      * @return Response
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Zone $zone):Response
     {

@@ -19,6 +19,7 @@ class DistrictType extends ApplicationType
             ->add('township',EntityType::class, $this->getConfiguration("Canton", "Choisir le canton d'appartenance", [
                 'class' => Township::class,
                 'choice_label' => 'name',
+                'placeholder' => "Choisir le canton d'appartenance..."
             ]))
         ;
     }

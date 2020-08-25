@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SimCard{% endblock %}
+
+{% block body %}
+    <div class="content-box">
+        <div class="element-wrapper">
+            <div class="row">
+                <div class="col-lg-10">
+                    <h5 class="element-header">Liste des numéros flooz</h5>
+                </div>
+                <div class="col-lg-2 text-right">
+                    <a href="{{ path('sim_card_add') }}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Ajouter</a>
+                </div>
+            </div>
+            <div class="element-box">
+                <div class="table-responsive">
+                    <table id="dataTable1" width="100%" class="table table-striped table-lightfont">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Numéro</th>
+                            <th>Profil</th>
+                            <th>Dernier mise à jour</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if simCards %}
+                            {% for simCard in simCards %}
+                                <tr>
+                                    <td>{{ loop.index0 + 1  }}</td>
+                                    <td>{{ simCard.msisdn }}</td>
+                                    <td>{% if simCard.profile %}{{ simCard.profile.title }}{% ellse %}Aucun profil enregistrer{% endif %}</td>
+                                    <td>{{ simCard.updateAt | date("F jS à g:ia") }}</td>
+                                    <td class="row-actions">
+                                        <a href="{{ path('sim_card_edit', {'id': simCard.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
+                                        <a class="danger" href="{{ path('sim_card_delete', {'id':simCard.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer le numéro{{ simCard.msisdn }}')"><i class="os-icon os-icon-ui-15"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

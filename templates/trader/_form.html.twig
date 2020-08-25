@@ -1,0 +1,30 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-lg-6">
+        <fieldset class="form-group">
+            <legend><span>Identification</span></legend>
+                {{ form_row(form.fullName) }}
+                {{ form_row(form.pictureFile) }}
+        </fieldset>
+    </div>
+    <div class="col-lg-6">
+        <fieldset class="form-group">
+            <legend><span>Techniques</span></legend>
+            <div class="row">
+                <div class="col-sm-7">{{ form_row(form.msisdn) }}</div>
+                <div class="col-sm-5 mt-4">{{ form_row(form.isActive) }}</div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-7">{{ form_row(form.region) }}</div>
+                <div class="col-sm-5 mt-4">{{ form_row(form.isTrader) }}</div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+
+<div class="form-buttons-w text-right compact">
+    <button class="btn btn-primary" type="submit"> Valider</button>
+</div>
+{{ form_end(form) }}

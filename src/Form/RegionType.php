@@ -18,6 +18,7 @@ class RegionType extends ApplicationType
             ->add('zone',EntityType::class, $this->getConfiguration("Zone", "Choisir la zone d'appartenance", [
                 'class' => Zone::class,
                 'choice_label' => 'name',
+                'placeholder' => "Choisir la zone d'appartenance ..."
             ]))
         ;
     }

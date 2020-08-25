@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'config_file/_collection.html.twig' %}
+{% block title %}Configuration{% endblock %}
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <h5 class="form-header">
+                            Ajouter des données de configuration
+                        </h5>
+                        {{ include('config_file/_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('assets/js/config.js') }}"></script>
+{% endblock %}
+
+

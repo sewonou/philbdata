@@ -18,6 +18,7 @@ class TownshipType extends ApplicationType
             ->add('prefecture',EntityType::class, $this->getConfiguration("Préfecture", "Choisir la préfecture d'appartenance", [
                 'class' => Prefecture::class,
                 'choice_label' => 'name',
+                'placeholder' => "Choisir la préfecture d'appartenance ...",
             ]))
         ;
     }

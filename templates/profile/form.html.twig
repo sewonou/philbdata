@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block title %}Profil{% endblock %}
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <h5 class="form-header">
+                            {% if profile is defined %}
+                                Modification du profil {{ profile.title }}
+                            {% else %}
+                                Enregistrement d'un nouveau profil
+                            {% endif %}
+                        </h5>
+                        {{ form_start(form) }}
+                        <fieldset class="form-group">
+                            <div class="row">
+                                <div class="col-sm-6">{{ form_row(form.title) }}</div>
+                                <div class="col-sm-6">{{ form_row(form.description) }}</div>
+                            </div>
+                        </fieldset>
+                        <div class="form-buttons-w text-right compact">
+                            <button class="btn btn-primary" type="submit"> Valider</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

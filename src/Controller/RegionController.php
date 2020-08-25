@@ -6,6 +6,7 @@ use App\Entity\Region;
 use App\Form\RegionType;
 use App\Repository\RegionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,10 +42,12 @@ class RegionController extends AbstractController
      */
     public function create(Request $request):Response
     {
+        $user = $this->getUser();
         $region = new Region();
         $form = $this->createForm(RegionType::class, $region);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            $region->setAuthor($user);
             $this->addFlash('success', "La région <strong>{$region->getName()}</strong> a bien été ajouter.");
             $this->manager->persist($region);
             return  $this->redirectToRoute('region');
@@ -63,9 +66,11 @@ class RegionController extends AbstractController
      */
     public function edit(Request $request, Region $region):Response
     {
+        $user = $this->getUser();
         $form = $this->createForm(RegionType::class, $region);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            $region->setAuthor($user);
             $this->addFlash('success', "La région <strong>{$region->getName()}</strong> a bien été modifier.");
             $this->manager->persist($region);
             return  $this->redirectToRoute('region');
@@ -81,6 +86,7 @@ class RegionController extends AbstractController
      * @Route("/regions/{id}/delete", name="region_delete")
      * @param Region $region
      * @return Response
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Region $region):Response
     {

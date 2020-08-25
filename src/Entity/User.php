@@ -110,6 +110,11 @@ class User implements UserInterface, \Serializable
         $this->userRoles = new ArrayCollection();
     }
 
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     *
+     */
     public function initialized()
     {
         $this->updateAt = new \DateTime();

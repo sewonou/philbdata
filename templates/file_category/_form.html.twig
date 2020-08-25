@@ -1,0 +1,12 @@
+{{ form_start(form) }}
+<fieldset class="form-group">
+    <legend><span>Categorie</span></legend>
+    <div class="row">
+        <div class="col-sm-4">{{ form_row(form.slug) }}</div>
+        <div class="col-sm-8">{{ form_row(form.title) }}</div>
+    </div>
+</fieldset>
+<div class="form-buttons-w text-right compact">
+    <button class="btn btn-primary" type="submit"> Valider</button>
+</div>
+{{ form_end(form) }}

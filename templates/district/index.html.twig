@@ -6,10 +6,10 @@
     <div class="content-box">
         <div class="element-wrapper">
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-10">
                     <h5 class="element-header">Liste des quartiers</h5>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg- text-right">
                     <a href="{{ path('district_add') }}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Ajouter</a>
                 </div>
             </div>
@@ -37,6 +37,7 @@
                                     <td>{{ district.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">
                                         <a href="{{ path('district_edit', {'id': district.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
+                                        <a href="{{ path('district_show', {'id': district.id}) }}"><i class="fa fa-eye"></i></a>
                                         <a class="danger" href="{{ path('district_delete', {'id':district.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer le quartier{{ district.name }}')"><i class="os-icon os-icon-ui-15"></i></a>
                                     </td>
                                 </tr>
