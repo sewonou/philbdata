@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use App\Repository\PointofsaleRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PointofsaleRepository::class)
+ *
  */
 class Pointofsale
 {
@@ -19,16 +21,21 @@ class Pointofsale
 
     /**
      * @ORM\OneToOne(targetEntity=SimCard::class, inversedBy="pointofsale", cascade={"persist", "remove"})
+     * @Assert\NotBlank(message="Veuillez chosir un numéro valide.")
+     * @Assert\Valid()
      */
     private $msisdn;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Veuillez saisir un nom valide")
      */
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=District::class)
+     * @Assert\NotBlank(message="Veuillez choisir un quartier valide")
+     * @Assert\Valid()
      */
     private $district;
 
@@ -39,11 +46,13 @@ class Pointofsale
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="La localisation ne doit pas être vide")
      */
     private $position;
 
     /**
      * @ORM\Column(type="string", length=120)
+     *
      */
     private $longitude;
 
@@ -54,18 +63,28 @@ class Pointofsale
 
     /**
      * @ORM\Column(type="string", length=15)
+     * @Assert\Regex(
+     *     pattern="^[0-9]+$",
+     *     htmlPattern="^[0-9]+$",
+     *     message="Le numéro doit être composé de chiffre uniquement"
+     * )
      */
     private $contact;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $isActive;
+    private $isActive = true;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updateAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     */
+    private $author;
 
     public function getId(): ?int
     {
@@ -188,6 +207,18 @@ class Pointofsale
     public function setContact(string $contact): self
     {
         $this->contact = $contact;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

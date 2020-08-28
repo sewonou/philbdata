@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Transaction{% endblock %}
+
+{% block body %}
+    <div class="content-box">
+        <div class="element-wrapper">
+            <div class="row">
+                <div class="col-lg-10">
+                    <h5 class="element-header">Liste des transactions CSIN / AGNT / ...</h5>
+                </div>
+                <div class="col-lg-2 text-right">
+                    {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
+                        <a href="{{ path('trader_add') }}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Ajouter</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="element-box">
+                <div class="table-responsive">
+                    <table id="dataTable1" width="100%" class="table table-striped table-lightfont">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Référence</th>
+                            <th>Date</th>
+                            <th>numéro PDV</th>
+                            <th>Nom PDV</th>
+                            <th>Profil</th>
+                            <th>Montant</th>
+                            <th>Commission dealer</th>
+                            <th>Commission POS</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if sales %}
+                            {% for sale in sales %}
+                                <tr>
+                                    <td>{{ loop.index0 + 1  }}</td>
+                                    <td>{{ sale.refId }}</td>
+                                    <td>{{ sale.transactionAt | date("F jS à g:ia") }}</td>
+                                    <td>{% if sale.msisdn %}{{ sale.msisdn.msisdn }}{% endif %}</td>
+                                    <td>
+                                        {% if sale.msisdn %}
+                                            {% if sale.msidn.pointofsale %}
+                                                {{ sale.msisdn.pointofsale.name }}
+                                            {% elseif sale.msisdn.trader %}
+                                                {{ sale.msisdn.trader.fullName }}
+                                            {% else %}
+                                                Ce numéro est inconnu
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                    <td>{% if sale.msisdn %}{{ sale.msisdn.profile.title }}{% endif %}</td>
+                                    <td>{{ sale.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                    <td>{{ sale.dComm | number_format(0, ',', ' ') }} F CFA</td>
+                                    <td>{{ sale.posComm | number_format(0, ',', ' ') }} F CFA</td>
+                                    <td class="row-actions">
+                                        <a href="{{ path('sale_edit', {'id': sale.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
+                                        <a class="danger" href="{{ path('sale_delete', {'id':sale.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer la transaction{{ sale.refId }} du {{ sale.transactionAt | date("F jS à g:ia") }}')"><i class="os-icon os-icon-ui-15"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

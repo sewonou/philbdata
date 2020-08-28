@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Solde{% endblock %}
+
+{% block body %}
+    <div class="content-box">
+        <div class="element-wrapper">
+            <div class="row">
+                <div class="col-lg-10">
+                    <h5 class="element-header">Liste des transactions CSIN / AGNT / ...</h5>
+                </div>
+                <div class="col-lg-2 text-right">
+                    {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
+                        <a href="{{ path('balance_add') }}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Ajouter</a>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="element-box">
+                <div class="table-responsive">
+                    <table id="dataTable1" width="100%" class="table table-striped table-lightfont">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>RefId</th>
+                            <th>Date</th>
+                            <th>numéro PDV</th>
+                            <th>Nom PDV</th>
+                            <th>Profil</th>
+                            <th>Montant</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if balances %}
+                            {% for balance in balances %}
+                                <tr>
+                                    <td>{{ loop.index0 + 1  }}</td>
+                                    <td>{{ balance.id }}</td>
+                                    <td>{{ balance.executionAt | date("F jS à g:ia") }}</td>
+                                    <td>{% if balance.msisdn %}{{ balance.msisdn.msisdn }}{% endif %}</td>
+                                    <td>
+                                        {% if balance.msisdn %}
+                                            {% if balance.msisdn.pointofsale %}
+                                                {{ balance.msisdn.pointofsale.name }}
+                                            {% elseif balance.msisdn.trader %}
+                                                {{ balance.msisdn.trader.fullName }}
+                                            {% else %}
+                                                Ce numéro est inconnu
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if balance.msisdn %}{{ balance.msisdn.profile.title }}{% endif %}
+                                    </td>
+
+                                    <td>{{ balance.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                    <td class="row-actions">
+                                        <a href="{{ path('balance_edit', {'id': balance.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
+                                        <a class="danger" href="{{ path('balance_delete', {'id':balance.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer la transaction{{ balance.id }} du {{ balance.executionAt | date("F jS à g:ia") }}')"><i class="os-icon os-icon-ui-15"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

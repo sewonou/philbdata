@@ -147,7 +147,6 @@ class ConfigFile
     public function setConfig(?Config $config): self
     {
         $this->config = $config;
-
         return $this;
     }
 

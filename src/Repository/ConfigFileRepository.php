@@ -23,7 +23,7 @@ class ConfigFileRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->innerJoin('c.category', 'fc')
-            ->andWhere('fc.title != :value')
+            ->andWhere('fc.slug != :value')
             ->setParameters(['value'=>$value])
             ->getQuery()
             ->getResult();
@@ -33,7 +33,7 @@ class ConfigFileRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->innerJoin('c.category', 'fc')
-            ->andWhere('fc.title = :value')
+            ->andWhere('fc.slug = :value')
             ->setParameters(['value'=>$value])
             ->getQuery()
             ->getResult();

@@ -60,7 +60,7 @@ class ProfileController extends AbstractController
      * @param Request $request
      * @param Profile $profile
      * @return Response
-     * @Route("/profiles/{id}/edit", name="profile")
+     * @Route("/profiles/{id}/edit", name="profile_edit")
      */
     public function edit(Request $request, Profile $profile):Response
     {
@@ -83,7 +83,7 @@ class ProfileController extends AbstractController
     /**
      * @param Profile $profile
      * @return Response
-     * @Route("/profiles/{id}/delete", name="delete")
+     * @Route("/profiles/{id}/delete", name="profile_delete")
      */
     public function delete(Profile $profile):Response
     {

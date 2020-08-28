@@ -197,4 +197,15 @@ class SimCard
 
         return $this;
     }
+
+    public function getFullName()
+    {
+        $fulName = $this->msisdn .' '. $this->getProfile()->getTitle();
+        if($this->getPointofsale()){
+            $fulName =  $this->msisdn .' '. $this->getPointofsale()->getName() .' '. $this->getProfile()->getTitle();
+        }elseif ($this->getTrader()){
+            $fulName =  $this->msisdn .' '. $this->getTrader()->getName() .' '. $this->getProfile()->getTitle();
+        }
+        return $fulName;
+    }
 }

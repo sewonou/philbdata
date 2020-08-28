@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}Sim Card{% endblock %}
+{% block title %}Point de vente{% endblock %}
 {% block body %}
     <div class="content-box">
         <div class="row">
@@ -7,24 +7,33 @@
                 <div class="element-wrapper">
                     <div class="element-box">
                         <h5 class="form-header">
-                            {% if simCard is defined %}
-                                Modification du numéro {{ simCard.msisdn }}
+                            {% if pointofsale is defined %}
+                                Modification du point de vente {{ pointofsale.name }}
                             {% else %}
-                                Enregistrement d'un nouveau numéro
+                                Enregistrement d'un nouveau point de vente
                             {% endif %}
                         </h5>
                         {{ form_start(form) }}
                         <div class="row">
                             <div class="col-lg-6">
                                 <fieldset class="form-group">
-                                    {{ form_row(form.profile) }}
+                                    <legend><span>Identification</span></legend>
+                                    {{ form_row(form.name) }}
+                                    {{ form_row(form.msisdn) }}
+                                    {{ form_row(form.activity) }}
                                     {{ form_row(form.isActive) }}
                                 </fieldset>
                             </div>
                             <div class="col-lg-6">
                                 <fieldset class="form-group">
-                                    {{ form_row(form.master) }}
-                                    {{ form_row(form.msisdn) }}
+                                    <legend><span>Localisation</span></legend>
+                                    {{ form_row(form.district) }}
+                                    {{ form_row(form.position) }}
+                                    <div class="row">
+                                        <div class="col-sm-6">{{ form_row(form.latitude) }}</div>
+                                        <div class="col-sm-6">{{ form_row(form.longitude) }}</div>
+                                    </div>
+                                    {{ form_row(form.contact) }}
                                 </fieldset>
                             </div>
                         </div>
@@ -39,7 +48,6 @@
         </div>
     </div>
 {% endblock %}
-
 
 
 

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}Transaction{% endblock %}
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <h5 class="form-header">
+                            {% if trade is defined %}
+                                Modification de la transaction GIVE : <strong>{{ trade.refId }}</strong>
+                            {% else %}
+                                Enregistrement d'une nouvel transaction GIVE.
+                            {% endif %}
+                        </h5>
+                        {{ include('trade/_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

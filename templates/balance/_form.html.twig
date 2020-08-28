@@ -1,0 +1,22 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-lg-6">
+        <fieldset class="form-group">
+            <legend><span>Identification</span></legend>
+            {{ form_row(form.msisdn) }}
+            {{ form_row(form.executionAt) }}
+        </fieldset>
+    </div>
+    <div class="col-lg-6">
+        <fieldset class="form-group">
+            <legend><span>Solde</span></legend>
+            {{ form_row(form.amount) }}
+        </fieldset>
+    </div>
+</div>
+
+
+<div class="form-buttons-w text-right compact">
+    <button class="btn btn-primary" type="submit"> Valider</button>
+</div>
+{{ form_end(form) }}

@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Transaction{% endblock %}
+
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
+                <div class="col-sm-12">
+                    <div class="element-wrapper">
+                        <div class="element-box">
+                            <h5 class="form-header">
+                                {% if type is defined %}
+                                    Modification du type : {{ type.title }}
+                                {% else %}
+                                    Enregistrement d'un nouveau type
+                                {% endif %}
+                            </h5>
+                            {{ form_start(form) }}
+                            <legend>
+                            <span>
+                                 {% if type is defined %}
+                                     Modification
+                                 {% else %}
+                                     Nouveau
+                                 {% endif %}
+                            </span>
+                            </legend>
+                            <fieldset class="form-group">
+                                <div class="row">
+                                    <div class="col-lg-4">{{ form_row(form.title) }}</div>
+                                    <div class="col-lg-7">{{ form_row(form.description) }}</div>
+                                    <div class="col-lg-1 text-right mt-4">
+                                        <button class="btn btn-primary" type="submit"> Valider</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <h5 class="element-header">Liste des type de transaction</h5>
+                    <div class="element-box">
+                        <div class="table-responsive">
+                            <table id="dataTable1" width="100%" class="table table-striped table-lightfont">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Titre</th>
+                                    <th>Description</th>
+                                    <th>Dernier mise à jour</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if types %}
+                                    {% for type in types %}
+                                        <tr>
+                                            <td>{{ loop.index0 + 1  }}</td>
+                                            <td>{{ type.title }}</td>
+                                            <td>{{ type.description }}</td>
+                                            <td>{{ type.updateAt | date("F jS à g:ia") }}</td>
+                                            <td class="row-actions">
+                                                {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
+                                                    <a href="{{ path('type_edit', {'id': type.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
+                                                    <a class="danger" href="{{ path('type_delete', {'id': type.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer le type de transaction : {{ type.title }}')"><i class="os-icon os-icon-ui-15"></i></a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}

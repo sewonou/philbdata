@@ -1,20 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PointofsaleController!{% endblock %}
+{% block title %}Point de vente{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/htdocs/philbdata/src/Controller/PointofsaleController.php'|file_link(0) }}">src/Controller/PointofsaleController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/htdocs/philbdata/templates/pointofsale/index.html.twig'|file_link(0) }}">templates/pointofsale/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="content-box">
+        <div class="element-wrapper">
+            <div class="row">
+                <div class="col-lg-10">
+                    <h5 class="element-header">Liste des points de vente </h5>
+                </div>
+                <div class="col-lg-2 text-right">
+                    {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
+                        <a href="{{ path('pointofsale_add') }}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Ajouter</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="element-box">
+                <div class="table-responsive">
+                    <table id="dataTable1" width="100%" class="table table-striped table-lightfont">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Point de vente</th>
+                            <th>Numéro Flooz</th>
+                            <th>Profil</th>
+                            <th>Commune</th>
+                            <th>Quartier</th>
+                            <th>Commercial</th>
+                            <th>Dernier mise à jour</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if pointofsales %}
+                            {% for pointofsale in pointofsales %}
+                                <tr>
+                                    <td>{{ loop.index0 + 1  }}</td>
+                                    <td>{{ pointofsale.name }}</td>
+                                    <td>{% if pointofsale.msisdn %}{{ pointofsale.msisdn.msisdn }}{% endif %}</td>
+                                    <td>{% if pointofsale.msisdn %}{{ pointofsale.msisdn.profile.title }}{% endif %}</td>
+                                    <td>{% if pointofsale.district %}{{ pointofsale.district.township.prefecture.town.name }}{% endif %}</td>
+                                    <td>{% if pointofsale.district %}{{ pointofsale.district.name }}{% endif %}</td>
+                                    <td></td>
+                                    <td>{{ pointofsale.updateAt | date("F jS à g:ia") }}</td>
+                                    <td class="row-actions">
+                                        <a href="{{ path('pointofsale_delete', {'id': pointofsale.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
+                                        <a href="{{ path('pointofsale_show', {'id': pointofsale.id}) }}"><i class="fa fa-eye"></i></a>
+                                        <a class="danger" href="{{ path('pointofsale_delete', {'id': pointofsale.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer le point de vente{{ pointofsale.name }}')"><i class="os-icon os-icon-ui-15"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

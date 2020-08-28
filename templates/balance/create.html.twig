@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %}Transaction{% endblock %}
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <h5 class="form-header">
+                            {% if balance is defined %}
+                                Modification de la solde : <strong>{{ balance.id }}</strong>
+                            {% else %}
+                                Enregistrement d'une nouvelle solde.
+                            {% endif %}
+                        </h5>
+                        {{ include('balance/_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-lg-6">
+        <fieldset class="form-group">
+            <legend><span>Identification</span></legend>
+            {{ form_row(form.refId) }}
+            {{ form_row(form.fromMsisdn) }}
+            {{ form_row(form.toMsisdn) }}
+            <div class="row">
+                <div class="col-sm-6">{{ form_row(form.transactionAt) }}</div>
+                <div class="col-sm-6">{{ form_row(form.type) }}</div>
+            </div>
+
+
+        </fieldset>
+    </div>
+    <div class="col-lg-6">
+        <fieldset class="form-group">
+            <legend><span>Commission</span></legend>
+            {{ form_row(form.amount) }}
+        </fieldset>
+    </div>
+</div>
+
+
+<div class="form-buttons-w text-right compact">
+    <button class="btn btn-primary" type="submit"> Valider</button>
+</div>
+{{ form_end(form) }}
+

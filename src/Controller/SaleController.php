@@ -1,0 +1,100 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Sale;
+use App\Form\SaleType;
+use App\Repository\SaleRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class SaleController extends AbstractController
+{
+    private $manager;
+    private $repository;
+
+    public function __construct(EntityManagerInterface $manager, SaleRepository $repository)
+    {
+        $this->manager = $manager;
+        $this->repository = $repository;
+    }
+
+    /**
+     * @Route("/sales", name="sale")
+     * @return Response
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function index():Response
+    {
+        $sales = $this->repository->findAll();
+        return $this->render('sale/index.html.twig', [
+            'sales' => $sales,
+        ]);
+    }
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route("/sales/add", name="sale_add")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function create(Request $request):Response
+    {
+        $user= $this->getUser();
+        $sale = new Sale();
+        $form = $this->createForm(SaleType::class, $sale);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $sale->setAuthor($user);
+            $this->manager->persist($sale);
+            $this->manager->flush();
+            $this->addFlash('success', "La transaction <strong>{$sale->getRefId()}</strong> a bien été ajouter");
+            return $this->redirectToRoute('sale');
+        }
+        return $this->render('sale/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+
+    }
+
+    /**
+     * @param Request $request
+     * @param Sale $sale
+     * @return Response
+     * @Route("/sales/{id}/edit", name="sale_edit")
+     * @IsGranted("ROLE_SUPER_ADMIN")
+     */
+    public function edit(Request $request, Sale $sale):Response
+    {
+        $user= $this->getUser();
+        $form = $this->createForm(SaleType::class, $sale);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $sale->setAuthor($user);
+            $this->manager->persist($sale);
+            $this->manager->flush();
+            $this->addFlash('success', "La transaction <strong>{$sale->getRefId()}</strong> a bien été modifier");
+            return $this->redirectToRoute('sale');
+        }
+        return $this->render('sale/create.html.twig', [
+            'form' => $form->createView(),
+            'sale' => $sale,
+        ]);
+    }
+    /**
+     * @param Sale $sale
+     * @return Response
+     * @Route("/sales/{id}/delete}", name="sale_delete")
+     * @IsGranted("ROLE_SUPER_ADMIN")
+     */
+    public function delete(Sale $sale):Response
+    {
+        $this->addFlash('success', "La transaction <strong>{$sale->getRefId()}</strong> a bien été supprimer");
+        $this->manager->remove($sale);
+        $this->manager->flush();
+        return  $this->redirectToRoute('sale');
+    }
+}

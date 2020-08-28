@@ -29,15 +29,17 @@ class TraderType extends ApplicationType
                     return $sr->createQueryBuilder('s')
                         ->innerJoin('s.profile', 'p')
                         ->where("p.title = 'CAGNT'")
-                        ->andWhere('s.isActive = true');
+                        ->andWhere('s.isActive = true')
+                        ->orderBy('s.msisdn', 'ASC');
                 },
-                'choice_label' => 'msisdn',
+                'choice_label' => 'fullName',
             ]))
             ->add('region', EntityType::class, $this->getConfiguration('La région', '', [
                 'class' => Region::class,
                 'choice_label' => 'name',
                 'placeholder' => "Choisir la région du commercial",
             ]))
+            ->add('name', TextType::class, $this->getConfiguration('Intitulé de la SIM', "Sasir l'intitulé de la carte SIM"))
         ;
     }
 

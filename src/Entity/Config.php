@@ -33,7 +33,7 @@ class Config
     private $content;
 
     /**
-     * @ORM\OneToMany(targetEntity=ConfigFile::class, mappedBy="config")
+     * @ORM\OneToMany(targetEntity=ConfigFile::class, mappedBy="config", cascade={"persist"}, orphanRemoval=true)
      * @Assert\Valid()
      */
     private $files;

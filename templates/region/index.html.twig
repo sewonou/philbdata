@@ -10,7 +10,9 @@
                     <h5 class="element-header">Liste des régions</h5>
                 </div>
                 <div class="col-lg-2 text-right">
-                    <a href="{{ path('region_add') }}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Ajouter</a>
+                    {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
+                        <a href="{{ path('region_add') }}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Ajouter</a>
+                    {% endif %}
                 </div>
             </div>
             <div class="element-box">

@@ -23,6 +23,7 @@ class ConfigType extends ApplicationType
                 'entry_type' => ConfigFileType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
+                'by_reference' => false,
                 'label' => false,
             ])
         ;

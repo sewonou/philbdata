@@ -3,5 +3,7 @@
 {% block title %}Hello DashboardController!{% endblock %}
 
 {% block body %}
-
+    {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
+        {{ dump(app.user.roles) }}
+    {% endif %}
 {% endblock %}

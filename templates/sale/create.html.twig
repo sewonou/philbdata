@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %}Transaction{% endblock %}
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <h5 class="form-header">
+                            {% if sale is defined %}
+                                Modification de la transaction : <strong>{{ sale.refId }}</strong>
+                            {% else %}
+                                Enregistrement d'une nouvel transaction.
+                            {% endif %}
+                        </h5>
+                        {{ include('sale/_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

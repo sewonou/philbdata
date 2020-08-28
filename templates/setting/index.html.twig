@@ -98,10 +98,10 @@
                                             {% if files %}
                                                 {% for file in files %}
                                                     <tr>
-                                                        <td>{{ file.createAt | date("j F à h:i")  }}</td>
+                                                        <td>{{ file.createdAt | date("j F à h:i")  }}</td>
                                                         <td>{{ file.fileName | upper }}</td>
                                                         <td>{{ file.updateAt | date("j F à h:i") }}</td>
-                                                        <td>{% if file.author %}{{ file.author.login }}{% else %}Non identifié{% endif %}</td>
+                                                        <td>{% if file.config %}{{ file.config.author.login }}{% else %}Non identifié{% endif %}</td>
                                                         <td class="row-actions">
                                                             <a href=""><i class="os-icon os-icon-ui-49"></i></a>
                                                             <a class="danger" href="" onclick="return confirm('Voulez vous vraiment supprimer la catégorie  {{ file.fileName }}"><i class="os-icon os-icon-ui-15"></i></a>
@@ -195,11 +195,13 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        {% if masters is null %}
-                                            <div class="form-buttons-w text-right compact">
-                                                <button class="mr-2 mb-2 btn btn-primary" data-target="#onboardingFormModal" data-toggle="modal" type="button"><i class="fa fa-plus"></i> Ajouter</button>
-                                                {{ include('setting/_master.html.twig') }}
-                                            </div>
+                                        {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
+                                            {% if masters is null %}
+                                                <div class="form-buttons-w text-right compact">
+                                                    <button class="mr-2 mb-2 btn btn-primary" data-target="#onboardingFormModal" data-toggle="modal" type="button"><i class="fa fa-plus"></i> Ajouter</button>
+                                                    {{ include('setting/_master.html.twig') }}
+                                                </div>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -223,7 +225,9 @@
                                         </h5>  
                                     </div>
                                     <div class="col-lg-2">
-                                        <a href="{{ path('setting_category_add') }}" class="btn btn-info"><i class="fa fa-cart-plus"></i>Nouveau</a>
+                                        {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
+                                            <a href="{{ path('setting_category_add') }}" class="btn btn-info"><i class="fa fa-cart-plus"></i>Nouveau</a>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 

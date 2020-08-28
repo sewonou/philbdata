@@ -50,8 +50,12 @@ class ConfigFileController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $config->setAuthor($user);
+            $files = $config->getFiles();
             $this->addFlash('success', "Le fichier <strong>{$config->getContent()}</strong> a bien été ajouter");
             $this->manager->persist($config);
+            foreach ($files as $file) {
+                $file->setConfig($config);
+            }
             $this->manager->flush();
             return $this->redirectToRoute('setting');
         }
@@ -61,7 +65,7 @@ class ConfigFileController extends AbstractController
     }
 
     /**
-     * @Route("/config/files/{id}/edit", name="file_edit")
+     * @Route("/admin/config/files/{id}/edit", name="file_edit")
      * @param Request $request
      * @param Config $config
      * @return Response
@@ -81,11 +85,12 @@ class ConfigFileController extends AbstractController
         }
         return $this->render('config_file/edit.html.twig', [
             'form' => $form->createView(),
+            'config' => $config,
         ]);
     }
 
     /**
-     * @Route("/config/files/{id}/delete", name="file_delete")
+     * @Route("/admin/config/files/{id}/delete", name="file_delete")
      * @param Request $request
      * @param Config $config
      * @return Response
@@ -98,5 +103,21 @@ class ConfigFileController extends AbstractController
         $this->manager->remove($config);
         $this->manager->flush();
         return $this->redirectToRoute('setting');
+    }
+
+    /**
+     * @Route("/admin/files/{id}/delete", name="configFile_delete")
+     * @param Request $request
+     * @param ConfigFile $configFile
+     * @return Response
+     * @IsGranted("ROLE_SUPER_ADMIN")
+     */
+    public function deleteFile(Request $request, ConfigFile $configFile):Response
+    {
+
+        $this->addFlash('success', "La configuration du <strong>{$configFile->getFileName()}</strong> a bien été supprimer");
+        $this->manager->remove($configFile);
+        $this->manager->flush();
+        return $this->redirectToRoute('configFile_delete');
     }
 }
