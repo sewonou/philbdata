@@ -27,8 +27,7 @@
                             <th>Commune</th>
                             <th>Quartier</th>
                             <th>Commercial</th>
-                            <th>Dernier mise à jour</th>
-                            <th class="text-center">Action</th>
+                            <th class="text-center" style="width: 90px;">Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -36,15 +35,22 @@
                             {% for pointofsale in pointofsales %}
                                 <tr>
                                     <td>{{ loop.index0 + 1  }}</td>
-                                    <td>{{ pointofsale.name }}</td>
+                                    <td><a href="{{ path('pointofsale_show', {'id': pointofsale.id}) }}">{{ pointofsale.name }}</a></td>
                                     <td>{% if pointofsale.msisdn %}{{ pointofsale.msisdn.msisdn }}{% endif %}</td>
                                     <td>{% if pointofsale.msisdn %}{{ pointofsale.msisdn.profile.title }}{% endif %}</td>
                                     <td>{% if pointofsale.district %}{{ pointofsale.district.township.prefecture.town.name }}{% endif %}</td>
                                     <td>{% if pointofsale.district %}{{ pointofsale.district.name }}{% endif %}</td>
-                                    <td></td>
-                                    <td>{{ pointofsale.updateAt | date("F jS à g:ia") }}</td>
-                                    <td class="row-actions">
-                                        <a href="{{ path('pointofsale_delete', {'id': pointofsale.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
+                                    <td>
+                                        {% if pointofsale.controls %}
+                                            {% for control in pointofsale.controls  %}
+                                                {{ control.trader.fullName }}
+                                            {% endfor %}
+                                        {% endif %}
+
+                                    </td>
+
+                                    <td class="row-actions" style="width: 90px;">
+                                        <a href="{{ path('pointofsale_edit', {'id': pointofsale.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
                                         <a href="{{ path('pointofsale_show', {'id': pointofsale.id}) }}"><i class="fa fa-eye"></i></a>
                                         <a class="danger" href="{{ path('pointofsale_delete', {'id': pointofsale.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer le point de vente{{ pointofsale.name }}')"><i class="os-icon os-icon-ui-15"></i></a>
                                     </td>

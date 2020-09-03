@@ -7,13 +7,12 @@
         <div class="element-wrapper">
             <div class="row">
                 <div class="col-lg-10">
-                    <h5 class="element-header">Liste des transactions : GIVE</h5>
+                    <h5 class="element-header">Liste des transactions : GIVE (Achat d'UV master en banque)</h5>
                 </div>
                 <div class="col-lg-2 text-right">
                     {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
                         <a href="{{ path('trader_add') }}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Ajouter</a>
                     {% endif %}
-
                 </div>
             </div>
             <div class="element-box">
@@ -22,57 +21,21 @@
                         <thead>
                         <tr>
                             <th></th>
-                            <th>REFERENCE</th>
-                            <th>DATE</th>
-                            <th>FROM MSISDN</th>
-                            <th>FROM NAME</th>
-                            <th>FROM PROFIL</th>
-                            <th>TO MSISDN</th>
-                            <th>TO NAME</th>
-                            <th>TO PROFIL</th>
-                            <th>MONTANT</th>
-                            <th>Action</th>
+                            <th>Date</th>
+                            <th>Numéros</th>
+                            <th>Montant</th>
+                            <th>Nbre </th>
                         </tr>
                         </thead>
                         <tbody>
                         {% if trades %}
                             {% for trade in trades %}
                                 <tr>
-                                    <td>{{ loop.index0 + 1  }}</td>
-                                    <td>{{ trade.refId }}</td>
-                                    <td>{{ trade.transactionAt | date("F jS à g:ia") }}</td>
-                                    <td>{% if trade.fromMsisdn %}{{ trade.fromMsisdn.msisdn }}{% endif %}</td>
-                                    <td>
-                                        {% if trade.fromMsisdn %}
-                                            {% if trade.fromMsisdn.pointofsale %}
-                                                {{ trade.fromMsisdn.pointofsale.name }}
-                                            {% elseif trade.fromMsisdn.trader %}
-                                                {{ trade.fromMsisdn.trader.fullName }}
-                                            {% else %}
-                                                Ce numéro est inconnu
-                                            {% endif %}
-                                        {% endif %}
-                                    </td>
-                                    <td>{% if trade.fromMsisdn %}{{ trade.fromMsisdn.profile.title }}{% endif %}</td>
-                                    <td>{% if trade.toMsisdn %}{{ trade.toMsisdn.msisdn }}{% endif %}</td>
-                                    <td>
-                                        {% if trade.toMsisdn %}
-                                            {% if trade.toMsisdn.pointofsale %}
-                                                {{ trade.toMsisdn.pointofsale.name }}
-                                            {% elseif trade.toMsisdn.trader %}
-                                                {{ trade.toMsisdn.trader.fullName }}
-                                            {% else %}
-                                                Ce numéro est inconnu
-                                            {% endif %}
-                                        {% endif %}
-                                    </td>
-                                    <td>{% if trade.toMsisdn %}{{ trade.toMsisdn.profile.title }}{% endif %}</td>
-                                    <td>{{ sale.amount | number_format(0, ',', ' ') }} F CFA</td>
-                                    <td class="row-actions">
-                                        <a href="{{ path('trader_edit', {'id': trade.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
-                                        <a href="{{ path('trader_show', {'id': trade.id}) }}"><i class="fa fa-eye"></i></a>
-                                        <a class="danger" href="{{ path('trader_delete', {'id':trader.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer le canton{{ township.name }}')"><i class="os-icon os-icon-ui-15"></i></a>
-                                    </td>
+                                    <td class="text-center">{{ loop.index0 + 1  }}</td>
+                                    <td >{{ trade.day | date("F yy") }}</td>
+                                    <td class="text-left">{{ trade.sim }}</td>
+                                    <td class="text-right">{{ trade.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                    <td class="text-right">{{ trade.total | number_format(0, ',', ' ') }}</td>
                                 </tr>
                             {% endfor %}
                         {% endif %}

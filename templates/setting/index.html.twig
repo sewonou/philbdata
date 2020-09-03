@@ -26,14 +26,12 @@
                     <div class="project-box">
                         <div class="project-head">
                             <div class="project-title">
-                                <h5>
-                                    Paramétrage
-                                </h5>
+                                <h5>Paramétrage</h5>
                             </div>
                             <div class="project-users">
-                                <div class="more">
-                                    + 5 More
-                                </div>
+                                {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
+                                    <a href="{{ path('file_add') }}" class="btn btn-rounded btn-info"><i class="fa fa-cart-plus"></i>Nouveau</a>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="project-info">
@@ -103,8 +101,8 @@
                                                         <td>{{ file.updateAt | date("j F à h:i") }}</td>
                                                         <td>{% if file.config %}{{ file.config.author.login }}{% else %}Non identifié{% endif %}</td>
                                                         <td class="row-actions">
-                                                            <a href=""><i class="os-icon os-icon-ui-49"></i></a>
-                                                            <a class="danger" href="" onclick="return confirm('Voulez vous vraiment supprimer la catégorie  {{ file.fileName }}"><i class="os-icon os-icon-ui-15"></i></a>
+                                                            <a href="{{ path('file_edit', {'id' : file.config.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
+                                                            <a class="danger" href="{{ path('configFile_delete', {'id' : file.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer la catégorie  {{ file.fileName }}"><i class="os-icon os-icon-ui-15"></i></a>
                                                         </td>
                                                     </tr>
                                                 {% endfor %}

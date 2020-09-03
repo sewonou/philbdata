@@ -33,8 +33,8 @@
                             {% for district in districts  %}
                                 <tr>
                                     <td>{{ loop.index0 + 1  }}</td>
-                                    <td>{% if district.township %}{{ district.township.prefecture.town.name }}{% elseif %}Commune inexistante{% endif %}</td>
-                                    <td>{% if district.township %}{{ district.township.prefecture.name }}{% elseif %}Préfecture inexistante{% endif %}</td>
+                                    <td>{% if district.township %}{{ district.township.prefecture.town.name }}{% else %}Commune inexistante{% endif %}</td>
+                                    <td>{% if district.township %}{{ district.township.prefecture.name }}{% else %}Préfecture inexistante{% endif %}</td>
                                     <td>{{ district.name }}</td>
                                     <td>{{ district.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">

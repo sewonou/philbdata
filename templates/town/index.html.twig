@@ -32,12 +32,12 @@
                             {% for town in towns %}
                                 <tr>
                                     <td>{{ loop.index0 + 1  }}</td>
-                                    <td>{% if town.region %}{{ town.region.name }}{% elseif %}Region inexistante{% endif %}</td>
+                                    <td>{% if town.region %}{{ town.region.name }}{% else %}Region inexistante{% endif %}</td>
                                     <td>{{ town.name }}</td>
                                     <td>{{ town.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">
                                         <a href="{{ path('town_edit', {'id': town.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
-                                        <a href="{{ path('zone_show', {'id': zone.id}) }}"><i class="fa fa-eye"></i></a>
+                                        <a href="{{ path('town_show', {'id': town.id}) }}"><i class="fa fa-eye"></i></a>
                                         <a class="danger" href="{{ path('town_delete', {'id':town.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer la commune{{ town.name }}')"><i class="os-icon os-icon-ui-15"></i></a>
                                     </td>
                                 </tr>

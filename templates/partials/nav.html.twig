@@ -122,19 +122,16 @@
                 <div class="sub-menu-i">
                     <ul class="sub-menu">
                         <li>
-                            <a href="#">Dépôt</a>
+                            <a href="{{ path('sale') }}">Transactions : CSIN | AGNT</a>
                         </li>
                         <li>
-                            <a href="#">Retrait</a>
+                            <a href="{{ path('trade') }}">Transaction : GIVE</a>
                         </li>
                         <li>
-                            <a href="#">Transfert</a>
+                            <a href="{{ path('balance') }}">Solde des numéros</a>
                         </li>
                         <li>
-                            <a href="">Autres</a>
-                        </li>
-                        <li>
-                            <a href="#">Uploader</a>
+                            <a href="{{ path('transaction_file') }}">Uploader</a>
                         </li>
                     </ul>
                 </div>
@@ -156,13 +153,13 @@
                 <div class="sub-menu-i">
                     <ul class="sub-menu">
                         <li>
-                            <a href="#">Les numéros</a>
+                            <a href="{{ path('sim_card') }}">Les numéros</a>
                         </li>
                         <li>
-                            <a href="#">Les Centraux Agents</a>
+                            <a href="{{ path('trade') }}">Les Centraux Agents</a>
                         </li>
                         <li>
-                            <a href="#">Les PDVs / Commerciaux</a>
+                            <a href="{{ path('pointofsale') }}">Les PDVs / Commerciaux</a>
                         </li>
                     </ul>
                 </div>

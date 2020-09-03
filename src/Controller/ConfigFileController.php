@@ -31,8 +31,10 @@ class ConfigFileController extends AbstractController
     public function index(ConfigFileRepository $repository)
     {
         $files = $repository->findTransactionFile('transaction');
+        $configs = $repository->findConfigFile('transaction');
         return $this->render('config_file/index.html.twig', [
             'files' => $files,
+            'configs' => $configs
         ]);
     }
 
@@ -81,7 +83,7 @@ class ConfigFileController extends AbstractController
             $this->addFlash('success', "Le fichier <strong>{$config->getContent()}</strong> a bien été modifier");
             $this->manager->persist($config);
             $this->manager->flush();
-            return $this->redirectToRoute('setting');
+            return $this->redirectToRoute('transaction_file');
         }
         return $this->render('config_file/edit.html.twig', [
             'form' => $form->createView(),
@@ -118,6 +120,6 @@ class ConfigFileController extends AbstractController
         $this->addFlash('success', "La configuration du <strong>{$configFile->getFileName()}</strong> a bien été supprimer");
         $this->manager->remove($configFile);
         $this->manager->flush();
-        return $this->redirectToRoute('configFile_delete');
+        return $this->redirectToRoute('transaction_file');
     }
 }

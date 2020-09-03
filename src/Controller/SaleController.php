@@ -30,10 +30,21 @@ class SaleController extends AbstractController
      */
     public function index():Response
     {
-        $sales = $this->repository->findAll();
+        $sales = $this->repository->findSaleByDate();
+        $columnHeaders = $this->repository->findDistinctDate();
         return $this->render('sale/index.html.twig', [
             'sales' => $sales,
+            'columnHeaders' => $columnHeaders
         ]);
+    }
+
+    private function crossTab($date, $sales)
+    {
+        $saleTab = [];
+        foreach ($date as $d){
+            $saleTab[] = $d;
+        }
+        return $saleTab;
     }
     /**
      * @param Request $request

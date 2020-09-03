@@ -1,0 +1,23 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col-lg-6">
+        <fieldset class="form-group">
+            <legend><span>Association Commerciaux et Point de vente</span></legend>
+            {{ form_row(form.trader) }}
+            {{ form_row(form.pointofsale) }}
+        </fieldset>
+    </div>
+    <div class="col-lg-6">
+        <fieldset class="form-group">
+            <legend><span>Durée</span></legend>
+            {{ form_row(form.startAt) }}
+            {{ form_row(form.endAt) }}
+            {{ form_row(form.isActive) }}
+        </fieldset>
+    </div>
+</div>
+
+<div class="form-buttons-w text-right compact">
+    <button class="btn btn-primary" type="submit"> Valider</button>
+</div>
+{{ form_end(form) }}

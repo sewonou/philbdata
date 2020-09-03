@@ -31,8 +31,8 @@
                             {% for township in townships %}
                                 <tr>
                                     <td>{{ loop.index0 + 1  }}</td>
-                                    <td>{% if township.prefecture %}{{ township.prefecture.town.name }}{% elseif %}Commune inexistante{% endif %}</td>
-                                    <td>{% if township.prefecture %}{{ township.prefecture.name }}{% elseif %}Préfecture inexistante{% endif %}</td>
+                                    <td>{% if township.prefecture %}{{ township.prefecture.town.name }}{% else %}Commune inexistante{% endif %}</td>
+                                    <td>{% if township.prefecture %}{{ township.prefecture.name }}{% else %}Préfecture inexistante{% endif %}</td>
                                     <td>{{ township.name }}</td>
                                     <td>{{ township.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">

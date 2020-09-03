@@ -27,7 +27,7 @@ class PointofsaleController extends AbstractController
      */
     public function index():Response
     {
-        $pointofsales = $this->repository->findBy(['isActive'=>true], ['name'=>'ASC'], null, null);
+        $pointofsales = $this->repository->findPointofsaleWithTrader(true);
         return $this->render('pointofsale/index.html.twig', [
             'pointofsales' => $pointofsales,
         ]);

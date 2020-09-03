@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\PointofsaleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PointofsaleRepository::class)
- *
+ * @ORM\HasLifecycleCallbacks()
  */
 class Pointofsale
 {
@@ -51,7 +53,7 @@ class Pointofsale
     private $position;
 
     /**
-     * @ORM\Column(type="string", length=120)
+     * @ORM\Column(type="string", length=120, nullable=true)
      *
      */
     private $longitude;
@@ -62,7 +64,7 @@ class Pointofsale
     private $latitude;
 
     /**
-     * @ORM\Column(type="string", length=15)
+     * @ORM\Column(type="string", length=15, nullable=true)
      * @Assert\Regex(
      *     pattern="^[0-9]+$",
      *     htmlPattern="^[0-9]+$",
@@ -85,6 +87,25 @@ class Pointofsale
      * @ORM\ManyToOne(targetEntity=User::class)
      */
     private $author;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Control::class, mappedBy="pointofsale", cascade={"persist"})
+     */
+    private $controls;
+
+    public function __construct()
+    {
+        $this->controls = new ArrayCollection();
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function initialized()
+    {
+        $this->updateAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -156,7 +177,7 @@ class Pointofsale
         return $this->longitude;
     }
 
-    public function setLongitude(string $longitude): self
+    public function setLongitude(?string $longitude): self
     {
         $this->longitude = $longitude;
 
@@ -204,7 +225,7 @@ class Pointofsale
         return $this->contact;
     }
 
-    public function setContact(string $contact): self
+    public function setContact(?string $contact): self
     {
         $this->contact = $contact;
 
@@ -219,6 +240,37 @@ class Pointofsale
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Control[]
+     */
+    public function getControls(): Collection
+    {
+        return $this->controls;
+    }
+
+    public function addControl(Control $control): self
+    {
+        if (!$this->controls->contains($control)) {
+            $this->controls[] = $control;
+            $control->setPointofsale($this);
+        }
+
+        return $this;
+    }
+
+    public function removeControl(Control $control): self
+    {
+        if ($this->controls->contains($control)) {
+            $this->controls->removeElement($control);
+            // set the owning side to null (unless already changed)
+            if ($control->getPointofsale() === $this) {
+                $control->setPointofsale(null);
+            }
+        }
 
         return $this;
     }

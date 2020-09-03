@@ -19,22 +19,25 @@ class PointofsaleRepository extends ServiceEntityRepository
         parent::__construct($registry, Pointofsale::class);
     }
 
-    // /**
-    //  * @return Pointofsale[] Returns an array of Pointofsale objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param $value
+     * @return Pointofsale[] Returns an array of Pointofsale objects
+     */
+
+    public function findPointofsaleWithTrader($value)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
+            ->innerJoin('p.controls', 'c')
+            ->innerJoin('c.trader', 't')
+            ->andWhere('c.isActive = :val')
+            ->andWhere('p.isActive = :val')
             ->setParameter('val', $value)
             ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Pointofsale

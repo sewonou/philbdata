@@ -32,7 +32,7 @@
                             {% for prefecture in prefectures %}
                                 <tr>
                                     <td>{{ loop.index0 + 1  }}</td>
-                                    <td>{% if prefecture.town %}{{ prefecture.town.name }}{% elseif %}Commune inexistante{% endif %}</td>
+                                    <td>{% if prefecture.town %}{{ prefecture.town.name }}{% else %}Commune inexistante{% endif %}</td>
                                     <td>{{ prefecture.name }}</td>
                                     <td>{{ prefecture.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Trade;
 use App\Form\TradeType;
+use App\Repository\MasterSimRepository;
 use App\Repository\TradeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -25,11 +26,14 @@ class TradeController extends AbstractController
 
     /**
      * @Route("/trades", name="trade")
+     * @param MasterSimRepository $masterSimRepository
      * @return Response
      */
-    public function index():Response
+    public function index(MasterSimRepository $masterSimRepository):Response
     {
-        $trades = $this->repository->findAll();
+        $master = $masterSimRepository->findOneBy(['name'=>'PHIL']);
+        $master = $master->getMsisdn();
+        $trades = $this->repository->findByExampleField($master);
         return $this->render('trade/index.html.twig', [
             'trades' => $trades,
         ]);

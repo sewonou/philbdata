@@ -19,22 +19,24 @@ class TradeRepository extends ServiceEntityRepository
         parent::__construct($registry, Trade::class);
     }
 
-    // /**
-    //  * @return Trade[] Returns an array of Trade objects
-    //  */
-    /*
+    /**
+    * @return Trade[] Returns an array of Trade objects
+    */
+
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
+            ->select("s.msisdn as sim,COUNT(t.id) as total, SUM(t.amount) as amount, CONCAT(MONTHNAME(t.transactionAt), ' ', YEAR(t.transactionAt)) as day")
+            ->innerJoin('t.toMsisdn', 's')
+            ->andWhere('s.msisdn = :val')
+            ->andWhere('t.fromMsisdn is null')
             ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+            ->groupBy('day')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Trade

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\SimCard;
 use App\Form\SimCardType;
+use App\Repository\ProfileRepository;
 use App\Repository\SimCardRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -90,6 +91,25 @@ class SimCardController extends AbstractController
         $this->addFlash('success', "Le numéro <strong>{$simCard->getMsisdn()}</strong> a bien été supprimer");
         $this->manager->remove($simCard);
         $this->manager->flush();
+        return $this->redirectToRoute('sim_card');
+    }
+
+    /**
+     * @param ProfileRepository $pRepo
+     * @return Response
+     * @Route("/simcards/i", name="sim_card_inactive")
+     */
+    public function update(ProfileRepository $pRepo):Response
+    {
+
+        $date = $this->repository->findPointofsaleLastUpdate();
+
+        $profile = $pRepo->findOneBy(['title'=>'AGNT']);
+        $this->repository->setInactive($profile, $date);
+
+        $profile = $pRepo->findOneBy(['title'=>'DISTRO']);
+        $this->repository->setInactive($profile, $date);
+
         return $this->redirectToRoute('sim_card');
     }
 }

@@ -58,6 +58,16 @@ class ConfigFile
      */
     private $config;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isUpload = 0;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isLoad;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -147,6 +157,30 @@ class ConfigFile
     public function setConfig(?Config $config): self
     {
         $this->config = $config;
+        return $this;
+    }
+
+    public function getIsUpload(): ?bool
+    {
+        return $this->isUpload;
+    }
+
+    public function setIsUpload(?bool $isUpload): self
+    {
+        $this->isUpload = $isUpload;
+
+        return $this;
+    }
+
+    public function getIsLoad(): ?bool
+    {
+        return $this->isLoad;
+    }
+
+    public function setIsLoad(?bool $isLoad): self
+    {
+        $this->isLoad = $isLoad;
+
         return $this;
     }
 

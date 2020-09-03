@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Sale;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +18,40 @@ class SaleRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Sale::class);
+    }
+
+    public function findSaleByDate()
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, CONCAT(MONTHNAME(s.transactionAt), ' ', YEAR(s.transactionAt)) as day, t.title")
+            ->innerJoin('s.type', 't')
+            ->where('t.title = :val1')
+            ->orwhere('t.title = :val2')
+            ->setParameters(['val1'=>'AGNT', 'val2' =>'CSIN'])
+            ->groupBy('day, s.type')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findDistinctType()
+    {
+        return $this->createQueryBuilder('s')
+            ->select('DISTINCT(t.title) as type')
+            ->innerJoin('s.type', 't')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findDistinctDate()
+    {
+        return $this->createQueryBuilder('s')
+            ->select("SUM(s.dComm) as dComm, CONCAT(MONTHNAME(s.transactionAt), ' ', YEAR(s.transactionAt)) as day")
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
     // /**

@@ -32,7 +32,7 @@
                             {% for region in regions %}
                                 <tr>
                                     <td>{{ loop.index0 + 1  }}</td>
-                                    <td>{% if region.zone %}{{ region.zone.name }}{% elseif %}Zone inexistante{% endif %}</td>
+                                    <td>{% if region.zone %}{{ region.zone.name }}{% else %}Zone inexistante{% endif %}</td>
                                     <td>{{ region.name }}</td>
                                     <td>{{ region.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">

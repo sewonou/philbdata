@@ -33,7 +33,7 @@
                                 <tr>
                                     <td>{{ loop.index0 + 1  }}</td>
                                     <td>{{ simCard.msisdn }}</td>
-                                    <td>{% if simCard.profile %}{{ simCard.profile.title }}{% ellse %}Aucun profil enregistrer{% endif %}</td>
+                                    <td>{% if simCard.profile %}{{ simCard.profile.title }}{% else %}Aucun profil enregistrer{% endif %}</td>
                                     <td>{{ simCard.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">
                                         <a href="{{ path('sim_card_edit', {'id': simCard.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>

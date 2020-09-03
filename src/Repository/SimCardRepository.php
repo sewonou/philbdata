@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Profile;
 use App\Entity\SimCard;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +19,39 @@ class SimCardRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, SimCard::class);
+    }
+
+    public function setInactive(?Profile $profile, ?string $date)
+    {
+        return $this->createQueryBuilder('s')
+            ->update()
+            ->set('s.isActive', 'false')
+            ->where('s.profile = :val')
+            ->andWhere('DATE(s.updateAt)<> :date')
+            ->setParameters(['val'=>$profile, 'date'=> $date])
+            ->getQuery()
+            ->execute();
+    }
+
+    public function findPointofsaleLastUpdate()
+    {
+        return $this->createQueryBuilder('s')
+        ->select('DATE(MAX(s.updateAt)) as lastDate')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getSingleScalarResult();
+    }
+
+    public function findPointofsale()
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.profile', 'p')
+            ->andWhere('p.title = :val1')
+            ->andWhere('p.title = :val2')
+            ->setParameters(['val1' => 'AGNT', 'val2' => 'DISTRO'])
+            ->orderBy('s.id', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     // /**
