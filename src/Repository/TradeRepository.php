@@ -23,7 +23,7 @@ class TradeRepository extends ServiceEntityRepository
     * @return Trade[] Returns an array of Trade objects
     */
 
-    public function findByExampleField($value)
+    public function findBankRecharge($value)
     {
         return $this->createQueryBuilder('t')
             ->select("s.msisdn as sim,COUNT(t.id) as total, SUM(t.amount) as amount, CONCAT(MONTHNAME(t.transactionAt), ' ', YEAR(t.transactionAt)) as day")

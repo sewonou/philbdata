@@ -128,7 +128,7 @@ class UploaderController extends AbstractController
         ]);
     }
     /**
-     * @Route("/admin/uploads/poscaght/{id}", name="uploader_poscagnt")
+     * @Route("/admin/uploads/poscagnt/{id}", name="uploader_poscagnt")
      * @param ConfigFile $file
      * @param SavePosCagnt $save
      * @return Response

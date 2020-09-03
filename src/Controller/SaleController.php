@@ -30,8 +30,8 @@ class SaleController extends AbstractController
      */
     public function index():Response
     {
-        $sales = $this->repository->findSaleByDate();
-        $columnHeaders = $this->repository->findDistinctDate();
+        $sales = $this->repository->findSaleByMonth();
+        $columnHeaders = $this->repository->findDistinctMonth();
         return $this->render('sale/index.html.twig', [
             'sales' => $sales,
             'columnHeaders' => $columnHeaders

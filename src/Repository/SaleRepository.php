@@ -20,7 +20,7 @@ class SaleRepository extends ServiceEntityRepository
         parent::__construct($registry, Sale::class);
     }
 
-    public function findSaleByDate()
+    public function findSaleByMonth()
     {
         return $this->createQueryBuilder('s')
             ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, CONCAT(MONTHNAME(s.transactionAt), ' ', YEAR(s.transactionAt)) as day, t.title")
@@ -29,6 +29,17 @@ class SaleRepository extends ServiceEntityRepository
             ->orwhere('t.title = :val2')
             ->setParameters(['val1'=>'AGNT', 'val2' =>'CSIN'])
             ->groupBy('day, s.type')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleByDate()
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->groupBy('day')
             ->getQuery()
             ->getResult()
             ;
@@ -44,7 +55,7 @@ class SaleRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findDistinctDate()
+    public function findDistinctMonth()
     {
         return $this->createQueryBuilder('s')
             ->select("SUM(s.dComm) as dComm, CONCAT(MONTHNAME(s.transactionAt), ' ', YEAR(s.transactionAt)) as day")

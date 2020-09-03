@@ -319,6 +319,9 @@ class Save
                 $pointofsale = new Pointofsale();
             }
             $pointofsale
+                ->setMsisdn($msisdn)
+                ->setName($value['posName'])
+                ->setActivity('Numéro POSCAGNT')
                 ->setIsActive(true)
                 ->setAuthor($value['user']);
             $msisdn->setIsActive(true);

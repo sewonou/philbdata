@@ -33,7 +33,7 @@ class TradeController extends AbstractController
     {
         $master = $masterSimRepository->findOneBy(['name'=>'PHIL']);
         $master = $master->getMsisdn();
-        $trades = $this->repository->findByExampleField($master);
+        $trades = $this->repository->findBankRecharge($master);
         return $this->render('trade/index.html.twig', [
             'trades' => $trades,
         ]);

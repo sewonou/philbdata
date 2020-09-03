@@ -3,7 +3,204 @@
 {% block title %}Hello DashboardController!{% endblock %}
 
 {% block body %}
-    {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
-        {{ dump(app.user.roles) }}
-    {% endif %}
+    <div class="content-box">
+        <div class="element-wrapper">
+            <div class="element-content">
+                <div class="row">
+                    <div class="col-sm-2 col-xxxl-2">
+                        <a class="element-box el-tablo" href="#">
+                            <div class="label">
+                                Sim Actif
+                            </div>
+                            <div class="value">
+                                57
+                            </div>
+                            <div class="trending trending-up-basic">
+                                <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-2 col-xxxl-2">
+                        <a class="element-box el-tablo" href="#">
+                            <div class="label">
+                                Nbre de PDV
+                            </div>
+                            <div class="value">
+                                12
+                            </div>
+                            <div class="trending trending-up-basic">
+                                <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-2 col-xxxl-2">
+                        <a class="element-box el-tablo" href="#">
+                            <div class="label">
+                                Nbre de AGNT
+                            </div>
+                            <div class="value">
+                                14
+                            </div>
+                            <div class="trending trending-down-basic">
+                                <span>12%</span><i class="os-icon os-icon-arrow-down"></i>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-2 col-xxxl-2">
+                        <a class="element-box el-tablo" href="#">
+                            <div class="label">
+                                Nbre de DISTRO
+                            </div>
+                            <div class="value">
+                                125
+                            </div>
+                            <div class="trending trending-down-basic">
+                                <span>9%</span><i class="os-icon os-icon-arrow-down"></i>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-2 col-xxxl-2">
+                        <a class="element-box el-tablo" href="#">
+                            <div class="label">
+                                Nbre de POSCAGNT
+                            </div>
+                            <div class="value">
+                                15
+                            </div>
+                            <div class="trending trending-up-basic">
+                                <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-sm-2 col-xxxl-2">
+                        <a class="element-box el-tablo" href="#">
+                            <div class="label">
+                                Nbre de CAGNT
+                            </div>
+                            <div class="value">
+                                14
+                            </div>
+                            <div class="trending trending-up-basic">
+                                <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="element-wrapper">
+            <h6 class="element-header">
+                Unique Visitors Graph
+            </h6>
+            <div class="element-box">
+                <div class="os-tabs-w">
+                    <div class="os-tabs-controls">
+                        <ul class="nav nav-tabs smaller">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#tab_overview">Overview</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tab_sales">Sales</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_overview">
+                            <div class="el-tablo bigger">
+                                <div class="label">
+                                    Commission du :
+                                </div>
+                                <div class="value">
+                                    {{ 12.537 |  number_format(0, ',', ' ') }} FCFA
+                                </div>
+                            </div>
+                            <div class="el-chart-w">
+                                <canvas height="170px" id="tradeChart" width="600px"></canvas>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_sales">
+                                {{ dump(sales) }}
+                        </div>
+                        <div class="tab-pane" id="tab_conversion"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready( function () {
+            $('#dataNoPos').DataTable({
+                responsive: true
+            });
+        } );
+    </script>
+    <script>
+        var ctx = document.getElementById('tradeChart').getContext('2d');
+        if ($("#tradeChart").length) {
+            var lineChart = $("#tradeChart");
+
+            // line chart data
+            var lineData = {
+                labels:{% if days is defined %}[{% for day in days %}"{{ day }}"{% if not loop.last %},{% endif %}{% endfor %}] {% else %}["J","J-1","J-2","J-3","J-4","J-5","J-6","J-7"]{% endif %},
+
+                datasets: [{
+                    label: "Commission du dealer",
+                    fill: false,
+                    lineTension: 0.3,
+                    backgroundColor: "#fff",
+                    borderColor: "#047bf8",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "#fff",
+                    pointBackgroundColor: "#141E41",
+                    pointBorderWidth: 3,
+                    pointHoverRadius: 10,
+                    pointHoverBackgroundColor: "#FC2055",
+                    pointHoverBorderColor: "#fff",
+                    pointHoverBorderWidth: 3,
+                    pointRadius: 5,
+                    pointHitRadius: 10,
+                    data: {% if percentWeekComm is defined %} {{ percentWeekComm }} {% else %} [10,20,30,40,50,60,70,80]{% endif %},
+                    spanGaps: false
+                }]
+            };
+
+            // line chart init
+
+        }
+        var myLineChart = new Chart(lineChart, {
+            type: 'line',
+            data: lineData,
+            options: {
+                legend: {
+                    display: false
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            fontSize: '11',
+                            fontColor: '#969da5'
+                        },
+                        gridLines: {
+                            color: 'rgba(0,0,0,0.05)',
+                            zeroLineColor: 'rgba(0,0,0,0.05)'
+                        }
+                    }],
+                    yAxes: [{
+                        display: false,
+                        ticks: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
 {% endblock %}
