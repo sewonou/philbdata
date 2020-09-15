@@ -64,7 +64,7 @@ class Pointofsale
     private $latitude;
 
     /**
-     * @ORM\Column(type="string", length=15, nullable=true)
+     * @ORM\Column(type="string", length=85, nullable=true)
      * @Assert\Regex(
      *     pattern="^[0-9]+$",
      *     htmlPattern="^[0-9]+$",
