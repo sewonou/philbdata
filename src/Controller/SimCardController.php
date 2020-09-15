@@ -41,12 +41,11 @@ class SimCardController extends AbstractController
      */
     public function create(Request $request):Response
     {
-        $user = $this->getUser();
+
         $simCard  = new SimCard();
         $form = $this->createForm(SimCardType::class, $simCard);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $simCard->setAuthor($user);
             $this->manager->persist($simCard);
             $this->manager->flush();
             $this->addFlash('success', "Le numéro <strong>{$simCard->getMsisdn()}</strong> a bien été ajouter");
@@ -65,11 +64,10 @@ class SimCardController extends AbstractController
      */
     public function edit(Request $request, SimCard $simCard):Response
     {
-        $user = $this->getUser();
+
         $form = $this->createForm(SimCardType::class, $simCard);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $simCard->setAuthor($user);
             $this->manager->persist($simCard);
             $this->manager->flush();
             $this->addFlash('success', "Le numéro <strong>{$simCard->getMsisdn()}</strong> a bien été modifier");

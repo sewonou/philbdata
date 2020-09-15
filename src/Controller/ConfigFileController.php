@@ -59,7 +59,7 @@ class ConfigFileController extends AbstractController
                 $file->setConfig($config);
             }
             $this->manager->flush();
-            return $this->redirectToRoute('setting');
+            return $this->redirectToRoute('transaction_file');
         }
         return $this->render('config_file/add.html.twig', [
             'form' => $form->createView(),
@@ -104,7 +104,7 @@ class ConfigFileController extends AbstractController
         $this->addFlash('success', "La configuration du <strong>{date_format($config->getConfigAt(), 'F jS à g:ia')}</strong> a bien été supprimer");
         $this->manager->remove($config);
         $this->manager->flush();
-        return $this->redirectToRoute('setting');
+        return $this->redirectToRoute('transaction_file');
     }
 
     /**

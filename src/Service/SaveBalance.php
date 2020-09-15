@@ -36,9 +36,8 @@ class SaveBalance
         $posName = $value[$title['posNameTitle']];
         $posBalance = $value[$title['balanceTitle']];
         $msisdn = $value[$title['simTitle']];
-        $user = $this->user;
 
-        return compact('profile', 'executeAt', 'posName', 'posBalance', 'msisdn', 'user');
+        return compact('profile', 'executeAt', 'posName', 'posBalance', 'msisdn');
     }
 
     public function save($value)

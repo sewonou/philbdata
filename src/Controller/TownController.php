@@ -40,13 +40,13 @@ class TownController extends AbstractController
      */
     public function create(Request $request):Response
     {
-        $user = $this->getUser();
+
         $town = new Town();
         $form = $this->createForm(TownType::class, $town);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $town->setAuthor($user);
+
             $this->addFlash('success', "La commune <strong>{$town->getName()}</strong> a bien été ajouter.");
             $this->manager->persist($town);
             $this->manager->flush();
@@ -66,12 +66,11 @@ class TownController extends AbstractController
      */
     public function edit(Request $request, Town $town):Response
     {
-        $user = $this->getUser();
         $form = $this->createForm(TownType::class, $town);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $town->setAuthor($user);
+
             $this->addFlash('success', "La commune <strong>{$town->getName()}</strong> a bien été modifier.");
             $this->manager->persist($town);
             $this->manager->flush();

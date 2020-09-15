@@ -8,11 +8,11 @@ use Symfony\Component\Security\Core\Security;
 
 class SaveTrader
 {
-    private $user;
+
     private $save;
-    public function __construct(Security $security, Save $save)
+    public function __construct(Save $save)
     {
-        $this->user = $security->getUser();
+
         $this->save = $save;
     }
 
@@ -37,9 +37,8 @@ class SaveTrader
         $profile = $value[$title['profileTitle']];
         $region = $value[$title['regionTitle']];
         $town = $value[$title['villeTitle']];
-        $user = $this->user;
 
-        return compact('msisdn', 'name', 'posName', 'profile', 'region', 'town', 'user');
+        return compact('msisdn', 'name', 'posName', 'profile', 'region', 'town');
     }
 
     public function save($value)

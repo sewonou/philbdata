@@ -41,11 +41,9 @@ class PointofsaleController extends AbstractController
     public function create(Request $request):Response
     {
         $pointofsale = new Pointofsale();
-        $user = $this->getUser();
         $form = $this->createForm(PointofsaleType::class, $pointofsale);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $pointofsale->setAuthor($user);
             $this->manager->persist($pointofsale);
             $this->manager->flush();
             $this->addFlash('success', "Le Point de vente <strong>{$pointofsale->getName()}</strong> a bien été ajouter");
@@ -65,11 +63,9 @@ class PointofsaleController extends AbstractController
     public function edit(Request $request, Pointofsale $pointofsale):Response
     {
 
-        $user = $this->getUser();
         $form = $this->createForm(PointofsaleType::class, $pointofsale);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $pointofsale->setAuthor($user);
             $this->manager->persist($pointofsale);
             $this->manager->flush();
             $this->addFlash('success', "Le Point de vente <strong>{$pointofsale->getName()}</strong> a bien été modifier");

@@ -8,11 +8,9 @@ use Symfony\Component\Security\Core\Security;
 
 class SavePosCagnt
 {
-    private $user;
     private $save;
     public function __construct(Security $security, Save $save)
     {
-        $this->user = $security->getUser();
         $this->save = $save;
     }
 
@@ -31,9 +29,8 @@ class SavePosCagnt
         $msisdn = $value[$title['msisdnTitle']];
         $profile = $value[$title['profileTitle']];
         $posName = $value[$title['posTitle']];
-        $user = $this->user;
 
-        return compact('msisdn', 'profile', 'posName', 'user');
+        return compact('msisdn', 'profile', 'posName');
     }
 
     public function save($value)

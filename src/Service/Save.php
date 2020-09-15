@@ -87,7 +87,7 @@ class Save
                 $zone = new Zone();
             }
             $zone->setName($value['zone'])
-                ->setAuthor($value['user']);
+            ;
             $this->manager->persist($zone);
             $this->manager->flush();
             $zone = $this->zoneRepository->findOneBy(['name'=>$value['zone']]);
@@ -112,7 +112,7 @@ class Save
             $region
                 ->setName($value['region'])
                 ->setZone($zone)
-                ->setAuthor($value['user']);
+            ;
             $this->manager->persist($region);
             $this->manager->flush();
             $region = $this->regionRepository->findOneBy(['name'=>$value['region']]);
@@ -138,7 +138,7 @@ class Save
             $town
                 ->setName($value['town'])
                 ->setRegion($region)
-                ->setAuthor($value['user']);
+            ;
             $this->manager->persist($town);
             $this->manager->flush();
             $town = $this->townRepository->findOneBy(['name'=>$value['town']]);
@@ -163,7 +163,6 @@ class Save
             $prefecture
                 ->setName($value['prefecture'])
                 ->setTown($town)
-                ->setAuthor($value['user'])
             ;
             $this->manager->persist($prefecture);
             $this->manager->flush();
@@ -189,7 +188,6 @@ class Save
             $township
                 ->setName($value['township'])
                 ->setPrefecture($prefecture)
-                ->setAuthor($value['user'])
             ;
             $this->manager->persist($township);
             $this->manager->flush();
@@ -215,7 +213,6 @@ class Save
             $district
                 ->setName($value['district'])
                 ->setTownship($township)
-                ->setAuthor($value['user'])
             ;
             $this->manager->persist($district);
             $this->manager->flush();
@@ -238,7 +235,6 @@ class Save
                 $profile = new Profile();
             }
             $profile->setTitle($value['profile'])
-                ->setAuthor($value['user'])
             ;
             $this->manager->persist($profile);
             $this->manager->flush();
@@ -264,7 +260,6 @@ class Save
                 ->setProfile($profile)
                 ->setIsActive(false)
                 ->setMaster($this->master)
-                ->setAuthor($value['user'])
             ;
             $this->manager->persist($msisdn);
             $this->manager->flush();
@@ -297,7 +292,6 @@ class Save
                 ->setName($value['posName'])
                 ->setIsActive(true)
                 ->setIsTrader((isset($town)? true : false))
-                ->setAuthor($value['user'])
             ;
             $this->manager->persist($msisdn);
             $this->manager->persist($trader);
@@ -323,7 +317,7 @@ class Save
                 ->setName($value['posName'])
                 ->setActivity('Numéro POSCAGNT')
                 ->setIsActive(true)
-                ->setAuthor($value['user']);
+            ;
             $msisdn->setIsActive(true);
             $this->manager->persist($msisdn);
             $this->manager->persist($pointofsale);
@@ -355,7 +349,6 @@ class Save
                 ->setName($value['posName'])
                 ->setDistrict($district)
                 ->setIsActive(false)
-                ->setAuthor($value['user'])
             ;
             if(isset($district)){
                 $pointofsale
@@ -466,7 +459,6 @@ class Save
                 ->setDealerCommission($value['dealerCommission'])
                 ->setPosComm($value['posCommission'])
                 ->setTransactionAt($value['transactionAt'])
-                ->setAuthor($value['user'])
             ;
             $this->manager->persist($sale);
         }elseif ($value['id'] && $value['type'] == 'GIVE'){
@@ -477,7 +469,6 @@ class Save
                 ->setRefId($value['id'])
                 ->setAmount($value['amount'])
                 ->setTransactionAt($value['transactionAt'])
-                ->setAuthor($value['user'])
             ;
             $this->manager->persist($trade);
         }
@@ -500,7 +491,6 @@ class Save
                 ->setMsisdn($simCard)
                 ->setExecutionAt($value['executeAt'])
                 ->setAmount((float) $value['posBalance'])
-                ->setAuthor($value['user'])
             ;
             $this->manager->persist($balance);
         }

@@ -82,10 +82,6 @@ class Trader
      */
     private $msisdnName;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     */
-    private $author;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -224,17 +220,6 @@ class Trader
         return $this;
     }
 
-    public function getAuthor(): ?User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): self
-    {
-        $this->author = $author;
-
-        return $this;
-    }
 
     public function getName(): ?string
     {

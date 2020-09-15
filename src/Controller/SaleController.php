@@ -54,12 +54,12 @@ class SaleController extends AbstractController
      */
     public function create(Request $request):Response
     {
-        $user= $this->getUser();
+
         $sale = new Sale();
         $form = $this->createForm(SaleType::class, $sale);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $sale->setAuthor($user);
+
             $this->manager->persist($sale);
             $this->manager->flush();
             $this->addFlash('success', "La transaction <strong>{$sale->getRefId()}</strong> a bien été ajouter");
@@ -80,11 +80,11 @@ class SaleController extends AbstractController
      */
     public function edit(Request $request, Sale $sale):Response
     {
-        $user= $this->getUser();
+
         $form = $this->createForm(SaleType::class, $sale);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $sale->setAuthor($user);
+
             $this->manager->persist($sale);
             $this->manager->flush();
             $this->addFlash('success', "La transaction <strong>{$sale->getRefId()}</strong> a bien été modifier");

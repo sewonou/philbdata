@@ -38,11 +38,6 @@ class Zone
     private $updateAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     */
-    private $author;
-
-    /**
      * @ORM\OneToMany(targetEntity=Region::class, mappedBy="zone")
      */
     private $regions;
@@ -92,17 +87,6 @@ class Zone
         return $this;
     }
 
-    public function getAuthor(): ?User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): self
-    {
-        $this->author = $author;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Region[]

@@ -64,11 +64,6 @@ class Trade
     private $updateAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     */
-    private $author;
-
-    /**
      * @ORM\OneToMany(targetEntity=Control::class, mappedBy="trader")
      */
     private $controls;
@@ -172,18 +167,6 @@ class Trade
     public function setUpdateAt(?\DateTimeInterface $updateAt): self
     {
         $this->updateAt = $updateAt;
-
-        return $this;
-    }
-
-    public function getAuthor(): ?User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): self
-    {
-        $this->author = $author;
 
         return $this;
     }

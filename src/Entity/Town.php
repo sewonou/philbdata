@@ -43,10 +43,6 @@ class Town
      */
     private $updateAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     */
-    private $author;
 
     /**
      * @ORM\OneToMany(targetEntity=Prefecture::class, mappedBy="town")
@@ -106,18 +102,6 @@ class Town
     public function setUpdateAt(?\DateTimeInterface $updateAt): self
     {
         $this->updateAt = $updateAt;
-
-        return $this;
-    }
-
-    public function getAuthor(): ?User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): self
-    {
-        $this->author = $author;
 
         return $this;
     }

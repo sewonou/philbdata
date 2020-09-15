@@ -40,13 +40,13 @@ class ProfileController extends AbstractController
      */
     public function create(Request $request):Response
     {
-        $user = $this->getUser();
+
         $profile = new Profile();
         $form = $this->createForm(ProfileType::class, $profile);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $this->addFlash('success', "Le profil <strong>{$profile->getTitle()}</strong> a bien été ajouter");
-            $profile->setAuthor($user);
+
             $this->manager->persist($profile);
             $this->manager->flush();
             $this->redirectToRoute('profile');
@@ -64,12 +64,11 @@ class ProfileController extends AbstractController
      */
     public function edit(Request $request, Profile $profile):Response
     {
-        $user = $this->getUser();
+
         $form = $this->createForm(ProfileType::class, $profile);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $this->addFlash('success', "Le profil <strong>{$profile->getTitle()}</strong> a bien été ajouter");
-            $profile->setAuthor($user);
             $this->manager->persist($profile);
             $this->manager->flush();
             $this->redirectToRoute('profile');

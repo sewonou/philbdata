@@ -37,7 +37,7 @@ class SettingController extends AbstractController
      */
     public function index(ConfigRepository $configRepository,MasterSimRepository $masterRepository, ConfigFileRepository $configFileRepository, FileCategoryRepository $fileCategoryRepository, Request $request):Response
     {
-        $user = $this->getUser();
+
 
         $masters = $masterRepository->findAll();
         $master = new  MasterSim();
@@ -45,7 +45,7 @@ class SettingController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $this->addFlash('success', "Un noouveau numéro master a été ajouté");
-            $master->setAuthor($user);
+
             $this->manager->persist($master);
             return $this->redirectToRoute('setting');
         }

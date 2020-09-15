@@ -40,13 +40,13 @@ class PrefectureController extends AbstractController
      */
     public function create(Request $request):Response
     {
-        $user = $this->getUser();
+
         $prefecture = new Prefecture();
         $form = $this->createForm(PrefectureType::class, $prefecture);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $prefecture->setAuthor($user);
+
             $this->addFlash('success', "La préfecture <strong>{$prefecture->getName()}</strong> a bien été ajouter.");
             $this->manager->persist($prefecture);
             $this->manager->flush();
@@ -66,12 +66,12 @@ class PrefectureController extends AbstractController
      */
     public function edit(Request $request, Prefecture $prefecture):Response
     {
-        $user = $this->getUser();
+
         $form = $this->createForm(PrefectureType::class, $prefecture);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $prefecture->setAuthor($user);
+
             $this->addFlash('success', "La préfecture <strong>{$prefecture->getName()}</strong> a bien été modifier.");
             $this->manager->persist($prefecture);
             $this->manager->flush();

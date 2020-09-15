@@ -40,13 +40,13 @@ class DistrictController extends AbstractController
      */
     public function create(Request $request):Response
     {
-        $user = $this->getUser();
+
         $district = new District();
         $form = $this->createForm(DistrictType::class, $district);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $district->setAuthor($user);
+
             $this->addFlash('success', "Le quartier <strong>{$district->getName()}</strong> a bien été ajouter.");
             $this->manager->persist($district);
             $this->manager->flush();
@@ -66,12 +66,12 @@ class DistrictController extends AbstractController
      */
     public function edit(Request $request, District $district):Response
     {
-        $user = $this->getUser();
+
         $form = $this->createForm(DistrictType::class, $district);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $district->setAuthor($user);
+
             $this->addFlash('success', "Le quartier <strong>{$district->getName()}</strong> a bien été modifier.");
             $this->manager->persist($district);
             $this->manager->flush();

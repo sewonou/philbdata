@@ -40,12 +40,11 @@ class ZoneController extends AbstractController
      */
     public function create(Request $request):Response
     {
-        $user = $this->getUser();
+
         $zone = new  Zone();
         $form = $this->createForm(ZoneType::class, $zone);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $zone->setAuthor($user);
             $this->addFlash('success', "La zone <strong>{$zone->getName()}</strong> a bien été ajouter");
             $this->manager->persist($zone);
             $this->manager->flush();
@@ -65,11 +64,10 @@ class ZoneController extends AbstractController
      */
     public function edit(Request $request, Zone $zone):Response
     {
-        $user = $this->getUser();
+
         $form = $this->createForm(ZoneType::class, $zone);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $zone->setAuthor($user);
             $this->addFlash('success', "La zone <strong>{$zone->getName()}</strong> a bien été modifier");
             $this->manager->persist($zone);
             $this->manager->flush();

@@ -47,7 +47,7 @@ class TraderController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $this->addFlash('success', "Le commercial <strong>{$trader->getFullName()}</strong> a bien été ajouter.");
-            $trader->setAuthor($user);
+
             $this->manager->persist($trader);
             $this->manager->flush();
             return $this->redirectToRoute('trader');
@@ -70,7 +70,6 @@ class TraderController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $this->addFlash('success', "Le commercial <strong>{$trader->getFullName()}</strong> a bien été modifier.");
-            $trader->setAuthor($user);
             $this->manager->persist($trader);
             $this->manager->flush();
             return $this->redirectToRoute('trader');

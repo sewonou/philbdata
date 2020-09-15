@@ -8,11 +8,11 @@ use Symfony\Component\Security\Core\Security;
 
 class SaveUniverse
 {
-    private $user;
+
     private $save;
-    public function __construct(Security $security, Save $save)
+    public function __construct(Save $save)
     {
-        $this->user = $security->getUser();
+
         $this->save = $save;
     }
 
@@ -55,9 +55,8 @@ class SaveUniverse
         $region = $value[$title['regionTitle']];
         $zone = $value[$title['zoneTitle']];
         $trader = $value[$title['traderTitle']];
-        $user = $this->user;
 
-        return compact('msisdn', 'posName', 'profile', 'activity', 'localization', 'latitude', 'longitude', 'contact', 'trader', 'district', 'township', 'prefecture', 'town', 'region', 'zone', 'user');
+        return compact('msisdn', 'posName', 'profile', 'activity', 'localization', 'latitude', 'longitude', 'contact', 'trader', 'district', 'township', 'prefecture', 'town', 'region', 'zone');
     }
 
     public function save($value)

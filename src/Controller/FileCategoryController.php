@@ -28,12 +28,10 @@ class FileCategoryController extends AbstractController
      */
     public function add(Request $request):Response
     {
-        $user = $this->getUser();
         $category = new FileCategory();
         $form = $this->createForm(FileCategoryType::class, $category);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $category->setAuthor($user);
             $this->addFlash('success', "La categorie de paramètre <strong>{$category->getTitle()}</strong>  a bien été ajouter");
             $this->manager->persist($category);
             $this->manager->flush();
@@ -55,11 +53,9 @@ class FileCategoryController extends AbstractController
      */
     public function edit(Request $request, FileCategory $category):Response
     {
-        $user = $this->getUser();
         $form = $this->createForm(FileCategoryType::class, $category);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $category->setAuthor($user);
             $this->addFlash('success', "La categorie de paramètre <strong>{$category->getTitle()}</strong>  a bien été modifier");
             $this->manager->persist($category);
             $this->manager->flush();

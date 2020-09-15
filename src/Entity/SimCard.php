@@ -46,11 +46,6 @@ class SimCard
     private $updateAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     */
-    private $author;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Profile::class)
      * @Assert\NotBlank(message="Veuillez sélectionner un profil valide")
      */
@@ -125,17 +120,6 @@ class SimCard
         return $this;
     }
 
-    public function getAuthor(): ?User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?User $author): self
-    {
-        $this->author = $author;
-
-        return $this;
-    }
 
     public function getProfile(): ?Profile
     {

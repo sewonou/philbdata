@@ -8,11 +8,11 @@ use Symfony\Component\Security\Core\Security;
 
 class SaveTransaction
 {
-    private $user;
+
     private $save;
-    public function __construct(Security $security, Save $save)
+    public function __construct(Save $save)
     {
-        $this->user = $security->getUser();
+
         $this->save = $save;
     }
 
@@ -42,9 +42,9 @@ class SaveTransaction
         $fromSim = $value[$title['fromSimTitle']];
         $toSim = $value[$title['toSimTitle']];
         $type = $value[$title['typeTitle']];
-        $user = $this->user;
 
-        return compact('id', 'transactionAt', 'amount', 'dealerCommission', 'posCommission', 'fromSim', 'toSim', 'type', 'user');
+
+        return compact('id', 'transactionAt', 'amount', 'dealerCommission', 'posCommission', 'fromSim', 'toSim', 'type');
     }
 
     public function save($value)

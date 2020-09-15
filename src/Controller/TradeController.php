@@ -52,7 +52,6 @@ class TradeController extends AbstractController
         $form = $this->createForm(TradeType::class, $trade);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $trade->setAuthor($user);
             $this->manager->persist($trade);
             $this->manager->flush();
             $this->addFlash('success', "La transaction <strong>{$trade->getRefId()}</strong> a bien été ajouter");
@@ -76,7 +75,6 @@ class TradeController extends AbstractController
         $form = $this->createForm(TradeType::class, $trade);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $trade->setAuthor($user);
             $this->manager->persist($trade);
             $this->manager->flush();
             $this->addFlash('success', "La transaction <strong>{$trade->getRefId()}</strong> a bien été modifier");

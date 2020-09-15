@@ -40,13 +40,13 @@ class TownshipController extends AbstractController
      */
     public function create(Request $request):Response
     {
-        $user = $this->getUser();
+
         $township = new Township();
         $form = $this->createForm(TownshipType::class, $township);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $township->setAuthor($user);
+
             $this->addFlash('success', "Le canton <strong>{$township->getName()}</strong> a bien été ajouter.");
             $this->manager->persist($township);
             $this->manager->flush();
@@ -71,7 +71,7 @@ class TownshipController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            $township->setAuthor($user);
+
             $this->addFlash('success', "Le canton <strong>{$township->getName()}</strong> a bien été modifier.");
             $this->manager->persist($township);
             $this->manager->flush();

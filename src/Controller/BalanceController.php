@@ -43,12 +43,11 @@ class BalanceController extends AbstractController
      */
     public function create(Request $request):Response
     {
-        $user= $this->getUser();
+
         $balance = new Balance();
         $form = $this->createForm(BalanceType::class, $balance);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $balance->setAuthor($user);
             $this->manager->persist($balance);
             $this->manager->flush();
             $this->addFlash('success', "Le solde <strong>{$balance->getId()}</strong> a bien été ajouter");
@@ -69,11 +68,11 @@ class BalanceController extends AbstractController
      */
     public function edit(Request $request, Balance $balance):Response
     {
-        $user= $this->getUser();
+
         $form = $this->createForm(BalanceType::class, $balance);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $balance->setAuthor($user);
+
             $this->manager->persist($balance);
             $this->manager->flush();
             $this->addFlash('success', "Le solde <strong>{$balance->getId()}</strong> a bien été modifier");
