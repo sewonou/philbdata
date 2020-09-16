@@ -4,6 +4,7 @@
 
 {% block body %}
     <div class="content-box">
+
         <div class="element-wrapper">
             <div class="row">
                 <div class="col-lg-10">
@@ -15,89 +16,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="element-content">
-                <div class="row">
-                    <div class="col-sm-2 col-xxxl-2">
-                        <a class="element-box el-tablo" href="#">
-                            <div class="label">
-                                Sim Actif
-                            </div>
-                            <div class="value">
-                                57
-                            </div>
-                            <div class="trending trending-up-basic">
-                                <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-sm-2 col-xxxl-2">
-                        <a class="element-box el-tablo" href="#">
-                            <div class="label">
-                                Nbre de PDV
-                            </div>
-                            <div class="value">
-                                12
-                            </div>
-                            <div class="trending trending-up-basic">
-                                <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-sm-2 col-xxxl-2">
-                        <a class="element-box el-tablo" href="#">
-                            <div class="label">
-                                Nbre de AGNT
-                            </div>
-                            <div class="value">
-                                14
-                            </div>
-                            <div class="trending trending-down-basic">
-                                <span>12%</span><i class="os-icon os-icon-arrow-down"></i>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-sm-2 col-xxxl-2">
-                        <a class="element-box el-tablo" href="#">
-                            <div class="label">
-                                Nbre de DISTRO
-                            </div>
-                            <div class="value">
-                                125
-                            </div>
-                            <div class="trending trending-down-basic">
-                                <span>9%</span><i class="os-icon os-icon-arrow-down"></i>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-sm-2 col-xxxl-2">
-                        <a class="element-box el-tablo" href="#">
-                            <div class="label">
-                                Nbre de POSCAGNT
-                            </div>
-                            <div class="value">
-                                15
-                            </div>
-                            <div class="trending trending-up-basic">
-                                <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-sm-2 col-xxxl-2">
-                        <a class="element-box el-tablo" href="#">
-                            <div class="label">
-                                Nbre de CAGNT
-                            </div>
-                            <div class="value">
-                                14
-                            </div>
-                            <div class="trending trending-up-basic">
-                                <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            {{ include('partials/_simCardStat.html.twig') }}
             <div class="element-box">
 
                 <div class="table-responsive">

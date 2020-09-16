@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Pointofsale;
 use App\Form\PointofsaleType;
 use App\Repository\PointofsaleRepository;
+use App\Service\SimCardStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,12 +25,15 @@ class PointofsaleController extends AbstractController
 
     /**
      * @Route("/pointofsales", name="pointofsale")
+     * @param SimCardStat $simCardStat
+     * @return Response
      */
-    public function index():Response
+    public function index(SimCardStat $simCardStat):Response
     {
         $pointofsales = $this->repository->findPointofsaleWithTrader(true);
         return $this->render('pointofsale/index.html.twig', [
             'pointofsales' => $pointofsales,
+            'simCardStat' => $simCardStat,
         ]);
     }
 

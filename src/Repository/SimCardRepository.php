@@ -54,6 +54,55 @@ class SimCardRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findActiveSim()
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.profile', 'p')
+            ->andWhere('s.isActive = true')
+            ->orderBy('s.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findActivePointofsale()
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.pointofsale', 'pos')
+            ->innerJoin('s.profile', 'p')
+            ->andWhere('pos.isActive = true')
+            ->andWhere('s.isActive = true')
+            ->orderBy('s.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findActivePointofsaleByProfile(string $profile)
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.profile', 'p')
+            ->innerJoin('s.pointofsale', 'pos')
+            ->andWhere('p.title = :val1')
+            ->andWhere('pos.isActive = true')
+            ->andWhere('s.isActive = true')
+            ->setParameters(['val1' => $profile])
+            ->orderBy('s.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findActiveTraderByProfile(string $profile)
+    {
+        return $this->createQueryBuilder('s')
+            ->innerJoin('s.profile', 'p')
+            ->innerJoin('s.trader', 't')
+            ->andWhere('p.title = :val1')
+            ->andWhere('t.isActive = true')
+            ->andWhere('s.isActive = true')
+            ->setParameters(['val1' => $profile])
+            ->orderBy('s.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
     // /**
     //  * @return SimCard[] Returns an array of SimCard objects
     //  */

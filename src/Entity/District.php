@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\DistrictRepository;
+use App\Repository\PointofsaleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -91,5 +92,10 @@ class District
         $this->updateAt = $updateAt;
 
         return $this;
+    }
+
+    public function getPointofsale()
+    {
+
     }
 }

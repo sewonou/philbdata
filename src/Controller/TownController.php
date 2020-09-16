@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Town;
 use App\Form\TownType;
 use App\Repository\TownRepository;
+use App\Service\SimCardStat;
+use App\Service\ZoningStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,11 +27,16 @@ class TownController extends AbstractController
 
     /**
      * @Route("/towns", name="town")
+     * @param ZoningStat $zoningStat
+     * @param SimCardStat $simCardStat
+     * @return Response
      */
-    public function index():Response
+    public function index(ZoningStat $zoningStat, SimCardStat $simCardStat):Response
     {
         return $this->render('town/index.html.twig', [
             'towns'=>$this->repository->findAll(),
+            'zoningStat' => $zoningStat,
+            'simCardStat' => $simCardStat
         ]);
     }
 

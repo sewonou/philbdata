@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Zone;
 use App\Form\ZoneType;
 use App\Repository\ZoneRepository;
+use App\Service\SimCardStat;
+use App\Service\ZoningStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,11 +27,16 @@ class ZoneController extends AbstractController
 
     /**
      * @Route("/zones", name="zone")
+     * @param ZoningStat $zoningStat
+     * @param SimCardStat $simCardStat
+     * @return Response
      */
-    public function index():Response
+    public function index(ZoningStat $zoningStat, SimCardStat $simCardStat):Response
     {
         return $this->render('zone/index.html.twig', [
             'zones' => $this->repository->findAll(),
+            'zoningStat' => $zoningStat,
+            'simCardStat' => $simCardStat
         ]);
     }
 

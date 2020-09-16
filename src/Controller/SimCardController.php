@@ -6,6 +6,8 @@ use App\Entity\SimCard;
 use App\Form\SimCardType;
 use App\Repository\ProfileRepository;
 use App\Repository\SimCardRepository;
+use App\Service\SimCardStat;
+use App\Service\ZoningStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,12 +27,15 @@ class SimCardController extends AbstractController
 
     /**
      * @Route("/simcards", name="sim_card")
+     * @param SimCardStat $simCardStat
+     * @return Response
      */
-    public function index()
+    public function index(SimCardStat $simCardStat)
     {
         $simCards = $this->repository->findBy(['isActive'=>true], ['msisdn' => 'ASC'], null, null);
         return $this->render('sim_card/index.html.twig', [
             'simCards' => $simCards,
+            'simCardStat' => $simCardStat,
         ]);
     }
 

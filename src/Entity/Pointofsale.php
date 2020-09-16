@@ -65,11 +65,6 @@ class Pointofsale
 
     /**
      * @ORM\Column(type="string", length=85, nullable=true)
-     * @Assert\Regex(
-     *     pattern="^[0-9]+$",
-     *     htmlPattern="^[0-9]+$",
-     *     message="Le numéro doit être composé de chiffre uniquement"
-     * )
      */
     private $contact;
 
@@ -220,7 +215,7 @@ class Pointofsale
         return $this->contact;
     }
 
-    public function setContact(?string $contact): self
+    public function setContact($contact): self
     {
         $this->contact = $contact;
 

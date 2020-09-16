@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Profile;
 use App\Form\ProfileType;
 use App\Repository\ProfileRepository;
+use App\Service\SimCardStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,12 +25,15 @@ class ProfileController extends AbstractController
 
     /**
      * @Route("/profiles", name="profile")
+     * @param SimCardStat $simCardStat
+     * @return Response
      */
-    public function index():Response
+    public function index(SimCardStat $simCardStat):Response
     {
         $profiles = $this->repository->findAll();
         return $this->render('profile/index.html.twig', [
             'profiles'=>$profiles,
+            'simCardStat' =>$simCardStat,
         ]);
     }
 

@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Region;
 use App\Form\RegionType;
 use App\Repository\RegionRepository;
+use App\Service\SimCardStat;
+use App\Service\ZoningStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,11 +29,16 @@ class RegionController extends AbstractController
 
     /**
      * @Route("/regions", name="region")
+     * @param ZoningStat $zoningStat
+     * @param SimCardStat $simCardStat
+     * @return Response
      */
-    public function index()
+    public function index(ZoningStat $zoningStat, SimCardStat $simCardStat)
     {
         return $this->render('region/index.html.twig', [
             'regions' => $this->repository->findAll(),
+            'zoningStat' => $zoningStat,
+            'simCardStat' => $simCardStat,
         ]);
     }
 

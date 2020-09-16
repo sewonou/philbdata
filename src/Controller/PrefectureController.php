@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Prefecture;
 use App\Form\PrefectureType;
 use App\Repository\PrefectureRepository;
+use App\Service\SimCardStat;
+use App\Service\ZoningStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,11 +27,16 @@ class PrefectureController extends AbstractController
 
     /**
      * @Route("/prefectures", name="prefecture")
+     * @param ZoningStat $zoningStat
+     * @param SimCardStat $simCardStat
+     * @return Response
      */
-    public function index():Response
+    public function index(ZoningStat $zoningStat, SimCardStat $simCardStat):Response
     {
         return $this->render('prefecture/index.html.twig', [
             'prefectures'=>$this->repository->findAll(),
+            'zoningStat' => $zoningStat,
+            'simCardSat' => $simCardStat,
         ]);
     }
 

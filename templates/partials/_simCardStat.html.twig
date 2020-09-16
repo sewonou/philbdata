@@ -1,0 +1,83 @@
+<div class="element-content">
+    <div class="row">
+        <div class="col-sm-2 col-xxxl-2">
+            <a class="element-box el-tablo" href="#">
+                <div class="label">
+                    Sim Actif
+                </div>
+                <div class="value">
+                    {{ simCardStat.activeSimCard }}
+                </div>
+                <div class="trending trending-up-basic">
+                    <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-2 col-xxxl-2">
+            <a class="element-box el-tablo" href="#">
+                <div class="label">
+                    Nbre de PDV
+                </div>
+                <div class="value">
+                    {{ simCardStat.activePointofsale }}
+                </div>
+                <div class="trending trending-up-basic">
+                    <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-2 col-xxxl-2">
+            <a class="element-box el-tablo" href="#">
+                <div class="label">
+                    Nbre de AGNT
+                </div>
+                <div class="value">
+                    {{ simCardStat.activePointofsaleByProfile('AGNT') }}
+                </div>
+                <div class="trending trending-down-basic">
+                    <span>12%</span><i class="os-icon os-icon-arrow-down"></i>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-2 col-xxxl-2">
+            <a class="element-box el-tablo" href="#">
+                <div class="label">
+                    Nbre de DISTRO
+                </div>
+                <div class="value">
+                    {{ simCardStat.activePointofsaleByProfile('DISTRO') }}
+                </div>
+                <div class="trending trending-down-basic">
+                    <span>9%</span><i class="os-icon os-icon-arrow-down"></i>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-2 col-xxxl-2">
+            <a class="element-box el-tablo" href="#">
+                <div class="label">
+                    Nbre de POSCAGNT
+                </div>
+                <div class="value">
+                    {{ simCardStat.activePointofsaleByProfile('POSCAGNT') }}
+                </div>
+                <div class="trending trending-up-basic">
+                    <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-sm-2 col-xxxl-2">
+            <a class="element-box el-tablo" href="#">
+                <div class="label">
+                    Nbre de CAGNT
+                </div>
+                <div class="value">
+                    {{ simCardStat.activeTraderByProfile('CAGNT') }}
+                </div>
+                <div class="trending trending-up-basic">
+                    <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

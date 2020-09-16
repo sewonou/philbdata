@@ -42,12 +42,12 @@ class SaveUniverse
     {
         $msisdn = $value[$title['msisdnTitle']];
         $profile = $value[$title['profileTitle']];
-        $posName = $value[$title['posTitle']];
-        $activity = $value[$title['activityTitle']];
-        $localization = $value[$title['localizationTitle']];
-        $latitude = $value[$title['latitudeTitle']];
-        $longitude = $value[$title['longitudeTitle']];
-        $contact = $value[$title['contactTitle']];
+        $posName = strval($value[$title['posTitle']]);
+        $activity = strval($value[$title['activityTitle']]);
+        $localization = strval($value[$title['localizationTitle']]);
+        $latitude = strval($value[$title['latitudeTitle']]);
+        $longitude = strval($value[$title['longitudeTitle']]);
+        $contact = mb_strtoupper($value[$title['contactTitle']]);
         $district = $value[$title['districtTitle']];
         $township = $value[$title['townshipTitle']];
         $prefecture = $value[$title['prefectureTitle']];
