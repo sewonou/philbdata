@@ -24,6 +24,9 @@
                             <th></th>
                             <th>Région</th>
                             <th>Commune</th>
+                            <th>PDV Agnt</th>
+                            <th>PDV Distro</th>
+                            <th>Total PDV</th>
                             <th>Dernière mise à jour</th>
                             <th>Action</th>
                         </tr>
@@ -35,6 +38,9 @@
                                     <td>{{ loop.index0 + 1  }}</td>
                                     <td>{% if town.region %}{{ town.region.name }}{% else %}Region inexistante{% endif %}</td>
                                     <td>{{ town.name }}</td>
+                                    <td>{{ zoningStat.pointofsaleInTown(town.id, 'AGNT') }}</td>
+                                    <td>{{ zoningStat.pointofsaleInTown(town.id, 'DISTRO') }}</td>
+                                    <td>{{ zoningStat.pointofsaleInTown(town.id, 'AGNT') + zoningStat.pointofsaleInTown(town.id, 'DISTRO') }}</td>
                                     <td>{{ town.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">
                                         <a href="{{ path('town_edit', {'id': town.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>

@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\District;
 use App\Form\DistrictType;
 use App\Repository\DistrictRepository;
+use App\Service\SimCardStat;
+use App\Service\ZoningStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,11 +27,16 @@ class DistrictController extends AbstractController
 
     /**
      * @Route("/districts", name="district")
+     * @param ZoningStat $zoningStat
+     * @param SimCardStat $simCardStat
+     * @return Response
      */
-    public function index():Response
+    public function index(ZoningStat $zoningStat, SimCardStat $simCardStat):Response
     {
         return $this->render('district/index.html.twig', [
             'districts'=>$this->repository->findAll(),
+            'zoningStat' => $zoningStat,
+            'simCardStat' => $simCardStat,
         ]);
     }
 

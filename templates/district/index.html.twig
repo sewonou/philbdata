@@ -9,7 +9,7 @@
                 <div class="col-lg-10">
                     <h5 class="element-header">Liste des quartiers</h5>
                 </div>
-                <div class="col-lg- text-right">
+                <div class="col-lg-2 text-right">
                     {% if 'ROLE_SUPER_ADMIN' in app.user.roles() %}
                         <a href="{{ path('district_add') }}" class="btn btn-primary btn-rounded"><i class="fa fa-plus"></i> Ajouter</a>
                     {% endif %}
@@ -25,7 +25,9 @@
                             <th>Commune</th>
                             <th>Préfecture</th>
                             <th>Quartier</th>
-                            <th>Dernière mise à jour</th>
+                            <th>PDV Agnt</th>
+                            <th>PDV Distro</th>
+                            <th>Total PDV</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -37,7 +39,9 @@
                                     <td>{% if district.township %}{{ district.township.prefecture.town.name }}{% else %}Commune inexistante{% endif %}</td>
                                     <td>{% if district.township %}{{ district.township.prefecture.name }}{% else %}Préfecture inexistante{% endif %}</td>
                                     <td>{{ district.name }}</td>
-                                    <td>{{ district.updateAt | date("F jS à g:ia") }}</td>
+                                    <td>{{ zoningStat.pointofsaleInDistrict(district.id, 'AGNT') }}</td>
+                                    <td>{{ zoningStat.pointofsaleInDistrict(district.id, 'DISTRO')  }}</td>
+                                    <td>{{ zoningStat.pointofsaleInDistrict(district.id, 'AGNT') + zoningStat.pointofsaleInDistrict(district.id, 'DISTRO') }}</td>
                                     <td class="row-actions">
                                         <a href="{{ path('district_edit', {'id': district.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
                                         <a href="{{ path('district_show', {'id': district.id}) }}"><i class="fa fa-eye"></i></a>

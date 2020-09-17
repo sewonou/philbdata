@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Control;
+use App\Entity\Trader;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,42 @@ class ControlRepository extends ServiceEntityRepository
         parent::__construct($registry, Control::class);
     }
 
+    public function findTraderPointofsale(?Trader $trader, ?bool $value)
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.trader', 't')
+            ->innerJoin('c.pointofsale', 'p')
+            ->innerJoin('p.msisdn', 's')
+            ->innerJoin('s.profile', 'pr')
+            ->andWhere('c.isActive = :val')
+            ->andWhere('p.isActive = :val')
+            ->andWhere('s.isActive = :val')
+            ->andWhere('c.trader = :trader')
+            ->setParameters(['val'=>$value, 'trader'=>$trader])
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findTraderPointofsaleByProfile(?Trader $trader, ?bool $value, ?string $profile)
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.trader', 't')
+            ->innerJoin('c.pointofsale', 'p')
+            ->innerJoin('p.msisdn', 's')
+            ->innerJoin('s.profile', 'pr')
+            ->andWhere('c.isActive = :val')
+            ->andWhere('p.isActive = :val')
+            ->andWhere('s.isActive = :val')
+            ->andWhere('c.trader = :trader')
+            ->andWhere('pr.title = :profile')
+            ->setParameters(['val'=>$value, 'trader'=>$trader, 'profile' => $profile])
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     // /**
     //  * @return Control[] Returns an array of Control objects
     //  */

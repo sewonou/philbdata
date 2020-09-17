@@ -20,6 +20,26 @@ class SaleRepository extends ServiceEntityRepository
         parent::__construct($registry, Sale::class);
     }
 
+    public function findSaleByTrader($val, $trader, $date1, $date2)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, DATE(sales.transactionAt) as day")
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.controls', 'c')
+            ->innerJoin('c.trader', 't')
+            ->andWhere('sim.isActive = :val')
+            ->andWhere('pos.isActive = :val')
+            ->andWhere('c.isActive = :val')
+            ->andWhere('c.trader = :trader')
+            ->andWhere('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['val'=>$val, 'trader'=>$trader, 'date1'=>$date1, 'date2'=>$date2])
+            ->orderBy('t.id')
+            ->getQuery()
+            ->getResult()
+         ;
+    }
+
     public function findSaleByMonth()
     {
         return $this->createQueryBuilder('s')

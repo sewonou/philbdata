@@ -36,7 +36,7 @@ class PrefectureController extends AbstractController
         return $this->render('prefecture/index.html.twig', [
             'prefectures'=>$this->repository->findAll(),
             'zoningStat' => $zoningStat,
-            'simCardSat' => $simCardStat,
+            'simCardStat' => $simCardStat,
         ]);
     }
 

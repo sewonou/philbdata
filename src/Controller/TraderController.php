@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Search;
 use App\Entity\Trader;
+use App\Form\SearchType;
 use App\Form\TraderType;
 use App\Repository\TraderRepository;
+use App\Service\TraderStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,12 +28,15 @@ class TraderController extends AbstractController
 
     /**
      * @Route("/traders", name="trader")
+     * @param TraderStat $traderStat
+     * @return Response
      */
-    public function index():Response
+    public function index(TraderStat $traderStat):Response
     {
         $traders =$this->repository->findBy(['isTrader'=>true, 'isActive'=>true],['fullName'=>'ASC'],null, null);
         return $this->render('trader/index.html.twig', [
             'traders' => $traders,
+            'traderStat' => $traderStat,
         ]);
     }
 
@@ -97,13 +103,30 @@ class TraderController extends AbstractController
     /**
      * @param Trader $trader
      * @return Response
-     * @Route("/trader/{id}/show", name="trader_show")
+     * @Route("/traders/{id}/show", name="trader_show")
      *
      */
     public function show(Trader $trader):Response
     {
         return $this->render('trader/show.html.twig', [
             'trader' => $trader,
+        ]);
+    }
+
+    /**
+     *
+     * @return Response
+     * @Route("/traders/performance", name="trader_performance")
+     *
+     */
+    public function performanceBoard():Response
+    {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $traders =$this->repository->findBy(['isTrader'=>true, 'isActive'=>true],['fullName'=>'ASC'],null, null);
+        return $this->render('trader/performanceBoard.html.twig', [
+            'traders' => $traders,
+            'form' => $form->createView()
         ]);
     }
 }

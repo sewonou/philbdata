@@ -19,6 +19,43 @@ class TraderRepository extends ServiceEntityRepository
         parent::__construct($registry, Trader::class);
     }
 
+    public function findTraderPointofsale(?Trader $trader, ?bool $value)
+    {
+        return $this->createQueryBuilder('t')
+            ->innerJoin('t.controls', 'c')
+            ->innerJoin('c.pointofsale', 'p')
+            ->innerJoin('p.msisdn', 's')
+            ->innerJoin('s.profile', 'pr')
+            ->andWhere('c.isActive = :val')
+            ->andWhere('p.isActive = :val')
+            ->andWhere('s.isActive = :val')
+            ->andWhere('c.trader = :trader')
+            ->setParameters(['val'=>$value, 'trader'=>$trader])
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findTraderPointofsaleByProfile(?int $id, ?bool $value, ?string $profile)
+    {
+        return $this->createQueryBuilder('t')
+            ->innerJoin('t.controls', 'c')
+            ->innerJoin('c.pointofsale', 'p')
+            ->innerJoin('p.msisdn', 's')
+            ->innerJoin('s.profile', 'pr')
+            ->andWhere('c.isActive = :val')
+            ->andWhere('p.isActive = :val')
+            ->andWhere('s.isActive = :val')
+            ->andWhere('t.id = :id')
+            ->andWhere('pr.title = :profile')
+            ->setParameters(['val'=>$value, 'id'=>$id, 'profile' => $profile])
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return Trader[] Returns an array of Trader objects
     //  */

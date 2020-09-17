@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TraderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -82,11 +84,20 @@ class Trader
      */
     private $msisdnName;
 
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Control::class, mappedBy="trader", cascade={"persist"})
+     */
+    private $controls;
+
+    public function __construct()
+    {
+        $this->controls = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -229,6 +240,37 @@ class Trader
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Control[]
+     */
+    public function getControls(): Collection
+    {
+        return $this->controls;
+    }
+
+    public function addControl(Control $control): self
+    {
+        if (!$this->controls->contains($control)) {
+            $this->controls[] = $control;
+            $control->setTrader($this);
+        }
+
+        return $this;
+    }
+
+    public function removeControl(Control $control): self
+    {
+        if ($this->controls->contains($control)) {
+            $this->controls->removeElement($control);
+            // set the owning side to null (unless already changed)
+            if ($control->getTrader() === $this) {
+                $control->setTrader(null);
+            }
+        }
 
         return $this;
     }

@@ -39,6 +39,7 @@ class PointofsaleRepository extends ServiceEntityRepository
         ;
     }
 
+
     public function findPointofsaleInDistrict(?string $id, ?string $profile, ?bool $val)
     {
         return $this->createQueryBuilder('p')
@@ -62,6 +63,7 @@ class PointofsaleRepository extends ServiceEntityRepository
             ->innerJoin('s.profile', 'pr')
             ->innerJoin('p.district', 'd')
             ->innerJoin('d.township', 't')
+            ->andWhere('pr.title = :profile')
             ->andWhere('p.isActive = :val')
             ->andWhere('s.isActive = :val')
             ->andWhere('t.id = :id')

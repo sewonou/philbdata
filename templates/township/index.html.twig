@@ -23,7 +23,9 @@
                             <th>Commune</th>
                             <th>Préfecture</th>
                             <th>Canton</th>
-                            <th>Dernière mise à jour</th>
+                            <th>PDV Agnt</th>
+                            <th>PDV Distro</th>
+                            <th>Total PDV</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -35,7 +37,9 @@
                                     <td>{% if township.prefecture %}{{ township.prefecture.town.name }}{% else %}Commune inexistante{% endif %}</td>
                                     <td>{% if township.prefecture %}{{ township.prefecture.name }}{% else %}Préfecture inexistante{% endif %}</td>
                                     <td>{{ township.name }}</td>
-                                    <td>{{ township.updateAt | date("F jS à g:ia") }}</td>
+                                    <td>{{ zoningStat.pointofsaleInTownship(township.id, 'AGNT') }}</td>
+                                    <td>{{ zoningStat.pointofsaleInTownship(township.id, 'DISTRO') }}</td>
+                                    <td>{{ zoningStat.pointofsaleInTownship(township.id, 'AGNT') + zoningStat.pointofsaleInTownship(township.id, 'DISTRO') }}</td>
                                     <td class="row-actions">
                                         <a href="{{ path('township_edit', {'id': township.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
                                         <a href="{{ path('township_show', {'id': township.id}) }}"><i class="fa fa-eye"></i></a>

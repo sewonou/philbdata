@@ -25,9 +25,10 @@
                             <th>Photo</th>
                             <th>Nom complet</th>
                             <th>Numéro flooz</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th>PDV Agnt</th>
+                            <th>PDV Distro</th>
+                            <th>Total PDV</th>
+                            <th>Objectif Mensuel</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -38,19 +39,21 @@
                                     <td>{{ loop.index0 + 1  }}</td>
                                     <td class="cell-image-list">
                                         {% if trader.pictureName %}
-                                            <img class="custom-avatar custom-avatar-mini" src="{{ vich_uploader_asset(trader, 'pictureFile') }}" alt="{{ trader.fullName }}">
+                                            <img class="custom-avatar custom-avatar-micro" src="{{ vich_uploader_asset(trader, 'pictureFile') }}" alt="{{ trader.fullName }}">
                                         {% else %}
-                                            <img class="custom-avatar custom-avatar-mini" src="{{ asset('uploads/images/user.png') }}" alt="{{ trader.fullName }}">
+                                            <img class="custom-avatar custom-avatar-micro" src="{{ asset('uploads/images/user.png') }}" alt="{{ trader.fullName }}">
                                         {% endif %}
                                     </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{ trader.fullName }}</td>
+                                    <td>{{ trader.msisdn.msisdn }}</td>
+                                    <td class="text-center">{{ traderStat.traderPointofsaleByProfile(trader, 'AGNT') }}</td>
+                                    <td class="text-center">{{ traderStat.traderPointofsaleByProfile(trader, 'DISTRO') }}</td>
+                                    <td class="text-center">{{ traderStat.traderPointofsale(trader) }}</td>
+                                    <td class="text-right">{{ traderStat.traderMonthlyGoal(trader) | number_format(0, ',', ' ') }} F CFA</td>
                                     <td class="row-actions">
                                         <a href="{{ path('trader_edit', {'id': trader.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
                                         <a href="{{ path('trader_show', {'id': trader.id}) }}"><i class="fa fa-eye"></i></a>
-                                        <a class="danger" href="{{ path('trader_delete', {'id':trader.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer le canton{{ township.name }}')"><i class="os-icon os-icon-ui-15"></i></a>
+                                        <a class="danger" href="{{ path('trader_delete', {'id':trader.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer le canton{{ trader.name }}')"><i class="os-icon os-icon-ui-15"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}
