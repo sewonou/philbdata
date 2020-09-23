@@ -46,7 +46,7 @@
                         <a href="{{ path('homePage') }}">Résumé journalier</a>
                     </li>
                     <li>
-                        <a href="#">Résumé périodique périodique</a>
+                        <a href="{{ path('periodicBoard') }}">Résumé périodique périodique</a>
                     </li>
                     <li>
                         <a href="#">Tableau des Performances par zone</a>
@@ -95,19 +95,16 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a href="#">Dépôt</a>
+                        <a href="{{ path('sale') }}">Transactions : CSIN | AGNT</a>
                     </li>
                     <li>
-                        <a href="#">Retrait</a>
+                        <a href="{{ path('trade') }}">Transaction : GIVE</a>
                     </li>
                     <li>
-                        <a href="#">Transfert</a>
+                        <a href="{{ path('balance') }}">Solde des numéros</a>
                     </li>
                     <li>
-                        <a href="#">Autres</a>
-                    </li>
-                    <li>
-                        <a href="#">Uploader</a>
+                        <a href="{{ path('transaction_file') }}">Uploader</a>
                     </li>
                 </ul>
             </li>
@@ -121,13 +118,13 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a href="#">Les numéros</a>
+                        <a href="{{ path('sim_card') }}">Les numéros</a>
                     </li>
                     <li>
-                        <a href="#">Les Centraux Agents</a>
+                        <a href="{{ path('trader') }}">Les Centraux Agents</a>
                     </li>
                     <li>
-                        <a href="#">Les PDVs / Commerciaux</a>
+                        <a href="{{ path('pointofsale') }}">Les PDVs / Commerciaux</a>
                     </li>
                 </ul>
             </li>
@@ -171,10 +168,10 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a href="#">Liste complète</a>
+                        <a href="{{ path('trader') }}">Liste complète</a>
                     </li>
                     <li>
-                        <a href="#">Tableaux des Performances</a>
+                        <a href="{{ path('trader_performance') }}">Tableaux des Performances</a>
                     </li>
                 </ul>
             </li>

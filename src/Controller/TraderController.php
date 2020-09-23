@@ -115,18 +115,27 @@ class TraderController extends AbstractController
 
     /**
      *
+     * @param TraderStat $traderStat
+     * @param Request $request
      * @return Response
      * @Route("/traders/performance", name="trader_performance")
-     *
+     * @throws \Exception
      */
-    public function performanceBoard():Response
+    public function performanceBoard(TraderStat $traderStat, Request $request):Response
     {
         $search = new Search();
+        $search->setStartAt(new \DateTime('-1 day'))
+            ->setEndAt(new \DateTime('-1 day'))
+        ;
         $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+
         $traders =$this->repository->findBy(['isTrader'=>true, 'isActive'=>true],['fullName'=>'ASC'],null, null);
         return $this->render('trader/performanceBoard.html.twig', [
             'traders' => $traders,
-            'form' => $form->createView()
+            'search' => $search,
+            'form' => $form->createView(),
+            'traderStat' => $traderStat,
         ]);
     }
 }

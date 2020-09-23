@@ -23,7 +23,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleByTrader($val, $trader, $date1, $date2)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, DATE(sales.transactionAt) as day")
+            ->select("SUM(s.dComm) as dComm")
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
             ->innerJoin('pos.controls', 'c')
@@ -36,7 +36,7 @@ class SaleRepository extends ServiceEntityRepository
             ->setParameters(['val'=>$val, 'trader'=>$trader, 'date1'=>$date1, 'date2'=>$date2])
             ->orderBy('t.id')
             ->getQuery()
-            ->getResult()
+            ->getSingleScalarResult()
          ;
     }
 

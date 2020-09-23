@@ -4,6 +4,7 @@
 namespace App\Service;
 
 
+use App\Entity\Search;
 use App\Entity\Trader;
 use App\Repository\ControlRepository;
 use App\Repository\SaleRepository;
@@ -43,5 +44,39 @@ class TraderStat
 
         return $totalPointofsale * $commercialMonth * $dailyGoal ;
 
+    }
+
+    public function getTraderPeriodGoal(?Trader $trader, ?Search $search)
+    {
+        $totalPointofsale = $this->getTraderPointofsale($trader);
+        $startDate = new \DateTime('-1 day');
+        $endDate = new \DateTime('-1 day') ;
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        $length = $startDate->diff($endDate);
+        $length = $length->format('%d');
+        $length = ($length == 0)? ($length + 1) : $length;
+        $dailyGoal = 500;
+        //dump($length);
+        //die();
+        return $totalPointofsale * $length * $dailyGoal ;
+    }
+
+    public function getTraderInput(?Trader $trader, ?Search $search)
+    {
+
+        $startDate = new \DateTime('-1 day');
+        $endDate = new \DateTime('-1 day') ;
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        return $this->saleRepository->findSaleByTrader(true, $trader, $startDate, $endDate);
     }
 }

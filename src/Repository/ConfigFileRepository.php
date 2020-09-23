@@ -25,6 +25,7 @@ class ConfigFileRepository extends ServiceEntityRepository
             ->innerJoin('c.category', 'fc')
             ->andWhere('fc.slug != :value')
             ->setParameters(['value'=>$value])
+            ->orderBy('c.id', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -35,6 +36,7 @@ class ConfigFileRepository extends ServiceEntityRepository
             ->innerJoin('c.category', 'fc')
             ->andWhere('fc.slug = :value')
             ->setParameters(['value'=>$value])
+            ->orderBy('c.id', 'DESC')
             ->getQuery()
             ->getResult();
     }

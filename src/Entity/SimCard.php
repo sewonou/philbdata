@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SimCardRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -66,6 +68,16 @@ class SimCard
      * @ORM\OneToOne(targetEntity=Pointofsale::class, mappedBy="msisdn", cascade={"persist", "remove"})
      */
     private $pointofsale;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Sale::class, mappedBy="msisdn")
+     */
+    private $sales;
+
+    public function __construct()
+    {
+        $this->sales = new ArrayCollection();
+    }
 
     /**
      * @ORM\PrePersist()
@@ -191,5 +203,36 @@ class SimCard
             $fulName =  $this->msisdn .' '. $this->getTrader()->getName() .' '. $this->getProfile()->getTitle();
         }
         return $fulName;
+    }
+
+    /**
+     * @return Collection|Sale[]
+     */
+    public function getSale(): Collection
+    {
+        return $this->sales;
+    }
+
+    public function addSale(Sale $sale): self
+    {
+        if (!$this->sales->contains($sale)) {
+            $this->sales[] = $sale;
+            $sale->setMsisdn($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSale(Sale $sale): self
+    {
+        if ($this->sales->contains($sale)) {
+            $this->sales->removeElement($sale);
+            // set the owning side to null (unless already changed)
+            if ($sale->getMsisdn() === $this) {
+                $sale->setMsisdn(null);
+            }
+        }
+
+        return $this;
     }
 }
