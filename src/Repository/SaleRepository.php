@@ -48,6 +48,7 @@ class SaleRepository extends ServiceEntityRepository
             ->where('t.title = :val1')
             ->orwhere('t.title = :val2')
             ->setParameters(['val1'=>'AGNT', 'val2' =>'CSIN'])
+            ->orderBy('day', 'DESC')
             ->groupBy('day, s.type')
             ->getQuery()
             ->getResult()
@@ -104,6 +105,7 @@ class SaleRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->select("SUM(s.dComm) as dComm, CONCAT(MONTHNAME(s.transactionAt), ' ', YEAR(s.transactionAt)) as day")
             ->groupBy('day')
+            ->orderBy('day', 'DESC')
             ->getQuery()
             ->getResult()
             ;
