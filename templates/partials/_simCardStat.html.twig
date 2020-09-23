@@ -8,8 +8,8 @@
                 <div class="value">
                     {{ simCardStat.activeSimCard }}
                 </div>
-                <div class="trending trending-up-basic">
-                    <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                <div class="trending">
+                    <span>100%</span>
                 </div>
             </a>
         </div>
@@ -21,8 +21,8 @@
                 <div class="value">
                     {{ simCardStat.activePointofsale }}
                 </div>
-                <div class="trending trending-up-basic">
-                    <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                <div class="trending">
+                    <span>{{ ((simCardStat.activePointofsale / simCardStat.activeSimCard) *100) | round(1, 'floor') }}%</span>
                 </div>
             </a>
         </div>
@@ -34,8 +34,8 @@
                 <div class="value">
                     {{ simCardStat.activePointofsaleByProfile('AGNT') }}
                 </div>
-                <div class="trending trending-down-basic">
-                    <span>12%</span><i class="os-icon os-icon-arrow-down"></i>
+                <div class="trending">
+                    <span>{{ ((simCardStat.activePointofsaleByProfile('AGNT') / simCardStat.activeSimCard) *100) | round(1, 'floor') }}%</span>
                 </div>
             </a>
         </div>
@@ -47,8 +47,8 @@
                 <div class="value">
                     {{ simCardStat.activePointofsaleByProfile('DISTRO') }}
                 </div>
-                <div class="trending trending-down-basic">
-                    <span>9%</span><i class="os-icon os-icon-arrow-down"></i>
+                <div class="trending">
+                    <span>{{ ((simCardStat.activePointofsaleByProfile('DISTRO') / simCardStat.activeSimCard) *100) | round(1, 'floor') }}%</span>
                 </div>
             </a>
         </div>
@@ -60,8 +60,8 @@
                 <div class="value">
                     {{ simCardStat.activePointofsaleByProfile('POSCAGNT') }}
                 </div>
-                <div class="trending trending-up-basic">
-                    <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                <div class="trending">
+                    <span>{{ ((simCardStat.activePointofsaleByProfile('POSCAGNT') / simCardStat.activeSimCard) *100) | round( 1, 'floor') }}%</span>
                 </div>
             </a>
         </div>
@@ -74,8 +74,8 @@
                 <div class="value">
                     {{ simCardStat.activeTraderByProfile('CAGNT') }}
                 </div>
-                <div class="trending trending-up-basic">
-                    <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                <div class="trending">
+                    <span>{{ ((simCardStat.activePointofsaleByProfile('CAGNT') / simCardStat.activeSimCard) *100) | round(1, 'floor') }}%</span>
                 </div>
             </a>
         </div>

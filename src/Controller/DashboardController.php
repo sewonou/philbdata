@@ -7,6 +7,7 @@ use App\Form\SearchType;
 use App\Repository\SaleRepository;
 use App\Service\PointofsaleStat;
 use App\Service\SimCardStat;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,14 +19,21 @@ class DashboardController extends AbstractController
      * @Route("/", name="homePage")
      * @param SaleRepository $saleRepository
      * @param SimCardStat $simCardStat
+     * @param PointofsaleStat $pointofsaleStat
      * @return Response
+     * @IsGranted("ROLE_ADMIN")
      */
-    public function index(SaleRepository $saleRepository, SimCardStat $simCardStat):Response
+    public function index(SaleRepository $saleRepository, SimCardStat $simCardStat, PointofsaleStat $pointofsaleStat):Response
     {
-        $sales = $saleRepository->findSaleByDate();
+        $lastDaySale = $saleRepository->findSaleByDateLimit(1);
+        $sales = $saleRepository->findSaleByDateLimit(8);
+        $percentWeekComm = $pointofsaleStat->getLastWeekCommission(8);
+
         return $this->render('dashboard/index.html.twig', [
             'sales'=>$sales,
             'simCardStat' => $simCardStat,
+            'lastSale' => $lastDaySale,
+            'percentWeekComm' => $percentWeekComm,
         ]);
     }
 
@@ -35,19 +43,19 @@ class DashboardController extends AbstractController
      * @param PointofsaleStat $pointofsaleStat
      * @return Response
      * @throws \Exception
+     * @IsGranted("ROLE_ADMIN")
      */
     public function periodicBoard(Request $request, PointofsaleStat $pointofsaleStat):Response
     {
         $search = new Search();
-        $search->setStartAt(new \DateTime('-1 day'))
-            ->setEndAt(new \DateTime('-1 day'))
-        ;
         $form = $this->createForm(SearchType::class, $search);
         $form->handleRequest($request);
-        $pointofsales = $pointofsaleStat->getPointofsalesPeriodInput($search);
+        $sales = $pointofsaleStat->getPointofsalesPeriodInput($search);
+        $goal = $pointofsaleStat->getPointofsaleGoal($search);
         return $this->render('dashboard/periodicBoard.html.twig', [
             'form' => $form->createView(),
-            'pointofsales' => $pointofsales,
+            'sales' => $sales,
+            'goal' => $goal,
         ]);
     }
 }

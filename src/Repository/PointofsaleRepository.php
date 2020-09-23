@@ -155,7 +155,7 @@ class PointofsaleRepository extends ServiceEntityRepository
     {
         //dump($date1, $date2);
         return $this->createQueryBuilder('pos')
-            ->addSelect("SUM(s.dComm) as dComm")
+            ->select("pos as pointofsale, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount")
             ->innerJoin('pos.msisdn', 'sim')
             ->innerJoin('sim.sales', 's')
             ->andWhere('sim.isActive = :val')

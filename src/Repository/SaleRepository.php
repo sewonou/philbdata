@@ -65,6 +65,30 @@ class SaleRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findSaleByDateLimit($limit)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->groupBy('day')
+            ->orderBy('day', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findLastDate()
+    {
+        return $this->createQueryBuilder('s')
+            ->select('DATE(s.transactionAt) as day')
+            ->orderBy('day', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
     public function findDistinctType()
     {
         return $this->createQueryBuilder('s')

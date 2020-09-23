@@ -9,29 +9,48 @@
                         {{ include('partials/_SearchForm.html.twig') }}
                     </div>
                     <h6 class="element-header">
-                        Sales Dashboard
+                        Tableau de perrfomances des point de ventes VS Objectif (Période)
                     </h6>
                 </div>
             </div>
         </div>
         <div class="element-box">
             <div class="table-responsive">
-                {{ dump(pointofsales) }}
                 <table id="dataTable1" width="100%" class="table table-striped table-lightfont">
                     <thead>
                     <tr>
                         <th></th>
+                        <th>Profil</th>
                         <th>Numéro flooz</th>
                         <th>Nom complet</th>
                         <th>Région</th>
-                        <th>Commercial</th>
-                        <th>Apport PDV</th>
+                        <th>Commune</th>
+                        <th>Commission PDV</th>
+                        <th>Commission Dealer</th>
                         <th>Objectif</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
+                        {% if sales  %}
+                            {% for sale in sales %}
+                                <tr>
+                                    <td class="text-center">{{ loop.index0+1 }}</td>
+                                    <th>{{ sale.pointofsale.msisdn.profile.title }}</th>
+                                    <td>{{ sale.pointofsale.msisdn.msisdn }}</td>
+                                    <td>{{ sale.pointofsale.name }}</td>
+                                    <td>{{ sale.pointofsale.district.township.prefecture.town.region.name }}</td>
+                                    <td>{{ sale.pointofsale.district.township.prefecture.town.name }}</td>
+                                    <td>{{ sale.posComm | number_format(0, ',', ' ') }} F CFA</td>
+                                    <td>{{ sale.dComm | number_format(0, ',', ' ') }} F CFA</td>
+                                    <td>{{ goal }}</td>
+                                    <td class="row-actions">
+                                        <a href="{{ path('pointofsale_show', {'id': sale.pointofsale.id}) }}"><i class="fa fa-eye"></i></a>
+                                    </td>
+                                </tr>
 
+                            {% endfor %}
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
