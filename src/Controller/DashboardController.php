@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Search;
 use App\Form\SearchType;
+use App\Repository\PointofsaleRepository;
 use App\Repository\SaleRepository;
 use App\Service\PointofsaleStat;
 use App\Service\SimCardStat;
@@ -56,6 +57,31 @@ class DashboardController extends AbstractController
             'form' => $form->createView(),
             'sales' => $sales,
             'goal' => $goal,
+        ]);
+    }
+
+    /**
+     * @Route("/pointofsales/performance", name="pointofsaleBoard")
+     * @param Request $request
+     * @param PointofsaleStat $pointofsaleStat
+     * @param PointofsaleRepository $pointofsaleRepository
+     * @return Response
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function pointofsaleBoard(Request $request, PointofsaleStat $pointofsaleStat, PointofsaleRepository $pointofsaleRepository):Response
+    {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $pointofsales = $pointofsaleRepository->findBy(['isActive'=>true]);
+        $sales = $pointofsaleStat->getPointofsalesPeriodInput($search);
+        $goal = $pointofsaleStat->getPointofsaleGoal($search);
+        return $this->render('dashboard/performanceBoard.html.twig', [
+            'form' => $form->createView(),
+            'pointofsales' => $pointofsales,
+            'pointofsaleStat' => $pointofsaleStat,
+            'goal' => $goal,
+            'search'=> $search,
         ]);
     }
 }

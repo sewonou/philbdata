@@ -33,6 +33,21 @@ class PointofsaleStat
         return $this->pointofsaleRepository->findPointofsalesPeriodInput(true, $startDate, $endDate);
     }
 
+    public function getPointofsaleComm(?Search $search, ?int $id)
+    {
+        $startDate = new \DateTime('-1 day');
+        $endDate = new \DateTime('-1 day') ;
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        //dump($startDate, $endDate);
+        return $this->pointofsaleRepository->findPointofsaleComm(true, $startDate, $endDate, $id);
+    }
+
+
     public function getPointofsaleGoal(?Search $search)
     {
         $startDate = new \DateTime($this->saleRepository->findLastDate());

@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Performance des PDVs{% endblock %}
+
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-actions">
+                        {{ include('partials/_searchForm.html.twig') }}
+                    </div>
+                    <h6 class="element-header">
+                        Tableau de perfomances des point de ventes VS Objectif (Période)
+                    </h6>
+                </div>
+            </div>
+        </div>
+        <div class="element-box">
+            <div class="table-responsive">
+                <table id="dataTable1" width="100%" class="table table-striped table-lightfont">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Profil</th>
+                        <th>Numéro flooz</th>
+                        <th>Nom complet</th>
+                        <th>Région</th>
+                        <th>Commune</th>
+                        <th>Commission PDV</th>
+                        <th>Commission Dealer</th>
+                        <th>Objectif</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if pointofsales  %}
+                        {% for pointofsale in pointofsales %}
+                            <tr>
+                                <td class="text-center">{{ loop.index0+1 }}</td>
+                                <th>{{ pointofsale.msisdn.profile.title }}</th>
+                                <td>{{ pointofsale.msisdn.msisdn }}</td>
+                                <td>{{ pointofsale.name }}</td>
+                                <td></td>
+                                <td></td>
+                                {% if pointofsaleStat.pointofsaleComm(search, pointofsale.id) %}
+                                {% for sale in  pointofsaleStat.pointofsaleComm(search, pointofsale.id) %}
+                                    <td>{{ sale.posComm | number_format(0, ',', ' ')  }} F CFA</td>
+                                    <td>{{ sale.dComm | number_format(0, ',', ' ')  }} F CFA</td>
+                                {% endfor %}
+                                {% else %}
+                                    <td>0 F CFA</td>
+                                    <td>0 F CFA</td>
+                                {% endif %}
+                                <td>{{ goal }}</td>
+                                <td class="row-actions">
+                                    <a href="{{ path('pointofsale_show', {'id': pointofsale.id}) }}"><i class="fa fa-eye"></i></a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
