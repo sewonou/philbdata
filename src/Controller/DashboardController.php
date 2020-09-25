@@ -84,4 +84,26 @@ class DashboardController extends AbstractController
             'search'=> $search,
         ]);
     }
+
+
+    /**
+     * @Route("/finance/stats", name="financeBoard")
+     * @param PointofsaleStat $pointofsaleStat
+     * @param Request $request
+     * @return Response
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function financeBoard(PointofsaleStat $pointofsaleStat, Request $request):Response
+    {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $sales = $pointofsaleStat->getSaleByDay($search);
+        $giveComs = $pointofsaleStat->getGiveComByDay($search);
+        return $this->render('dashboard/financeBoard.html.twig', [
+            'form' => $form->createView(),
+            'sales' => $sales,
+            'giveComs' => $giveComs,
+        ]);
+    }
 }

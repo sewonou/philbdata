@@ -55,10 +55,39 @@ class SaleRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findSaleByDate()
+    public function findSaleByDay($date1, $date2)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andwhere('t.title != :val')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM'])
+            ->orderBy('day', 'DESC')
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findGiveComByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andwhere('t.title = :val')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM'])
+            ->orderBy('day', 'DESC')
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+    public function findSaleByDate($startDate, $endDate)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount, DATE(s.transactionAt) as day, t.title")
             ->innerJoin('s.type', 't')
             ->groupBy('day')
             ->getQuery()
@@ -71,7 +100,9 @@ class SaleRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
+            ->where(['t.title != :type'])
             ->groupBy('day')
+            ->setParameters(['type'=> 'GIVECOM'])
             ->orderBy('day', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()

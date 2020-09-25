@@ -78,4 +78,30 @@ class PointofsaleStat
         $commissions = '['. implode(',', $commissions) .']';
         return $commissions;
     }
+
+    public function getSaleByDay(?Search $search)
+    {
+        $startDate = new \DateTime($this->saleRepository->findLastDate());
+        $endDate = new \DateTime($this->saleRepository->findLastDate()) ;
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        return $this->saleRepository->findSaleByDay($startDate, $endDate);
+    }
+
+    public function getGiveComByDay(?Search $search)
+    {
+        $startDate = new \DateTime($this->saleRepository->findLastDate());
+        $endDate = new \DateTime($this->saleRepository->findLastDate()) ;
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        return $this->saleRepository->findSaleByDay($startDate, $endDate);
+    }
 }
