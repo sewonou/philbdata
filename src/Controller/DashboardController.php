@@ -8,6 +8,7 @@ use App\Repository\PointofsaleRepository;
 use App\Repository\SaleRepository;
 use App\Service\PointofsaleStat;
 use App\Service\SimCardStat;
+use App\Service\ZoningStat;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,8 +74,8 @@ class DashboardController extends AbstractController
         $search = new Search();
         $form = $this->createForm(SearchType::class, $search);
         $form->handleRequest($request);
-        $pointofsales = $pointofsaleRepository->findBy(['isActive'=>true]);
-        $sales = $pointofsaleStat->getPointofsalesPeriodInput($search);
+        $pointofsales = $pointofsaleRepository->findPointofsaleWithoutProfile(true, 'POSCAGNT');
+        //$sales = $pointofsaleStat->getPointofsalesPeriodInput($search);
         $goal = $pointofsaleStat->getPointofsaleGoal($search);
         return $this->render('dashboard/performanceBoard.html.twig', [
             'form' => $form->createView(),
@@ -104,6 +105,28 @@ class DashboardController extends AbstractController
             'form' => $form->createView(),
             'sales' => $sales,
             'giveComs' => $giveComs,
+        ]);
+    }
+
+    /**
+     * @Route("/regions/stats", name="regionBoard")
+     * @param PointofsaleStat $pointofsaleStat
+     * @param Request $request
+     * @param ZoningStat $zoningStat
+     * @return Response
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function regionBoard(PointofsaleStat $pointofsaleStat, Request $request, ZoningStat $zoningStat):Response
+    {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $sales = $pointofsaleStat->getSaleByRegion($search);
+
+        return $this->render('dashboard/regionBoard.html.twig', [
+            'form' => $form->createView(),
+            'sales' => $sales,
+            'zoningStat' => $zoningStat
         ]);
     }
 }

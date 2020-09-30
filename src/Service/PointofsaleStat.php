@@ -104,4 +104,17 @@ class PointofsaleStat
         }
         return $this->saleRepository->findSaleByDay($startDate, $endDate);
     }
+
+    public function getSaleByRegion(?Search $search)
+    {
+        $startDate = new \DateTime($this->saleRepository->findLastDate());
+        $endDate = new \DateTime($this->saleRepository->findLastDate()) ;
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        return $this->saleRepository->findSaleByRegion($startDate, $endDate);
+    }
 }

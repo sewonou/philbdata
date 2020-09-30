@@ -15914,6 +15914,16 @@ body.menu-side-right .layout-w {
 /*
  #2. Tablo Element
 */
+
+.down{
+  color: #fff;
+  background-color: #e65252;
+}
+
+.up{
+  color: #fff;
+  background-color: #24b314;
+}
 .el-tablo {
   display: block;
 }

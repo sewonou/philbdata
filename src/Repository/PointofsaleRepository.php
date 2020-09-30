@@ -22,6 +22,27 @@ class PointofsaleRepository extends ServiceEntityRepository
 
     /**
      * @param $value
+     * @param string|null $profile
+     * @return Pointofsale[] Returns an array of Pointofsale objects
+     */
+
+    public function findPointofsaleWithoutProfile($value, ?string  $profile)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.msisdn', 's')
+            ->innerJoin('s.profile', 'pro')
+            ->where('pro.title != :profile')
+            ->andWhere('s.isActive = :val')
+            ->andWhere('p.isActive = :val')
+            ->setParameters(['val'=>$value, 'profile'=>$profile])
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @param $value
      * @return Pointofsale[] Returns an array of Pointofsale objects
      */
 
