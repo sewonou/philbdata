@@ -73,10 +73,11 @@ class PointofsaleStat
         $commissions = [];
         $results = $this->saleRepository->findSaleByDateLimit($limit);
         foreach ($results as  $value ){
-            $commissions[] = round($value['dComm']/10000, 1);
+            $commissions[] = round($value['dComm']/$value['total'], 1);
         }
-        $commissions = '['. implode(',', $commissions) .']';
-        return $commissions;
+        $inverse = array_reverse($commissions);
+        $inverse = '['. implode(',', $inverse) .']';
+        return $inverse;
     }
 
     public function getSaleByDay(?Search $search)

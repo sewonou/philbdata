@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\District;
+use App\Entity\Search;
 use App\Form\DistrictType;
+use App\Form\SearchType;
 use App\Repository\DistrictRepository;
+use App\Repository\PointofsaleRepository;
 use App\Service\SimCardStat;
 use App\Service\ZoningStat;
 use Doctrine\ORM\EntityManagerInterface;
@@ -66,7 +69,7 @@ class DistrictController extends AbstractController
     }
 
     /**
-     * @Route("/districts/{id}/edit}", name="district_edit")
+     * @Route("/districts/{id}/edit", name="district_edit")
      * @param Request $request
      * @param District $district
      * @return Response
@@ -109,12 +112,32 @@ class DistrictController extends AbstractController
     /**
      * @Route("/districts/{id}/show", name="district_show")
      * @param District $district
+     * @param Request $request
+     * @param PointofsaleRepository $pointofsaleRepository
+     * @param ZoningStat $zoningStat
      * @return Response
      */
-    public function show(District $district):Response
+    public function show(District $district, Request $request, PointofsaleRepository $pointofsaleRepository, ZoningStat $zoningStat):Response
     {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $pointofsales = $pointofsaleRepository->findInDistrict($district->getId());
+        $lastSale = $zoningStat->getSaleInDistrictWithLimit($district->getId(), 1);
+        $sales = $zoningStat->getSaleInDistrictWithLimit($district->getId(), 8);
+        $percentWeekCom = $zoningStat->getLastWeekCommission($sales);
+        $periodSales = $zoningStat->getSaleInDistrictByDay($search, $district->getId());
+        $stat = $zoningStat->getSaleInDistrict($search, $district->getId());
         return  $this->render('district/show.html.twig', [
-            'district'=>$district
+            'district'=>$district,
+            'form'=>$form->createView(),
+            'pointofsales' => $pointofsales,
+            'lastSale'=> $lastSale,
+            'sales' => $sales,
+            'percentWeekComm' => $percentWeekCom,
+            'periodSales' => $periodSales,
+            'stat' => $stat,
+
         ]);
     }
 }

@@ -44,7 +44,7 @@
                                     <td>
                                         {% if pointofsale.controls %}
                                             {% for control in pointofsale.controls  %}
-                                                {{ control.trader.fullName }}
+                                                {% if control.isActive == true %} {{ control.trader.fullName }} {% endif %}
                                             {% endfor %}
                                         {% endif %}
 

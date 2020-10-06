@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Prefecture;
+use App\Entity\Search;
 use App\Form\PrefectureType;
+use App\Form\SearchType;
+use App\Repository\PointofsaleRepository;
 use App\Repository\PrefectureRepository;
 use App\Service\SimCardStat;
 use App\Service\ZoningStat;
@@ -109,12 +112,31 @@ class PrefectureController extends AbstractController
     /**
      * @Route("/prefectures/{id}/show", name="prefecture_show")
      * @param Prefecture $prefecture
+     * @param Request $request
+     * @param PointofsaleRepository $pointofsaleRepository
+     * @param ZoningStat $zoningStat
      * @return Response
      */
-    public function show(Prefecture $prefecture):Response
+    public function show(Prefecture $prefecture, Request $request, PointofsaleRepository $pointofsaleRepository, ZoningStat $zoningStat):Response
     {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $pointofsales = $pointofsaleRepository->findInPrefecture($prefecture->getId());
+        $lastSale = $zoningStat->getSaleInPrefectureWithLimit($prefecture->getId(), 1);
+        $sales = $zoningStat->getSaleInPrefectureWithLimit($prefecture->getId(), 8);
+        $percentWeekCom = $zoningStat->getLastWeekCommission($sales);
+        $periodSales = $zoningStat->getSaleInPrefectureByDay($search, $prefecture->getId());
+        $stat = $zoningStat->getSaleInPrefecture($search, $prefecture->getId());
         return  $this->render('prefecture/show.html.twig', [
-            'prefecture'=>$prefecture
+            'prefecture'=>$prefecture,
+            'form' => $form->createView(),
+            'pointofsales' => $pointofsales,
+            'lastSale'=> $lastSale,
+            'sales' => $sales,
+            'percentWeekComm' => $percentWeekCom,
+            'periodSales' => $periodSales,
+            'stat' => $stat,
         ]);
     }
 }

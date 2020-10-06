@@ -60,7 +60,19 @@ class PointofsaleRepository extends ServiceEntityRepository
         ;
     }
 
-
+    public function findInDistrict(?string $id)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.msisdn',  's')
+            ->innerJoin('p.district', 'd')
+            ->andWhere('p.isActive = :val')
+            ->andWhere('s.isActive = :val')
+            ->andWhere('d.id = :id')
+            ->setParameters(['val'=>true, 'id'=>$id])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     public function findPointofsaleInDistrict(?string $id, ?string $profile, ?bool $val)
     {
         return $this->createQueryBuilder('p')
@@ -71,10 +83,25 @@ class PointofsaleRepository extends ServiceEntityRepository
             ->andWhere('p.isActive = :val')
             ->andWhere('s.isActive = :val')
             ->andWhere('d.id = :id')
-            ->setParameters(['val'=>true, 'id'=>$id, 'profile' => $profile])
+            ->setParameters(['val'=> $val, 'id'=>$id, 'profile' => $profile])
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function findInTownship(?string $id)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.msisdn',  's')
+            ->innerJoin('p.district', 'd')
+            ->innerJoin('d.township', 't')
+            ->andWhere('p.isActive = :val')
+            ->andWhere('s.isActive = :val')
+            ->andWhere('t.id = :id')
+            ->setParameters(['val'=>true, 'id'=>$id])
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
     public function findPointofsaleInTownship(?string $id, ?string  $profile, ?bool $val)
@@ -94,6 +121,22 @@ class PointofsaleRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findInPrefecture(?string $id)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.msisdn',  's')
+            ->innerJoin('p.district', 'd')
+            ->innerJoin('d.township', 't')
+            ->innerJoin('t.prefecture', 'pf')
+            ->andWhere('s.isActive = :val')
+            ->andWhere('p.isActive = :val')
+            ->andWhere('pf.id = :id')
+            ->setParameters(['val'=>true, 'id'=>$id])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findPointofsaleInPrefecture(?string $id, ?string  $profile, ?bool $val)
     {
         return $this->createQueryBuilder('p')
@@ -107,6 +150,23 @@ class PointofsaleRepository extends ServiceEntityRepository
             ->andWhere('p.isActive = :val')
             ->andWhere('pf.id = :id')
             ->setParameters(['val'=>$val, 'id'=>$id, 'profile'=>$profile])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findInTown(?string $id)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.msisdn',  's')
+            ->innerJoin('p.district', 'd')
+            ->innerJoin('d.township', 't')
+            ->innerJoin('t.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->andWhere('s.isActive = :val')
+            ->andWhere('p.isActive = :val')
+            ->andWhere('tw.id = :id')
+            ->setParameters(['val'=>true, 'id'=>$id])
             ->getQuery()
             ->getResult()
             ;
@@ -131,6 +191,24 @@ class PointofsaleRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findInRegion(?string $id)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.msisdn',  's')
+            ->innerJoin('p.district', 'd')
+            ->innerJoin('d.township', 't')
+            ->innerJoin('t.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->innerJoin('tw.region', 'r')
+            ->andWhere('s.isActive = :val')
+            ->andWhere('p.isActive = :val')
+            ->andWhere('r.id = :id')
+            ->setParameters(['val'=>true, 'id'=>$id])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findPointofsaleInRegion(?string $id, ?string  $profile, ?bool $val)
     {
         return $this->createQueryBuilder('p')
@@ -146,6 +224,25 @@ class PointofsaleRepository extends ServiceEntityRepository
             ->andWhere('p.isActive = :val')
             ->andWhere('r.id = :id')
             ->setParameters(['val'=>$val, 'id'=>$id, 'profile'=>$profile])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findInZone(?string $id)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.msisdn',  's')
+            ->innerJoin('p.district', 'd')
+            ->innerJoin('d.township', 't')
+            ->innerJoin('t.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->innerJoin('tw.region', 'r')
+            ->innerJoin('r.zone', 'z')
+            ->andWhere('s.isActive = :val')
+            ->andWhere('p.isActive = :val')
+            ->andWhere('z.id = :id')
+            ->setParameters(['val'=>true, 'id'=>$id])
             ->getQuery()
             ->getResult()
             ;

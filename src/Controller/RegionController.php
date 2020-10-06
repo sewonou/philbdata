@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Region;
+use App\Entity\Search;
 use App\Form\RegionType;
+use App\Form\SearchType;
+use App\Repository\PointofsaleRepository;
 use App\Repository\RegionRepository;
 use App\Service\SimCardStat;
 use App\Service\ZoningStat;
@@ -106,12 +109,31 @@ class RegionController extends AbstractController
     /**
      * @Route("/regions/{id}/show", name="region_show")
      * @param Region $region
+     * @param Request $request
+     * @param PointofsaleRepository $pointofsaleRepository
+     * @param ZoningStat $zoningStat
      * @return Response
      */
-    public function show(Region $region):Response
+    public function show(Region $region,Request $request, PointofsaleRepository $pointofsaleRepository, ZoningStat $zoningStat):Response
     {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $pointofsales = $pointofsaleRepository->findInRegion($region->getId());
+        $lastSale = $zoningStat->getSaleInRegionWithLimit($region->getId(), 1);
+        $sales = $zoningStat->getSaleInRegionWithLimit($region->getId(), 8);
+        $percentWeekCom = $zoningStat->getLastWeekCommission($sales);
+        $periodSales = $zoningStat->getSaleInRegionByDay($search, $region->getId());
+        $stat = $zoningStat->getSaleInRegion($search, $region->getId());
         return $this->render('region/show.html.twig', [
             'region'=> $region,
+            'form' => $form->createView(),
+            'pointofsales' => $pointofsales,
+            'lastSale'=> $lastSale,
+            'sales' => $sales,
+            'percentWeekComm' => $percentWeekCom,
+            'periodSales' => $periodSales,
+            'stat' => $stat,
         ]);
     }
 }

@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Search;
 use App\Entity\Town;
+use App\Form\SearchType;
 use App\Form\TownType;
+use App\Repository\PointofsaleRepository;
 use App\Repository\TownRepository;
 use App\Service\SimCardStat;
 use App\Service\ZoningStat;
@@ -108,12 +111,31 @@ class TownController extends AbstractController
     /**
      * @Route("/towns/{id}/show", name="town_show")
      * @param Town $town
+     * @param Request $request
+     * @param PointofsaleRepository $pointofsaleRepository
+     * @param ZoningStat $zoningStat
      * @return Response
      */
-    public function show(Town $town):Response
+    public function show(Town $town, Request $request, PointofsaleRepository $pointofsaleRepository, ZoningStat $zoningStat):Response
     {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $pointofsales = $pointofsaleRepository->findInTown($town->getId());
+        $lastSale = $zoningStat->getSaleInTownWithLimit($town->getId(), 1);
+        $sales = $zoningStat->getSaleInTownWithLimit($town->getId(), 8);
+        $percentWeekCom = $zoningStat->getLastWeekCommission($sales);
+        $periodSales = $zoningStat->getSaleInTownByDay($search, $town->getId());
+        $stat = $zoningStat->getSaleInTown($search, $town->getId());
         return  $this->render('town/show.html.twig', [
-            'town'=>$town
+            'town'=>$town,
+            'form' => $form->createView(),
+            'pointofsales' => $pointofsales,
+            'lastSale'=> $lastSale,
+            'sales' => $sales,
+            'percentWeekComm' => $percentWeekCom,
+            'periodSales' => $periodSales,
+            'stat' => $stat,
         ]);
     }
 }

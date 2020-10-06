@@ -24,6 +24,7 @@
                             <th></th>
                             <th>Commune</th>
                             <th>Préfecture</th>
+                            <th>Canton</th>
                             <th>Quartier</th>
                             <th>PDV Agnt</th>
                             <th>PDV Distro</th>
@@ -38,6 +39,7 @@
                                     <td>{{ loop.index0 + 1  }}</td>
                                     <td>{% if district.township %}{{ district.township.prefecture.town.name }}{% else %}Commune inexistante{% endif %}</td>
                                     <td>{% if district.township %}{{ district.township.prefecture.name }}{% else %}Préfecture inexistante{% endif %}</td>
+                                    <td>{% if district.township %}{{ district.township.name }}{% else %}Canton inexistant{% endif %}</td>
                                     <td>{{ district.name }}</td>
                                     <td>{{ zoningStat.pointofsaleInDistrict(district.id, 'AGNT') }}</td>
                                     <td>{{ zoningStat.pointofsaleInDistrict(district.id, 'DISTRO')  }}</td>

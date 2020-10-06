@@ -1,0 +1,55 @@
+
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="element-box el-tablo">
+                <div class="label">
+                    Transaction
+                </div>
+                <div class="value">
+                   {% if stat %} {{ stat[0].total |  number_format(0, ',', ' ') }}  {% else %} 0 {% endif %}
+                </div>
+                <div class="trending trending-up">
+                    <span>12%</span><i class="os-icon os-icon-arrow-up2"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="element-box el-tablo">
+                <div class="label">
+                    Montant
+                </div>
+                <div class="value">
+                    {% if stat %}{{ stat[0].amount |  number_format(0, ',', ' ') }}  {% else %} 0 {% endif %}F CFA
+                </div>
+                <div class="trending trending-down-basic">
+                    <span>9%</span><i class="os-icon os-icon-graph-down"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="element-box el-tablo">
+                <div class="label">
+                    Commission POS
+                </div>
+                <div class="value">
+                    {% if stat %} {{ stat[0].posComm |  number_format(0, ',', ' ') }} {% else %} 0 {% endif %} F CFA
+                </div>
+                <div class="trending trending-down-basic">
+                    <span>12%</span><i class="os-icon os-icon-arrow-2-down"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="element-box el-tablo">
+                <div class="label">
+                    Commission Dealer
+                </div>
+                <div class="value">
+                   {% if stat %} {{ stat[0].dComm |  number_format(0, ',', ' ') }} {% else %} 0 {% endif %} F CFA
+                </div>
+                <div class="trending trending-down-basic">
+                    <span>12%</span><i class="os-icon os-icon-arrow-2-down"></i>
+                </div>
+            </div>
+        </div>
+    </div>

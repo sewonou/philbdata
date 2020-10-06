@@ -105,8 +105,10 @@ class Save
         $region = null ;
         if( isset($value['region'])){
             $zone = $this->addZone($value);
-            $region = $this->regionRepository->findOneBy(['name' => $value['region']]);
+            $region = $this->regionRepository->findOneBy(['name' => $value['region'], 'zone'=>$zone]);
             if(empty($region)) {
+                $region = new Region();
+            }elseif(isset($region) and ($region->getZone()->getName() != $value['zone'])){
                 $region = new Region();
             }
             $region
@@ -115,7 +117,7 @@ class Save
             ;
             $this->manager->persist($region);
             $this->manager->flush();
-            $region = $this->regionRepository->findOneBy(['name'=>$value['region']]);
+            $region = $this->regionRepository->findOneBy(['name'=>$value['region'], 'zone'=>$zone]);
 
         }
 
@@ -131,8 +133,10 @@ class Save
         $town = null ;
         if(isset($value['town'])){
             $region = $this->addRegion($value);
-            $town = $this->townRepository->findOneBy(['name' => $value['town']]);
+            $town = $this->townRepository->findOneBy(['name' => $value['town'],'region'=>$region]);
             if(empty($town)) {
+                $town = new Town();
+            }elseif(isset($town) and ($town->getRegion()->getName() != $value['region'])){
                 $town = new Town();
             }
             $town
@@ -141,7 +145,7 @@ class Save
             ;
             $this->manager->persist($town);
             $this->manager->flush();
-            $town = $this->townRepository->findOneBy(['name'=>$value['town']]);
+            $town = $this->townRepository->findOneBy(['name'=>$value['town'],'region'=>$region]);
         }
 
         return $town;
@@ -156,8 +160,10 @@ class Save
         $prefecture = null ;
         if(isset($value['prefecture'])){
             $town = $this->addTown($value);
-            $prefecture = $this->prefectureRepository->findOneBy(['name' => $value['prefecture']]);
+            $prefecture = $this->prefectureRepository->findOneBy(['name' => $value['prefecture'], 'town'=>$town]);
             if(empty($prefecture)) {
+                $prefecture = new Prefecture();
+            }elseif(isset($prefecture) and ($prefecture->getTown()->getName() != $value['town'])){
                 $prefecture = new Prefecture();
             }
             $prefecture
@@ -166,7 +172,7 @@ class Save
             ;
             $this->manager->persist($prefecture);
             $this->manager->flush();
-            $prefecture = $this->prefectureRepository->findOneBy(['name'=>$value['prefecture']]);
+            $prefecture = $this->prefectureRepository->findOneBy(['name'=>$value['prefecture'], 'town'=>$town]);
         }
 
 
@@ -181,8 +187,11 @@ class Save
         $township = null ;
         if (isset($value['township'])){
             $prefecture = $this->addPrefecture($value);
-            $township = $this->townshipRepository->findOneBy(['name' => $value['township']]);
+            $township = $this->townshipRepository->findOneBy(['name' => $value['township'], 'prefecture'=>$prefecture]);
+
             if(empty($township)) {
+                $township = new Township();
+            }elseif(isset($township) and ($township->getPrefecture()->getName() != $value['prefecture'])){
                 $township = new Township();
             }
             $township
@@ -191,7 +200,7 @@ class Save
             ;
             $this->manager->persist($township);
             $this->manager->flush();
-            $township = $this->townshipRepository->findOneBy(['name'=>$value['township']]);
+            $township = $this->townshipRepository->findOneBy(['name'=>$value['township'], 'prefecture'=>$prefecture]);
         }
 
         return $township;
@@ -204,10 +213,16 @@ class Save
     public function addDistrict($value)
     {
         $district = null ;
+
         if(isset($value['district'])){
+
             $township = $this->addTownship($value);
-            $district = $this->districtRepository->findOneBy(['name'=>$value['district']]);
-            if(empty($district)) {
+            $district = $this->districtRepository->findOneBy(['name'=>$value['district'], 'township'=> $township]);
+
+            if(empty($district)){
+                $district = new District();
+            }elseif(isset($district) and ($district->getTownship()->getName() != $value['township'])){
+
                 $district = new District();
             }
             $district
@@ -216,7 +231,7 @@ class Save
             ;
             $this->manager->persist($district);
             $this->manager->flush();
-            $district = $this->districtRepository->findOneBy(['name'=>$value['district']]);
+            $district = $this->districtRepository->findOneBy(['name'=>$value['district'], 'township'=> $township]);
         }
 
 

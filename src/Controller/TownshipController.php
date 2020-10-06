@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Search;
 use App\Entity\Township;
+use App\Form\SearchType;
 use App\Form\TownshipType;
+use App\Repository\PointofsaleRepository;
 use App\Repository\TownshipRepository;
 use App\Service\SimCardStat;
 use App\Service\ZoningStat;
@@ -109,12 +112,31 @@ class TownshipController extends AbstractController
     /**
      * @Route("/townships/{id}/show", name="township_show")
      * @param Township $township
+     * @param Request $request
+     * @param PointofsaleRepository $pointofsaleRepository
+     * @param ZoningStat $zoningStat
      * @return Response
      */
-    public function show(Township $township):Response
+    public function show(Township $township, Request $request, PointofsaleRepository $pointofsaleRepository, ZoningStat $zoningStat):Response
     {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $pointofsales = $pointofsaleRepository->findInTownship($township->getId());
+        $lastSale = $zoningStat->getSaleInTownshipWithLimit($township->getId(), 1);
+        $sales = $zoningStat->getSaleInTownshipWithLimit($township->getId(), 8);
+        $percentWeekCom = $zoningStat->getLastWeekCommission($sales);
+        $periodSales = $zoningStat->getSaleInTownshipByDay($search, $township->getId());
+        $stat = $zoningStat->getSaleInDistrict($search, $township->getId());
         return  $this->render('township/show.html.twig', [
-            'township'=>$township
+            'township'=>$township,
+            'form' => $form->createView(),
+            'pointofsales' => $pointofsales,
+            'lastSale'=> $lastSale,
+            'sales' => $sales,
+            'percentWeekComm' => $percentWeekCom,
+            'periodSales' => $periodSales,
+            'stat' => $stat,
         ]);
     }
 }

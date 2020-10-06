@@ -140,10 +140,10 @@ class SaleRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findSaleByRegion($date1, $date2)
+    public function findSaleByRegionByDay($date1, $date2)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, DATE(s.transactionAt) as day, r.name, r.id")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, r.id as id")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -156,38 +156,430 @@ class SaleRepository extends ServiceEntityRepository
             ->andwhere('t.title != :val')
             ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM'])
             ->orderBy('r.name', 'DESC')
-            ->groupBy('r.name')
+            ->groupBy('r.id')
             ->getQuery()
             ->getResult()
             ;
     }
 
-    // /**
-    //  * @return Sale[] Returns an array of Sale objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findSaleByRegion($date1, $date2)
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, r.id as id")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->innerJoin('tw.region', 'r')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andwhere('t.title != :val')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM'])
+            ->orderBy('r.name', 'DESC')
+            ->groupBy('r.id')
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Sale
+    public function findSaleInZone($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, z.id as id")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->innerJoin('tw.region', 'r')
+            ->innerJoin('r.zone', 'z')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.title != :val')
+            ->andWhere('z.id = :id')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM', 'id'=> $id])
+            ->orderBy('r.name', 'DESC')
+            ->groupBy('z.id')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult()
+            ;
     }
-    */
+
+    public function findSaleInZoneByDay($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, z.id as id, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->innerJoin('tw.region', 'r')
+            ->innerJoin('r.zone', 'z')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.title != :val')
+            ->andWhere('z.id = :id')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM', 'id'=> $id])
+            ->orderBy('r.name', 'DESC')
+            ->groupBy('day, z.id')
+            ->orderBy('DATE(s.transactionAt)', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleInZoneWithLimit($id, $limit)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, z.id as id, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->innerJoin('tw.region', 'r')
+            ->innerJoin('r.zone', 'z')
+            ->andWhere('t.title != :val')
+            ->andWhere('z.id = :id')
+            ->setParameters(['val'=> 'GIVECOM', 'id'=> $id])
+            ->orderBy('day', 'DESC')
+            ->groupBy('day, z.id')
+            ->setMaxResults($limit)
+            ->orderBy('DATE(s.transactionAt)', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    //STAT REGION
+
+    public function findSaleInRegion($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, r.id as id")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->innerJoin('tw.region', 'r')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.title != :val')
+            ->andWhere('r.id = :id')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('r.id')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleInRegionByDay($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, r.id as id, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->innerJoin('tw.region', 'r')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.title != :val')
+            ->andWhere('r.id = :id')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('day, r.id')
+            ->orderBy('DATE(s.transactionAt)', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleInRegionWithLimit($id, $limit)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, r.id as id, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->innerJoin('tw.region', 'r')
+            ->andWhere('t.title != :val')
+            ->andWhere('r.id = :id')
+            ->setParameters(['val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('day, r.id')
+            ->orderBy('DATE(s.transactionAt)', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    //STAT TOWN
+
+    public function findSaleInTown($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, tw.name as name, tw.id as id")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.title != :val')
+            ->andWhere('tw.id = :id')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('tw.id')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleInTownByDay($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, tw.name as name, tw.id as id, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.title != :val')
+            ->andWhere('tw.id = :id')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('day, tw.id')
+            ->orderBy('DATE(s.transactionAt)', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleInTownWithLimit($id, $limit)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, tw.name as name, tw.id as id, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->innerJoin('pf.town', 'tw')
+            ->andWhere('t.title != :val')
+            ->andWhere('tw.id = :id')
+            ->setParameters(['val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('day, tw.id')
+            ->orderBy('DATE(s.transactionAt)', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    //STAT PREFECTURE
+
+    public function findSaleInPrefecture($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, pf.name as name, pf.id as id")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.title != :val')
+            ->andWhere('pf.id = :id')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('pf.id')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleInPrefectureByDay($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, pf.name as name, pf.id as id, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.title != :val')
+            ->andWhere('pf.id = :id')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('day, pf.id')
+            ->orderBy('DATE(s.transactionAt)', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleInPrefectureWithLimit($id, $limit)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, pf.name as name, pf.id as id, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->andWhere('t.title != :val')
+            ->andWhere('pf.id = :id')
+            ->setParameters(['val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('day, pf.id')
+            ->orderBy('DATE(s.transactionAt)', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    //STAT SUR LES TOWNSHIP
+
+    public function findSaleInTownship($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, tws.id as id")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.title != :val')
+            ->andWhere('tws.id = :id')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('tws.id')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleInTownshipByDay($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, tws.name as name, tws.id as id, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.title != :val')
+            ->andWhere('tws.id = :id')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('day, tws.id')
+            ->orderBy('DATE(s.transactionAt)', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleInTownshipWithLimit($id, $limit)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, tws.name as name, tws.id as id, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->andWhere('t.title != :val')
+            ->andWhere('tws.id = :id')
+            ->setParameters(['val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('day, tws.id')
+            ->orderBy('DATE(s.transactionAt)', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    //STAT SUR LES DISTRICT
+
+    public function findSaleInDistrict($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, d.name as name, d.id as id")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.title != :val')
+            ->andWhere('d.id = :id')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('d.id')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleInDistrictByDay($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, d.name as name, d.id as id, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.title != :val')
+            ->andWhere('d.id = :id')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('day, d.id')
+            ->orderBy('DATE(s.transactionAt)', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleInDistrictWithLimit($id, $limit)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, d.name as name, d.id as id, DATE(s.transactionAt) as day")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.district', 'd')
+            ->innerJoin('d.township', 'tws')
+            ->innerjoin('tws.prefecture', 'pf')
+            ->andWhere('t.title != :val')
+            ->andWhere('d.id = :id')
+            ->setParameters(['val'=> 'GIVECOM', 'id'=>$id])
+            ->groupBy('day, d.id')
+            ->orderBy('DATE(s.transactionAt)', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 }
