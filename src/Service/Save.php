@@ -261,6 +261,27 @@ class Save
 
     /**
      * @param $value
+     * @return Profile|null
+     */
+    public function addOtherProfile($value){
+        $profile = null ;
+        if (isset($value['profile'])){
+            $profile = $this->profileRepository->findOneBy(['title' => $value['profile']]);
+            if(empty($profile)) {
+                $profile = new Profile();
+            }
+            $profile->setTitle($value['profile'])
+            ;
+            $this->manager->persist($profile);
+            $this->manager->flush();
+            $profile = $this->profileRepository->findOneBy(['title'=>$value['profile']]);
+
+        }
+        return $profile;
+    }
+
+    /**
+     * @param $value
      * @return SimCard|null
      */
     public function addSimCard($value){
@@ -282,6 +303,8 @@ class Save
         }
         return $msisdn;
     }
+
+
 
     /**
      * @param $value
@@ -461,6 +484,7 @@ class Save
      */
     public function addTransaction($value)
     {
+
         $type = $this->addType($value);
         $toSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['toSim']]);
         $fromSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['fromSim']]);

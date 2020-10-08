@@ -7,7 +7,9 @@ use App\Entity\Trader;
 use App\Form\SearchType;
 use App\Form\TraderType;
 use App\Repository\TraderRepository;
+use App\Service\PointofsaleStat;
 use App\Service\TraderStat;
+use App\Service\ZoningStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -106,10 +108,28 @@ class TraderController extends AbstractController
      * @Route("/traders/{id}/show", name="trader_show")
      *
      */
-    public function show(Trader $trader):Response
+    public function show(Trader $trader, Request $request, TraderStat $traderStat):Response
     {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $lastSale = $traderStat->getTraderInputByDayWithLimit($trader, 1);
+        $sales = $traderStat->getTraderInputByDayWithLimit($trader, 8);
+        $percentWeekCom = $traderStat->getLastWeekCommission($sales);
+        $periodSales = $traderStat->getTraderInputByDay($trader, $search);
+        $stat = $traderStat->getSaleForTrader($trader, $search);
+        $giveReceives = $traderStat->getGiveReceivedByTrader($search, $trader->getId());
+        $giveSends = $traderStat->getGiveSendByTrader($search, $trader->getId());
         return $this->render('trader/show.html.twig', [
             'trader' => $trader,
+            'form'=>$form->createView(),
+            'lastSale'=> $lastSale,
+            'sales' => $sales,
+            'percentWeekComm' => $percentWeekCom,
+            'periodSales' => $periodSales,
+            'stat' => $stat,
+            'giveReceives' => $giveReceives,
+            'giveSends' => $giveSends,
         ]);
     }
 

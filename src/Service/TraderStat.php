@@ -8,6 +8,7 @@ use App\Entity\Search;
 use App\Entity\Trader;
 use App\Repository\ControlRepository;
 use App\Repository\SaleRepository;
+use App\Repository\TradeRepository;
 use App\Repository\TraderRepository;
 
 class TraderStat
@@ -19,11 +20,12 @@ class TraderStat
     private $traderRepository;
     private $controlRepository;
 
-    public function __construct(TraderRepository $traderRepository, ControlRepository $controlRepository, SaleRepository $saleRepository)
+    public function __construct(TraderRepository $traderRepository, ControlRepository $controlRepository, SaleRepository $saleRepository, TradeRepository $tradeRepository)
     {
         $this->traderRepository = $traderRepository;
         $this->controlRepository = $controlRepository;
         $this->saleRepository = $saleRepository;
+        $this->tradeRepository = $tradeRepository;
     }
 
     public function getTraderPointofsale(?Trader $trader):int
@@ -49,8 +51,8 @@ class TraderStat
     public function getTraderPeriodGoal(?Trader $trader, ?Search $search)
     {
         $totalPointofsale = $this->getTraderPointofsale($trader);
-        $startDate = new \DateTime('-1 day');
-        $endDate = new \DateTime('-1 day') ;
+        $startDate = new \DateTime($this->saleRepository->findLastDate());
+        $endDate = new \DateTime($this->saleRepository->findLastDate());
         if(null != $search->getStartAt()){
             $startDate = $search->getStartAt();
         }
@@ -58,7 +60,7 @@ class TraderStat
             $endDate = $search->getEndAt();
         }
         $length = $startDate->diff($endDate);
-        $length = $length->format('%d');
+        $length = $length->format('%a');
         $length = ($length == 0)? ($length + 1) : $length;
         $dailyGoal = 500;
         //dump($length);
@@ -69,8 +71,8 @@ class TraderStat
     public function getTraderInput(?Trader $trader, ?Search $search)
     {
 
-        $startDate = new \DateTime('-1 day');
-        $endDate = new \DateTime('-1 day') ;
+        $startDate = new \DateTime($this->saleRepository->findLastDate());
+        $endDate = new \DateTime($this->saleRepository->findLastDate());
         if(null != $search->getStartAt()){
             $startDate = $search->getStartAt();
         }
@@ -78,5 +80,79 @@ class TraderStat
             $endDate = $search->getEndAt();
         }
         return $this->saleRepository->findSaleByTrader(true, $trader, $startDate, $endDate);
+    }
+
+    public function getTraderInputByDay(?Trader $trader, ?Search $search)
+    {
+
+        $startDate = new \DateTime($this->saleRepository->findLastDate());
+        $endDate = new \DateTime($this->saleRepository->findLastDate());
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        return $this->saleRepository->findSaleByTraderByDay(true, $trader, $startDate, $endDate);
+    }
+
+    public function getSaleForTrader(?Trader $trader, ?Search $search)
+    {
+
+        $startDate = new \DateTime($this->saleRepository->findLastDate());
+        $endDate = new \DateTime($this->saleRepository->findLastDate());
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        return $this->saleRepository->findSaleForTrader(true, $trader, $startDate, $endDate);
+    }
+
+    public function getTraderInputByDayWithLimit(?Trader $trader, int $limit)
+    {
+
+        return $this->saleRepository->findSaleByTraderByDayWithLimit(true, $trader, $limit);
+    }
+
+
+    public function getGiveSendByTrader(Search $search, int $id)
+    {
+        $startDate = new \DateTime($this->tradeRepository->findLastDate());
+        $endDate = new \DateTime($this->tradeRepository->findLastDate()) ;
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+
+        return $this->tradeRepository->findGiveSendByTrader($startDate, $endDate, $id);
+    }
+
+    public function getGiveReceivedByTrader(Search $search, int $id)
+    {
+        $startDate = new \DateTime($this->tradeRepository->findLastDate());
+        $endDate = new \DateTime($this->saleRepository->findLastDate()) ;
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+
+        return $this->tradeRepository->findGiveReceivedByTrader($startDate, $endDate, $id);
+    }
+
+    public function getLastWeekCommission($results)
+    {
+        $commissions = [];
+        foreach ($results as  $value ){
+            $commissions[] = round($value['dComm']/$value['total'], 1);
+        }
+        $inverse = array_reverse($commissions);
+        $inverse = '['. implode(',', $inverse) .']';
+        return $inverse;
     }
 }

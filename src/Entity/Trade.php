@@ -63,19 +63,10 @@ class Trade
      */
     private $updateAt;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Control::class, mappedBy="trader")
-     */
-    private $controls;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function __construct()
-    {
-        $this->controls = new ArrayCollection();
     }
 
     /**
@@ -171,34 +162,5 @@ class Trade
         return $this;
     }
 
-    /**
-     * @return Collection|Control[]
-     */
-    public function getControls(): Collection
-    {
-        return $this->controls;
-    }
 
-    public function addControl(Control $control): self
-    {
-        if (!$this->controls->contains($control)) {
-            $this->controls[] = $control;
-            $control->setTrader($this);
-        }
-
-        return $this;
-    }
-
-    public function removeControl(Control $control): self
-    {
-        if ($this->controls->contains($control)) {
-            $this->controls->removeElement($control);
-            // set the owning side to null (unless already changed)
-            if ($control->getTrader() === $this) {
-                $control->setTrader(null);
-            }
-        }
-
-        return $this;
-    }
 }

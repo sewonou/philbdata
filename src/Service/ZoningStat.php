@@ -240,6 +240,37 @@ class ZoningStat
         return $this->saleRepository->findSaleInZoneWithLimit($id, $limit);
     }
 
+    public function getSaleInPointofsale(Search $search, int $id)
+    {
+        $startDate = new \DateTime($this->saleRepository->findLastDate());
+        $endDate = new \DateTime($this->saleRepository->findLastDate()) ;
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        return $this->saleRepository->findSaleInPointofsale($startDate, $endDate, $id);
+    }
+
+    public function getSaleInPointofsaleByDay(Search $search, int $id)
+    {
+        $startDate = new \DateTime($this->saleRepository->findLastDate());
+        $endDate = new \DateTime($this->saleRepository->findLastDate()) ;
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        return $this->saleRepository->findSaleInPointofsaleByDay($startDate, $endDate, $id);
+    }
+
+    public function getSaleInPointofsaleWithLimit(int $id, int $limit)
+    {
+        return $this->saleRepository->findSaleInPointofsaleWithLimit($id, $limit);
+    }
+
     public function getLastWeekCommission($results)
     {
         $commissions = [];

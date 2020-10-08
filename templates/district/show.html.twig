@@ -38,10 +38,10 @@
                             <div class="col-sm-12">
                                 <div class="el-tablo bigger">
                                     <div class="label">
-                                        Commission du : {{ lastSale[0].day | date("jS F Y") }}
+                                        Commission du : {% if lastSale %}{{ lastSale[0].day | date("jS F Y") }} {% endif %}
                                     </div>
                                     <div class="value">
-                                        {{ lastSale[0].dComm |  number_format(0, ',', ' ') }} FCFA
+                                       {% if lastSale %} {{ lastSale[0].dComm |  number_format(0, ',', ' ') }} FCFA {% endif %}
                                     </div>
                                 </div>
                                 <div class="el-chart-w">

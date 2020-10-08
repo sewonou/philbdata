@@ -1,21 +1,287 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Point de vente{% endblock %}
-
 {% block body %}
     <div class="content-box">
+        <div class="element-wrapper">
+            <div class="element-header">
+                Statistique du Point de vente :  {% if pointofsale %}{{ pointofsale.name }}{% endif %}
+                <div class="element-actions">
+                    {{ include('partials/_searchForm.html.twig') }}
+                </div>
+            </div>
+            {% if stat is defined %}
+                {{ include('partials/_zoningStat.html.twig') }}
+            {% endif %}
+        </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="element-wrapper">
-                    <div class="element-box">
-                        <h5 class="form-header">
-                            Détails de le point de vente {% if pointofsale %}{{ pointofsale.name }}{% endif %}
-                        </h5>
+                <div class="os-tabs-w mx-4">
+                    <div class="os-tabs-controls">
+                        <ul class="nav nav-tabs upper" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Résumé</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="transaction-tab" data-toggle="tab" href="#transaction" role="tab" aria-controls="transaction" aria-selected="true">Transactions</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="giveR-tab" data-toggle="tab" href="#giveR" role="tab" aria-controls="giveR" aria-selected="true">Give Envoyés</a>
+                            </li><li class="nav-item">
+                                <a class="nav-link" id="giveS-tab" data-toggle="tab" href="#giveS" role="tab" aria-controls="giveS" aria-selected="true">Give Reçus</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="element-box">
+                            <div class="col-sm-12">
+                                <div class="el-tablo bigger">
+                                    <div class="label">
+                                        Commission du : {% if lastSale %}{{ lastSale[0].day | date("jS F Y") }} {% endif %}
+                                    </div>
+                                    <div class="value">
+                                        {% if lastSale %} {{ lastSale[0].dComm |  number_format(0, ',', ' ') }} FCFA {% endif %}
+                                    </div>
+                                </div>
+                                <div class="el-chart-w">
+                                    <canvas height="170px" id="tradeChart" width="600px"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="transaction" role="tabpanel" aria-labelledby="transaction-tab">
+                        <div class="element-wrapper">
+                            <div class="row">
+                                <h6 class="element-header">
+                                    Tableau des ventes journalier (période)
+                                </h6>
+                            </div>
+                            <div class="element-box">
+                                <div class="table-responsive">
+                                    <table id="dataTable1" width="100%" class="table table-striped table-lightfont">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Date</th>
+                                            <th>Nbre</th>
+                                            <th>Valeur</th>
+                                            <th>Commission POS</th>
+                                            <th>Commission Dealer</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if periodSales %}
+                                            {% for periodSale in periodSales %}
+                                                <tr>
+                                                    <td>{{ loop.index0+1 }}</td>
+                                                    <td>{{ periodSale.day | date("jS F Y") }}</td>
+                                                    <td>{{ periodSale.total | number_format(0, ',', ' ') }}</td>
+                                                    <td>{{ periodSale.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                                    <td>{{ periodSale.posComm | number_format(0, ',', ' ') }} F CFA</td>
+                                                    <td>{{ periodSale.dComm | number_format(0, ',', ' ') }} F CFA</td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="giveR" role="tabpanel" aria-labelledby="giveR-tab">
+                        <div class="element-wrapper">
+                            <div class="row">
+                                <h6 class="element-header">
+                                    Tableau des Give Envoyés (période)
+                                </h6>
+                            </div>
+                            <div class="element-box">
+                                <div class="table-responsive">
+                                    <table id="dataTable2" width="100%" class="table table-striped table-lightfont">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Date</th>
+                                            <th>Receveur</th>
+                                            <th>Valeur</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% set totalAmount = 0 %}
+                                        {% set row = 0 %}
+                                        {% if giveSends %}
+                                            {% for giveSend in giveSends %}
+                                                <tr>
+                                                    <td>{{ loop.index0+1 }}</td>
+                                                    <td>{{ giveSend.transactionAt | date("jS F Y") }}</td>
+                                                    <td>
+                                                        {% if giveSend.toMsisdn %}
+                                                            {% if giveSend.toMsisdn.trader  %}
+                                                                {{ giveSend.toMsisdn.trader.fullName }}
+                                                            {% elseif giveSend.toMsisdn.pointofsale  %}
+                                                                {{ giveSend.toMsisdn.pointofsale.name }}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ giveSend.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                                </tr>
+                                                {% set row = loop.index0 + 2 %}
+                                                {% set totalAmount = totalAmount + giveSend.amount%}
+                                            {% endfor %}
+                                            <tr>
+                                                <td>{{ row }}</td>
+                                                <td></td>
+                                                <td class="text-right">Total</td>
+                                                <td class="text-right">{{ totalAmount | number_format(0, ',', ' ') }} FCFA</td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="giveS" role="tabpanel" aria-labelledby="giveS-tab">
+                        <div class="element-wrapper">
+                            <div class="row">
+                                <h6 class="element-header">
+                                    Tableau des Give Reçus (période)
+                                </h6>
+                            </div>
+                            <div class="element-box">
+                                <div class="table-responsive">
+                                    <table id="dataTable3" width="100%" class="table table-striped table-lightfont">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Date</th>
+                                            <th>Emétteur</th>
+                                            <th>Valeur</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% set totalAmount = 0 %}
+                                        {% set row = 0 %}
+                                        {% if giveReceives %}
+                                            {% for giveReceive in giveReceives %}
+                                                <tr>
+                                                    <td>{{ loop.index0+1 }}</td>
+                                                    <td>{{ giveReceive.transactionAt | date("jS F Y") }}</td>
+                                                    <td>
+                                                        {% if giveReceive.fromMsisdn %}
+                                                            {% if giveReceive.fromMsisdn.trader  %}
+                                                                {{ giveReceive.fromMsisdn.trader.fullName }}
+                                                            {% elseif giveReceive.fromMsisdn.pointofsale  %}
+                                                                {{ giveReceive.fromMsisdn.pointofsale.name }}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ giveReceive.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                                </tr>
+                                                {% set totalAmount = totalAmount + giveReceive.amount%}
+                                                {% set row = loop.index0 + 2 %}
+                                            {% endfor %}
+                                            <tr>
+                                                <td>{{ row }}</td>
+                                                <td></td>
+                                                <td class="text-right">Total</td>
+                                                <td class="text-right">{{ totalAmount | number_format(0, ',', ' ') }} FCFA</td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
+
 {% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready( function () {
+            $('#dataTable2').DataTable({
+                responsive: true
+            });
+            $('#dataTable3').DataTable({
+                responsive: true
+            });
+        } );
+    </script>
+    <script>
+        var ctx = document.getElementById('tradeChart').getContext('2d');
+        if ($("#tradeChart").length) {
+            var lineChart = $("#tradeChart");
+
+            // line chart data
+            var lineData = {
+                labels:{% if days is defined %}[{% for day in days %}"{{ day }}"{% if not loop.last %},{% endif %}{% endfor %}] {% else %}["J","J-1","J-2","J-3","J-4","J-5","J-6","J-7"]{% endif %},
+
+                datasets: [{
+                    label: "Commission du dealer",
+                    fill: false,
+                    lineTension: 0.3,
+                    backgroundColor: "#fff",
+                    borderColor: "#047bf8",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "#fff",
+                    pointBackgroundColor: "#141E41",
+                    pointBorderWidth: 3,
+                    pointHoverRadius: 10,
+                    pointHoverBackgroundColor: "#FC2055",
+                    pointHoverBorderColor: "#fff",
+                    pointHoverBorderWidth: 3,
+                    pointRadius: 5,
+                    pointHitRadius: 10,
+                    data: {% if percentWeekComm is defined %} {{ percentWeekComm }} {% else %} [10,20,30,40,50,40,10,70]{% endif %},
+                    spanGaps: false
+                }]
+            };
+
+            // line chart init
+
+        }
+        var myLineChart = new Chart(lineChart, {
+            type: 'line',
+            data: lineData,
+            options: {
+                legend: {
+                    display: false
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            fontSize: '11',
+                            fontColor: '#969da5'
+                        },
+                        gridLines: {
+                            color: 'rgba(0,0,0,0.05)',
+                            zeroLineColor: 'rgba(0,0,0,0.05)'
+                        }
+                    }],
+                    yAxes: [{
+                        display: false,
+                        ticks: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+{% endblock %}
+
 

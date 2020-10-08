@@ -26,8 +26,12 @@ class SaveTransaction
         $typeTitle= $reader->getTitle('TYPE');
         $toSimTitle =$reader->getTitle('TOMSISDN');
         $fromSimTitle = $reader->getTitle('FRMSISDN');
+        $toSimProfile = $reader->getTitle('TOPROFILE');
+        $fromSimProfile = $reader->getTitle('FRPROFILE');
+        $toSimName = $reader->getTitle('TO_POS_NAME');
+        $fromSimName = $reader->getTitle('FR_POS_NAME');
 
-        $title = compact('idTitle', 'amountTitle', 'dealerCommissionTitle', 'posCommissionTitle', 'transactionDateTitle', 'typeTitle', 'toSimTitle', 'fromSimTitle');
+        $title = compact('idTitle', 'amountTitle', 'dealerCommissionTitle', 'posCommissionTitle', 'transactionDateTitle', 'typeTitle', 'toSimTitle', 'fromSimTitle', 'toSimProfile', 'toSimName', 'fromSimProfile', 'fromSimName');
 
         return $title;
     }
@@ -42,9 +46,13 @@ class SaveTransaction
         $fromSim = $value[$title['fromSimTitle']];
         $toSim = $value[$title['toSimTitle']];
         $type = $value[$title['typeTitle']];
+        $fromSimName = $value[$title['fromSimName']];
+        $fromSimProfile = $value[$title['fromSimProfile']];
+        $toSimName = $value[$title['toSimName']];
+        $toSimProfile = $value[$title['toSimProfile']];
 
 
-        return compact('id', 'transactionAt', 'amount', 'dealerCommission', 'posCommission', 'fromSim', 'toSim', 'type');
+        return compact('id', 'transactionAt', 'amount', 'dealerCommission', 'posCommission', 'fromSim', 'toSim', 'type', 'fromSimName', 'fromSimProfile', 'toSimName', 'toSimProfile');
     }
 
     public function save($value)

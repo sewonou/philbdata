@@ -3,9 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Pointofsale;
+use App\Entity\Search;
 use App\Form\PointofsaleType;
+use App\Form\SearchType;
 use App\Repository\PointofsaleRepository;
+use App\Service\PointofsaleStat;
 use App\Service\SimCardStat;
+use App\Service\ZoningStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,13 +100,34 @@ class PointofsaleController extends AbstractController
 
     /**
      * @param Pointofsale $pointofsale
+     * @param Request $request
+     * @param ZoningStat $zoningStat
+     * @param PointofsaleStat $pointofsaleStat
      * @return Response
      * @Route("/pointofsales/{id}/show", name="pointofsale_show")
      */
-    public function show(Pointofsale $pointofsale):Response
+    public function show(Pointofsale $pointofsale, Request $request,ZoningStat $zoningStat, PointofsaleStat $pointofsaleStat):Response
     {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $lastSale = $zoningStat->getSaleInPointofsaleWithLimit($pointofsale->getId(), 1);
+        $sales = $zoningStat->getSaleInPointofsaleWithLimit($pointofsale->getId(), 8);
+        $percentWeekCom = $zoningStat->getLastWeekCommission($sales);
+        $periodSales = $zoningStat->getSaleInPointofsaleByDay($search, $pointofsale->getId());
+        $stat = $zoningStat->getSaleInPointofsale($search, $pointofsale->getId());
+        $giveReceives = $pointofsaleStat->getGiveReceivedByPos($search, $pointofsale->getId());
+        $giveSends = $pointofsaleStat->getGiveSendByPos($search, $pointofsale->getId());
         return  $this->render('pointofsale/show.html.twig', [
             'pointofsale' => $pointofsale,
+            'form'=>$form->createView(),
+            'lastSale'=> $lastSale,
+            'sales' => $sales,
+            'percentWeekComm' => $percentWeekCom,
+            'periodSales' => $periodSales,
+            'stat' => $stat,
+            'giveReceives' => $giveReceives,
+            'giveSends' => $giveSends,
         ]);
     }
 }
