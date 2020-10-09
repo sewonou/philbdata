@@ -108,8 +108,6 @@ class Save
             $region = $this->regionRepository->findOneBy(['name' => $value['region'], 'zone'=>$zone]);
             if(empty($region)) {
                 $region = new Region();
-            }elseif(isset($region) and ($region->getZone()->getName() != $value['zone'])){
-                $region = new Region();
             }
             $region
                 ->setName($value['region'])
@@ -136,8 +134,6 @@ class Save
             $town = $this->townRepository->findOneBy(['name' => $value['town'],'region'=>$region]);
             if(empty($town)) {
                 $town = new Town();
-            }elseif(isset($town) and ($town->getRegion()->getName() != $value['region'])){
-                $town = new Town();
             }
             $town
                 ->setName($value['town'])
@@ -162,8 +158,6 @@ class Save
             $town = $this->addTown($value);
             $prefecture = $this->prefectureRepository->findOneBy(['name' => $value['prefecture'], 'town'=>$town]);
             if(empty($prefecture)) {
-                $prefecture = new Prefecture();
-            }elseif(isset($prefecture) and ($prefecture->getTown()->getName() != $value['town'])){
                 $prefecture = new Prefecture();
             }
             $prefecture
@@ -190,8 +184,6 @@ class Save
             $township = $this->townshipRepository->findOneBy(['name' => $value['township'], 'prefecture'=>$prefecture]);
 
             if(empty($township)) {
-                $township = new Township();
-            }elseif(isset($township) and ($township->getPrefecture()->getName() != $value['prefecture'])){
                 $township = new Township();
             }
             $township
@@ -220,9 +212,6 @@ class Save
             $district = $this->districtRepository->findOneBy(['name'=>$value['district'], 'township'=> $township]);
 
             if(empty($district)){
-                $district = new District();
-            }elseif(isset($district) and ($district->getTownship()->getName() != $value['township'])){
-
                 $district = new District();
             }
             $district
