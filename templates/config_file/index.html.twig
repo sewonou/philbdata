@@ -100,7 +100,7 @@
                                             {% for file in configs %}
                                                 <tr>
                                                     <td>{{ file.createdAt | date("j F à h:i")  }}</td>
-                                                    <td>{{ file.fileName | upper }}</td>
+                                                    <td><a href="{{ vich_uploader_asset(file) }}">{{ file.fileName | upper }}</a></td>
                                                     <td>{{ file.updateAt | date("j F à h:i") }}</td>
                                                     <td>{% if file.config %}{{ file.config.author.login }}{% else %}Non identifié{% endif %}</td>
                                                     <td class="row-actions">

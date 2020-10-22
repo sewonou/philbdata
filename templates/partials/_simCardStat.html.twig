@@ -6,7 +6,11 @@
                     Sim Actif
                 </div>
                 <div class="value">
-                    {{ simCardStat.activeSimCard }}
+                    {% if simCardStat.activeSimCard  %}
+                        {{ simCardStat.activeSimCard }}
+                    {% else %}
+                        0
+                    {% endif %}
                 </div>
                 <div class="trending">
                     <span>100%</span>
@@ -19,10 +23,20 @@
                     Nbre de PDV
                 </div>
                 <div class="value">
-                    {{ simCardStat.activePointofsale }}
+                    {% if simCardStat.activeSimCard  %}
+                        {{ simCardStat.activePointofsale }}
+                    {% else %}
+                        0
+                    {% endif %}
                 </div>
                 <div class="trending">
-                    <span>{{ ((simCardStat.activePointofsale / simCardStat.activeSimCard) *100) | round(1, 'floor') }}%</span>
+                    <span>
+                        {% if simCardStat.activeSimCard  %}
+                            {{ ((simCardStat.activePointofsale / simCardStat.activeSimCard) *100) | round(1, 'floor') }}
+                        {% else %}
+                            0
+                        {% endif %}%
+                    </span>
                 </div>
             </a>
         </div>
@@ -32,10 +46,20 @@
                     Nbre de AGNT
                 </div>
                 <div class="value">
-                    {{ simCardStat.activePointofsaleByProfile('AGNT') }}
+                    {% if simCardStat.activeSimCard  %}
+                        {{ simCardStat.activePointofsaleByProfile('AGNT') }}
+                    {% else %}
+                        0
+                    {% endif %}
                 </div>
                 <div class="trending">
-                    <span>{{ ((simCardStat.activePointofsaleByProfile('AGNT') / simCardStat.activeSimCard) *100) | round(1, 'floor') }}%</span>
+                    <span>
+                        {% if simCardStat.activeSimCard  %}
+                            {{ ((simCardStat.activePointofsaleByProfile('AGNT') / simCardStat.activeSimCard) *100) | round(1, 'floor') }}
+                        {% else %}
+                            0
+                        {% endif %}%
+                    </span>
                 </div>
             </a>
         </div>
@@ -45,10 +69,20 @@
                     Nbre de DISTRO
                 </div>
                 <div class="value">
-                    {{ simCardStat.activePointofsaleByProfile('DISTRO') }}
+                    {% if simCardStat.activeSimCard  %}
+                        {{ simCardStat.activePointofsaleByProfile('DISTRO') }}
+                    {% else %}
+                        0
+                    {% endif %}
                 </div>
                 <div class="trending">
-                    <span>{{ ((simCardStat.activePointofsaleByProfile('DISTRO') / simCardStat.activeSimCard) *100) | round(1, 'floor') }}%</span>
+                    <span>
+                        {% if simCardStat.activeSimCard  %}
+                            {{ ((simCardStat.activePointofsaleByProfile('DISTRO') / simCardStat.activeSimCard) *100) | round(1, 'floor') }}
+                        {% else %}
+                            0
+                        {% endif %}%
+                    </span>
                 </div>
             </a>
         </div>
@@ -58,10 +92,20 @@
                     Nbre de POSCAGNT
                 </div>
                 <div class="value">
-                    {{ simCardStat.activePointofsaleByProfile('POSCAGNT') }}
+                    {% if simCardStat.activeSimCard  %}
+                        {{ simCardStat.activePointofsaleByProfile('POSCAGNT') }}
+                    {% else %}
+                        0
+                    {% endif %}
                 </div>
                 <div class="trending">
-                    <span>{{ ((simCardStat.activePointofsaleByProfile('POSCAGNT') / simCardStat.activeSimCard) *100) | round( 1, 'floor') }}%</span>
+                    <span>
+                        {% if simCardStat.activeSimCard  %}
+                            {{ ((simCardStat.activePointofsaleByProfile('POSCAGNT') / simCardStat.activeSimCard) *100) | round( 1, 'floor') }}
+                        {% else %}
+                            0
+                        {% endif %}%
+                    </span>
                 </div>
             </a>
         </div>
@@ -72,10 +116,20 @@
                     Nbre de CAGNT
                 </div>
                 <div class="value">
-                    {{ simCardStat.activeTraderByProfile('CAGNT') }}
+                    {% if simCardStat.activeSimCard  %}
+                        {{ simCardStat.activeTraderByProfile('CAGNT') }}
+                    {% else %}
+                        0
+                    {% endif %}%
                 </div>
                 <div class="trending">
-                    <span>{{ ((simCardStat.activePointofsaleByProfile('CAGNT') / simCardStat.activeSimCard) *100) | round(1, 'floor') }}%</span>
+                    <span>
+                        {% if simCardStat.activeSimCard  %}
+                            {{ ((simCardStat.activePointofsaleByProfile('CAGNT') / simCardStat.activeSimCard) *100) | round(1, 'floor') }}
+                        {% else %}
+                            0
+                        {% endif %}%
+                    </span>
                 </div>
             </a>
         </div>

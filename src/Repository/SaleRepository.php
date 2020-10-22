@@ -43,7 +43,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleForTrader($val, $trader, $date1, $date2)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 'type')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -65,7 +65,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleByTraderByDay($val, $trader, $date1, $date2)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, SUM(s.posComm) as posComm, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 'type')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -88,7 +88,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleByTraderByDayWithLimit($val, $trader, $limit)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 'type')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -111,7 +111,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleByMonth()
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, CONCAT(MONTHNAME(s.transactionAt), ' ', YEAR(s.transactionAt)) as day, t.title")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, CONCAT(MONTHNAME(s.transactionAt), ' ', YEAR(s.transactionAt)) as day, t.title")
             ->innerJoin('s.type', 't')
             ->where('t.title != :val1')
             //->orwhere('t.title = :val2')
@@ -126,7 +126,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleByDay($date1, $date2)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
             ->andwhere('t.title != :val')
@@ -155,7 +155,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleByDate($startDate, $endDate)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount, DATE(s.transactionAt) as day, t.title")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, DATE(s.transactionAt) as day, t.title")
             ->innerJoin('s.type', 't')
             ->groupBy('day')
             ->getQuery()
@@ -166,7 +166,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleByDateLimit($limit)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->groupBy('day')
             ->orderBy('day', 'DESC')
@@ -200,7 +200,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findDistinctMonth()
     {
         return $this->createQueryBuilder('s')
-            ->select("SUM(s.dComm) as dComm, CONCAT(MONTHNAME(s.transactionAt), ' ', YEAR(s.transactionAt)) as day")
+            ->select("SUM(s.dComm) as dComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, CONCAT(MONTHNAME(s.transactionAt), ' ', YEAR(s.transactionAt)) as day")
             ->groupBy('day')
             ->orderBy('day', 'DESC')
             ->getQuery()
@@ -211,7 +211,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleByRegionByDay($date1, $date2)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, r.id as id")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, r.name as name, r.id as id")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -233,7 +233,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleByRegion($date1, $date2)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, r.id as id")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, r.name as name, r.id as id")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -255,7 +255,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInZone($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, z.id as id")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, z.id as id")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -278,7 +278,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInZoneByDay($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, z.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, z.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -302,7 +302,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInZoneWithLimit($id, $limit)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, z.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, z.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -328,7 +328,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInRegion($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, r.id as id")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, r.name as name, r.id as id")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -350,7 +350,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInRegionByDay($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, r.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, r.name as name, r.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -373,7 +373,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInRegionWithLimit($id, $limit)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, r.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, r.name as name, r.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -398,7 +398,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInTown($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, tw.name as name, tw.id as id")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, tw.name as name, tw.id as id")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -419,7 +419,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInTownByDay($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, tw.name as name, tw.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, tw.name as name, tw.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -441,7 +441,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInTownWithLimit($id, $limit)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, tw.name as name, tw.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, tw.name as name, tw.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -465,7 +465,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInPrefecture($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, pf.name as name, pf.id as id")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, pf.name as name, pf.id as id")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -485,7 +485,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInPrefectureByDay($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, pf.name as name, pf.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, pf.name as name, pf.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -506,7 +506,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInPrefectureWithLimit($id, $limit)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, pf.name as name, pf.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, pf.name as name, pf.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -529,7 +529,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInTownship($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, r.name as name, tws.id as id")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, r.name as name, tws.id as id")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -548,7 +548,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInTownshipByDay($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, tws.name as name, tws.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, tws.name as name, tws.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -568,7 +568,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInTownshipWithLimit($id, $limit)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, tws.name as name, tws.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, tws.name as name, tws.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -590,7 +590,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInDistrict($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, d.name as name, d.id as id")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, d.name as name, d.id as id")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -608,7 +608,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInDistrictByDay($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, d.name as name, d.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, d.name as name, d.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -629,7 +629,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInDistrictWithLimit($id, $limit)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, d.name as name, d.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, d.name as name, d.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -652,7 +652,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInPointofsale($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, pos.name as name, pos.id as id")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, pos.name as name, pos.id as id")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -669,7 +669,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInPointofsaleByDay($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, pos.name as name, pos.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, pos.name as name, pos.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -687,7 +687,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInPointofsaleWithLimit($id, $limit)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, pos.name as name, pos.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, pos.name as name, pos.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -697,6 +697,17 @@ class SaleRepository extends ServiceEntityRepository
             ->groupBy('day, pos.id')
             ->orderBy('DATE(s.transactionAt)', 'DESC')
             ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleIllegal($date)
+    {
+        return $this->createQueryBuilder('s')
+            ->where('date(s.transactionAt) = :date')
+            ->andWhere('s.dComm != s.dCommCalc')
+            ->setParameters(['date'=>$date])
             ->getQuery()
             ->getResult()
             ;

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Sale;
 use App\Form\SaleType;
 use App\Repository\SaleRepository;
+use App\Service\PointofsaleStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -96,6 +97,7 @@ class SaleController extends AbstractController
             'sale' => $sale,
         ]);
     }
+
     /**
      * @param Sale $sale
      * @return Response
@@ -108,5 +110,39 @@ class SaleController extends AbstractController
         $this->manager->remove($sale);
         $this->manager->flush();
         return  $this->redirectToRoute('sale');
+    }
+
+
+
+
+    /**
+     * @param PointofsaleStat $pointofsaleStat
+     * @param $date
+     * @return Response
+     * @Route("/admin/sales/{date}", name="sale_illegal")
+     * @IsGranted("ROLE_SUPER_ADMIN")
+     */
+    public function showIllegal(PointofsaleStat $pointofsaleStat, $date):Response
+    {
+        dump($date);
+        $sales = $pointofsaleStat->getIllegalSale($date);
+        return $this->render('sale/illegalSale.html.twig', [
+            'sales' => $sales,
+        ]);
+    }
+
+
+    /**
+     * @param Sale $sale
+     * @return Response
+     * @Route("/admin/sales/{id}", name="sale_show")
+     * @IsGranted("ROLE_SUPER_ADMIN")
+     */
+    public function show(Sale $sale):Response
+    {
+
+        return $this->render('sale/show.html.twig', [
+            'sale' => $sale,
+        ]);
     }
 }

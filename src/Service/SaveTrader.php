@@ -23,8 +23,9 @@ class SaveTrader
         $posTitle = $reader->getTitle('NOM DU POINT');
         $profileTitle = $reader->getTitle('PROFIL');
         $regionTitle = $reader->getTitle('REGION');
+        $zoneTitle = $reader->getTitle('ZONE');
         $villeTitle = $reader->getTitle('Ville');
-        $title = compact('msisdnTitle', 'nameTitle', 'posTitle', 'profileTitle', 'regionTitle', 'villeTitle');
+        $title = compact('msisdnTitle', 'nameTitle', 'posTitle', 'profileTitle', 'regionTitle', 'villeTitle', 'zoneTitle');
 
         return $title;
     }
@@ -36,9 +37,10 @@ class SaveTrader
         $posName = $value[$title['posTitle']];
         $profile = $value[$title['profileTitle']];
         $region = $value[$title['regionTitle']];
+        $zone = $value[$title['zoneTitle']];
         $town = $value[$title['villeTitle']];
 
-        return compact('msisdn', 'name', 'posName', 'profile', 'region', 'town');
+        return compact('msisdn', 'name', 'posName', 'profile', 'region', 'town', 'zone');
     }
 
     public function save($value)

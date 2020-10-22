@@ -129,4 +129,23 @@ class DashboardController extends AbstractController
             'zoningStat' => $zoningStat
         ]);
     }
+
+    /**
+     * @Route("/comparaisons", name="comparaisonBoard")
+     * @param PointofsaleStat $pointofsaleStat
+     * @param Request $request
+     * @param ZoningStat $zoningStat
+     * @return Response
+     */
+    public function ComparisonBoard(PointofsaleStat $pointofsaleStat, Request $request, ZoningStat $zoningStat)
+    {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $sales = $pointofsaleStat->getSaleByDay($search);
+        return $this->render('dashboard/comparisonBoard.html.twig', [
+            'form' => $form->createView(),
+            'sales' => $sales,
+        ]);
+    }
 }
