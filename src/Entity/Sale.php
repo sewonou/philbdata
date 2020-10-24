@@ -125,7 +125,7 @@ class Sale
     private function getCSINCommission($amount)
     {
         $commission = 0 ;
-        if($amount >=5 and $amount<=5000){
+        if($amount >=500 and $amount<=5000){
             $commission = 25;
         }elseif($amount > 5000 and $amount <= 15000){
             $commission = 75;

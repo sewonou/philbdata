@@ -36,6 +36,20 @@ class PointofsaleStat
         return $this->pointofsaleRepository->findPointofsalesPeriodInput(true, $startDate, $endDate);
     }
 
+    public function getAllPointofsalesPeriodInput(?Search $search)
+    {
+        $startDate = new \DateTime('-1 day');
+        $endDate = new \DateTime('-1 day') ;
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        //dump($startDate, $endDate);
+        return $this->pointofsaleRepository->findAllPointofsalesPeriodInput( $startDate, $endDate);
+    }
+
     public function getPointofsaleComm(?Search $search, ?int $id)
     {
         $startDate = new \DateTime('-1 day');
@@ -61,11 +75,14 @@ class PointofsaleStat
         if(null != $search->getEndAt()){
             $endDate = $search->getEndAt();
         }
+
         $length = $startDate->diff($endDate);
         $length = $length->format('%d');
-        $length = ($length == 0)? ($length + 1) : $length;
+        //dump($length);
+        $length = $length+1;
         //dump($length);
         $dailyGoal = 500;
+        //dump($length);
         //dump($length);
         //die();
         return $length * $dailyGoal ;
@@ -153,5 +170,30 @@ class PointofsaleStat
     public function getIllegalSale($date)
     {
         return $this->saleRepository->findSaleIllegal($date);
+    }
+
+
+    public function getPointofsales(array $values)
+    {
+        $pointofsales = [];
+        foreach ($values as $key=>$value){
+           $pointofsales[] = $value['pointofsale'] ;
+        }
+        return $pointofsales;
+    }
+
+    public function getInactivePointofsales(array $values)
+    {
+        $activePointofsales = $this->getPointofsales($values);
+
+        $pointofsales = $this->pointofsaleRepository->findAll();
+        $inactivePointofsales = [];
+        foreach ($pointofsales as $pointofsale){
+            if(!(in_array($pointofsale, $activePointofsales))  ){
+                $inactivePointofsales[] = $pointofsale;
+            }
+        }
+        //dump($inactivePointofsales);
+        return $inactivePointofsales;
     }
 }

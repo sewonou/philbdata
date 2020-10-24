@@ -377,6 +377,7 @@ class Save
                 ->setDistrict($district)
                 ->setIsActive(false)
             ;
+            $msisdn->setIsActive(true);
             if(isset($district)){
                 $pointofsale
                     ->setIsActive(true)
@@ -386,7 +387,6 @@ class Save
                     ->setLongitude((float)$value['longitude'])
                     ->setContact($value['contact'])
                 ;
-                $msisdn->setIsActive(true);
             }
 
             $this->manager->persist($msisdn);

@@ -40,7 +40,7 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route("/periodic/stats", name="periodicBoard")
+     * @Route("/pointofsale/active", name="activePointofsaleBoard")
      * @param Request $request
      * @param PointofsaleStat $pointofsaleStat
      * @return Response
@@ -52,9 +52,9 @@ class DashboardController extends AbstractController
         $search = new Search();
         $form = $this->createForm(SearchType::class, $search);
         $form->handleRequest($request);
-        $sales = $pointofsaleStat->getPointofsalesPeriodInput($search);
+        $sales = $pointofsaleStat->getAllPointofsalesPeriodInput($search);
         $goal = $pointofsaleStat->getPointofsaleGoal($search);
-        return $this->render('dashboard/periodicBoard.html.twig', [
+        return $this->render('dashboard/activePointofsaleBoard.html.twig', [
             'form' => $form->createView(),
             'sales' => $sales,
             'goal' => $goal,
@@ -62,22 +62,21 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route("/pointofsales/performance", name="pointofsaleBoard")
+     * @Route("/pointofsales/inactive", name="inactivePointofsaleBoard")
      * @param Request $request
      * @param PointofsaleStat $pointofsaleStat
      * @param PointofsaleRepository $pointofsaleRepository
      * @return Response
      * @IsGranted("ROLE_ADMIN")
      */
-    public function pointofsaleBoard(Request $request, PointofsaleStat $pointofsaleStat, PointofsaleRepository $pointofsaleRepository):Response
+    public function inactivePointofsaleBoard(Request $request, PointofsaleStat $pointofsaleStat, PointofsaleRepository $pointofsaleRepository):Response
     {
         $search = new Search();
         $form = $this->createForm(SearchType::class, $search);
         $form->handleRequest($request);
-        $pointofsales = $pointofsaleRepository->findPointofsaleWithoutProfile(true, 'POSCAGNT');
-        //$sales = $pointofsaleStat->getPointofsalesPeriodInput($search);
+        $pointofsales = $pointofsaleStat->getInactivePointofsales($pointofsaleStat->getAllPointofsalesPeriodInput($search));
         $goal = $pointofsaleStat->getPointofsaleGoal($search);
-        return $this->render('dashboard/performanceBoard.html.twig', [
+        return $this->render('dashboard/inactivePointofsalesBoard.html.twig', [
             'form' => $form->createView(),
             'pointofsales' => $pointofsales,
             'pointofsaleStat' => $pointofsaleStat,

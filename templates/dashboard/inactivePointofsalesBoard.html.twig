@@ -27,8 +27,6 @@
                         <th>Nom complet</th>
                         <th>Région</th>
                         <th>Commune</th>
-                        <th>Commission PDV</th>
-                        <th>Commission Dealer</th>
                         <th>Objectif</th>
                         <th>Action</th>
                     </tr>
@@ -41,19 +39,8 @@
                                 <th>{{ pointofsale.msisdn.profile.title }}</th>
                                 <td>{{ pointofsale.msisdn.msisdn }}</td>
                                 <td>{{ pointofsale.name }}</td>
-                                <td>{{ pointofsale.district.township.prefecture.town.region.name }}</td>
-                                <td>{{ pointofsale.district.township.prefecture.town.name }}</td>
-                                {% if pointofsaleStat.pointofsaleComm(search, pointofsale.id) %}
-                                {% for sale in  pointofsaleStat.pointofsaleComm(search, pointofsale.id) %}
-                                    <td>{{ sale.posComm | number_format(0, ',', ' ')  }} F CFA</td>
-                                    <td class="{% if sale.dComm < goal %}down{% elseif sale.dComm > goal %} up {% endif %}">
-                                        {{ sale.dComm | number_format(0, ',', ' ')  }} F CFA
-                                    </td>
-                                {% endfor %}
-                                {% else %}
-                                    <td>0 F CFA</td>
-                                    <td class="down">0 F CFA</td>
-                                {% endif %}
+                                <td>{% if pointofsale.district  %}{{ pointofsale.district.township.prefecture.town.region.name }} {% endif %}</td>
+                                <td>{% if pointofsale.district  %}{{ pointofsale.district.township.prefecture.town.name }}{% endif %}</td>
                                 <td>{{ goal | number_format(0, ',', ' ')  }} F CFA</td>
                                 <td class="row-actions">
                                     <a href="{{ path('pointofsale_show', {'id': pointofsale.id}) }}"><i class="fa fa-eye"></i></a>

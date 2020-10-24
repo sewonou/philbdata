@@ -14,12 +14,12 @@ class SearchType extends ApplicationType
     {
         $builder
             ->add('startAt', DateType::class,
-                $this->getConfiguration('Date des transactions', "", [
+                $this->getConfiguration('Début', "", [
                     'widget' => 'single_text',
                     'placeholder' => 'Date début de la période'
                 ]))
             ->add('endAt', DateType::class,
-                $this->getConfiguration('Date des transactions', "", [
+                $this->getConfiguration('Fin', "", [
                     'widget' => 'single_text',
                     'placeholder' => 'Date fin de la période'
                 ]))

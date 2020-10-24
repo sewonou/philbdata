@@ -287,6 +287,22 @@ class PointofsaleRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findAllPointofsalesPeriodInput($date1, $date2)
+    {
+        //dump($date1, $date2);
+        return $this->createQueryBuilder('pos')
+            ->select("pos as pointofsale, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount")
+            ->innerJoin('pos.msisdn', 'sim')
+            ->innerJoin('sim.sales', 's')
+            ->andWhere('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2])
+            ->orderBy('dComm', 'ASC')
+            ->groupBy('pos.id')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findPointofsaleComm(?bool $val, $date1, $date2, $id)
     {
         //dump($date1, $date2);

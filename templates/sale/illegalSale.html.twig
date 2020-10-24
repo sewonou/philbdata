@@ -21,6 +21,7 @@
                         <th></th>
                         <th>id</th>
                         <th>Date</th>
+                        <th>Type</th>
                         <th>Nom Point</th>
                         <th>Profil</th>
                         <th>Montant</th>
@@ -37,7 +38,8 @@
                             <tr>
                                 <td class="text-center">{{ loop.index0+1 }}</td>
                                 <th>{{ sale.id  }}</th>
-                                <th>{{ sale.transactionAt | date  }}</th>
+                                <th>{{ sale.transactionAt | date("F jS \\a\\t g:ia") }}</th>
+                                <th>{{ sale.type.title  }}</th>
                                 <td>{{ sale.msisdn.pointofsale.name }}</td>
                                 <td>{{ sale.msisdn.profile.title }}</td>
                                 <td>{{ sale.amount | number_format(0, ',', ' ')  }} F CFA</td>
