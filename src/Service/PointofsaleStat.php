@@ -123,7 +123,7 @@ class PointofsaleStat
         if(null != $search->getEndAt()){
             $endDate = $search->getEndAt();
         }
-        return $this->saleRepository->findSaleByDay($startDate, $endDate);
+        return $this->saleRepository->findGiveComByDay($startDate, $endDate);
     }
 
     public function getSaleByRegion(?Search $search)

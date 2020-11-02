@@ -8,6 +8,7 @@ use App\Repository\PointofsaleRepository;
 use App\Repository\SaleRepository;
 use App\Service\PointofsaleStat;
 use App\Service\SimCardStat;
+use App\Service\TradeStat;
 use App\Service\ZoningStat;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,7 +41,7 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route("/pointofsale/active", name="activePointofsaleBoard")
+     * @Route("/boards/active_pointofsales", name="activePointofsaleBoard")
      * @param Request $request
      * @param PointofsaleStat $pointofsaleStat
      * @return Response
@@ -62,7 +63,7 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route("/pointofsales/inactive", name="inactivePointofsaleBoard")
+     * @Route("/boards/inactive_pointofsales", name="inactivePointofsaleBoard")
      * @param Request $request
      * @param PointofsaleStat $pointofsaleStat
      * @param PointofsaleRepository $pointofsaleRepository
@@ -87,28 +88,46 @@ class DashboardController extends AbstractController
 
 
     /**
-     * @Route("/finance/stats", name="financeBoard")
+     * @Route("/boards/finance_stats", name="financeBoard")
+     * @param TradeStat $tradeStat
      * @param PointofsaleStat $pointofsaleStat
      * @param Request $request
      * @return Response
      * @IsGranted("ROLE_ADMIN")
      */
-    public function financeBoard(PointofsaleStat $pointofsaleStat, Request $request):Response
+    public function financeBoard(TradeStat $tradeStat ,PointofsaleStat $pointofsaleStat, Request $request):Response
     {
         $search = new Search();
         $form = $this->createForm(SearchType::class, $search);
         $form->handleRequest($request);
         $sales = $pointofsaleStat->getSaleByDay($search);
         $giveComs = $pointofsaleStat->getGiveComByDay($search);
+        $giveInByTraders = $tradeStat->getGiveInBankByTraders($search);
+        $giveOutByTraders = $tradeStat->getGiveOutBankByTraders($search);
+        $giveInByPointofsales = $tradeStat->getGiveInBankByPointofsales($search);
+        $giveOutByPointofsales = $tradeStat->getGiveOutBankByPointofsales($search);
+        $giveInBankByTradersByDay = $tradeStat->getGiveInBankByTradersByDay($search);
+        $giveOutBankByTradersByDay = $tradeStat->getGiveOutBankByTradersByDay($search);
+        $giveInBankByPointofsalesByDay = $tradeStat->getGiveInBankByPointofsalesByDay($search);
+        $giveOutBankByPointofsalesByDay = $tradeStat->getGiveOutBankByPointofsalesByDay($search);
+
         return $this->render('dashboard/financeBoard.html.twig', [
             'form' => $form->createView(),
             'sales' => $sales,
             'giveComs' => $giveComs,
+            'giveInBankByTraders' => $giveInByTraders,
+            'giveOutBankByTraders' => $giveOutByTraders,
+            'giveInBankByPointofsales' => $giveInByPointofsales,
+            'giveOutBankByPointofsales' =>$giveOutByPointofsales,
+            'giveInBankByTradersByDay' => $giveInBankByTradersByDay,
+            'giveOutBankByTradersByDay' => $giveOutBankByTradersByDay,
+            'giveInBankByPointofsalesByDay' => $giveInBankByPointofsalesByDay,
+            'giveOutBankByPointofsalesByDay' => $giveOutBankByPointofsalesByDay,
         ]);
     }
 
     /**
-     * @Route("/regions/stats", name="regionBoard")
+     * @Route("/boards/region_stats", name="regionBoard")
      * @param PointofsaleStat $pointofsaleStat
      * @param Request $request
      * @param ZoningStat $zoningStat
@@ -130,7 +149,7 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route("/comparaisons", name="comparaisonBoard")
+     * @Route("/bords/sales_comparaison", name="comparaisonBoard")
      * @param PointofsaleStat $pointofsaleStat
      * @param Request $request
      * @param ZoningStat $zoningStat

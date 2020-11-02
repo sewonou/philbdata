@@ -108,6 +108,192 @@ class TradeRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     *
+     * @param $date1
+     * @param $date2
+     * @return mixed
+     */
+    public function findGiveInBankByTraders($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title = :profile')
+            ->andwhere('t.fromMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT'])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findGiveInBankByTradersByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title = :profile')
+            ->andwhere('t.fromMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT'])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findGiveOutBankByTraders($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title = :profile')
+            ->andwhere('t.toMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT'])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+
+    public function findGiveOutBankByTradersByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title = :profile')
+            ->andwhere('t.toMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT'])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+
+    public function findGiveInBankByPointofsales($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title != :profile')
+            ->andwhere('t.fromMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT'])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findGiveInBankByPointofsalesByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title != :profile')
+            ->andwhere('t.fromMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT'])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+
+    public function findGiveOutBankByPointofsales($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title != :profile')
+            ->andwhere('t.toMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT'])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findGiveOutBankByPointofsalesByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title != :profile')
+            ->andwhere('t.toMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT'])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findGiveInBank($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.toMsisdn', 's')
+            ->andwhere('t.fromMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findGiveInBankByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.toMsisdn', 's')
+            ->andwhere('t.fromMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findGiveOutBank($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->andwhere('t.toMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findGiveOutBankByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->andwhere('t.toMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     /*
     public function findOneBySomeField($value): ?Trade
     {

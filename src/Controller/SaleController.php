@@ -124,7 +124,6 @@ class SaleController extends AbstractController
      */
     public function showIllegal(PointofsaleStat $pointofsaleStat, $date):Response
     {
-        dump($date);
         $sales = $pointofsaleStat->getIllegalSale($date);
         return $this->render('sale/illegalSale.html.twig', [
             'sales' => $sales,
