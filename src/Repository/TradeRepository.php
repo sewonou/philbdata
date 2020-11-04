@@ -244,7 +244,7 @@ class TradeRepository extends ServiceEntityRepository
     public function findGiveInBank($date1, $date2)
     {
         return $this->createQueryBuilder('t')
-            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->select('SUM(t.amount) as amount, COUNT(t.id) as total')
             ->innerJoin('t.toMsisdn', 's')
             ->andwhere('t.fromMsisdn is null')
             ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
@@ -271,7 +271,7 @@ class TradeRepository extends ServiceEntityRepository
     public function findGiveOutBank($date1, $date2)
     {
         return $this->createQueryBuilder('t')
-            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->select('SUM(t.amount) as amount, COUNT(t.id) as total')
             ->innerJoin('t.fromMsisdn', 's')
             ->andwhere('t.toMsisdn is null')
             ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
@@ -289,6 +289,79 @@ class TradeRepository extends ServiceEntityRepository
             ->andwhere('t.toMsisdn is null')
             ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
             ->setParameters(['date1'=>$date1, 'date2'=>$date2])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleByTraders($date1, $date2, $profile)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title = :profile')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile' => $profile])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleByTradersByDay($date1, $date2, $profile)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, COUNT(t.id) as total, DATE(t.transactionAt) as day')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title = :profile')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile' => $profile])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+    public function findSaleByTrader($date1, $date2, $id, $master)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('s.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.toMsisdn != :master')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'id' => $id, 'master'=> $master])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
+    public function findSaleReceiveByTrader($date1, $date2, $id, $master)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('s.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.fromMsisdn != :master')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'id' => $id, 'master'=> $master])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
+    public function findSaleByTraderByDay($date1, $date2, $trader)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, COUNT(t.id) as total, DATE(t.transactionAt) as day')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('s.trader = :trader')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'trader' => $trader])
             ->groupBy('day')
             ->getQuery()
             ->getResult()

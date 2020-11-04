@@ -712,4 +712,44 @@ class SaleRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
+
+    public function findSaleByProfile($date1, $date2, $profile)
+    {
+        return $this->createQueryBuilder('s')
+            ->select('SUM(s.dComm) as dComm')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.profile', 'p')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('p.title = :profile')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=> $profile])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
+    public function findSaleDealer($date1, $date2)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("SUM(s.dComm) as dComm")
+            ->innerJoin('s.type', 't')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andwhere('t.title != :val')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM'])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
+    public function findSalePOS($date1, $date2)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("SUM(s.posComm) as posComm")
+            ->innerJoin('s.type', 't')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andwhere('t.title != :val')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM'])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
 }

@@ -48,7 +48,7 @@ class DashboardController extends AbstractController
      * @throws \Exception
      * @IsGranted("ROLE_ADMIN")
      */
-    public function periodicBoard(Request $request, PointofsaleStat $pointofsaleStat):Response
+    public function activePointofsaleBoard(Request $request, PointofsaleStat $pointofsaleStat):Response
     {
         $search = new Search();
         $form = $this->createForm(SearchType::class, $search);
@@ -110,6 +110,11 @@ class DashboardController extends AbstractController
         $giveOutBankByTradersByDay = $tradeStat->getGiveOutBankByTradersByDay($search);
         $giveInBankByPointofsalesByDay = $tradeStat->getGiveInBankByPointofsalesByDay($search);
         $giveOutBankByPointofsalesByDay = $tradeStat->getGiveOutBankByPointofsalesByDay($search);
+        $giveInBankByDay = $tradeStat->getGiveInBankByDay($search);
+        $giveOutBankByDay = $tradeStat->getGiveOutBankByDay($search);
+        $giveInBank = $tradeStat->getGiveInBank($search);
+        $giveOutBank = $tradeStat->getGiveOutBank($search);
+        $giveByTradersByDays = $tradeStat->getSaleByTradersByDay($search, 'CAGNT');
 
         return $this->render('dashboard/financeBoard.html.twig', [
             'form' => $form->createView(),
@@ -123,6 +128,11 @@ class DashboardController extends AbstractController
             'giveOutBankByTradersByDay' => $giveOutBankByTradersByDay,
             'giveInBankByPointofsalesByDay' => $giveInBankByPointofsalesByDay,
             'giveOutBankByPointofsalesByDay' => $giveOutBankByPointofsalesByDay,
+            'giveInBankByDay'=> $giveInBankByDay,
+            'giveOutBankByDay'=> $giveOutBankByDay,
+            'giveInBank'=> $giveInBank,
+            'giveOutBank'=> $giveOutBank,
+            'giveByTradersByDays' => $giveByTradersByDays,
         ]);
     }
 
@@ -149,7 +159,7 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route("/bords/sales_comparaison", name="comparaisonBoard")
+     * @Route("/boards/sales_comparaison", name="comparaisonBoard")
      * @param PointofsaleStat $pointofsaleStat
      * @param Request $request
      * @param ZoningStat $zoningStat
@@ -166,4 +176,30 @@ class DashboardController extends AbstractController
             'sales' => $sales,
         ]);
     }
+
+    /**
+     * @Route("/boards/periodic_stats", name="periodicBoard")
+     * @param Request $request
+     * @param TradeStat $tradeStat
+     * @param PointofsaleStat $pointofsaleStat
+     * @return Response
+     */
+    public function periodicBoard(Request $request, TradeStat $tradeStat, PointofsaleStat $pointofsaleStat):Response
+    {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $saleByTraders = $tradeStat->getSaleByTraders($search, 'CAGNT');
+        $commissionByAGNT ='' ;
+        //$saleByTradersByDays = $tradeStat->getSaleByTradersByDay($search, 'CAGNT');
+        return $this->render('dashboard/periodicBoard.html.twig', [
+            'form' => $form->createView(),
+            'saleByTraders' => $saleByTraders,
+            'pointofsaleStat' => $pointofsaleStat,
+            'tradeStat' => $tradeStat,
+            'search' => $search,
+        ]);
+    }
+    
+    
 }

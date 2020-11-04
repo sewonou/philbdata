@@ -9,6 +9,7 @@ use App\Form\TraderType;
 use App\Repository\TraderRepository;
 use App\Service\PointofsaleStat;
 use App\Service\TraderStat;
+use App\Service\TradeStat;
 use App\Service\ZoningStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -108,7 +109,7 @@ class TraderController extends AbstractController
      * @Route("/traders/{id}/show", name="trader_show")
      *
      */
-    public function show(Trader $trader, Request $request, TraderStat $traderStat):Response
+    public function show(Trader $trader, Request $request, TraderStat $traderStat, TradeStat $tradeStat):Response
     {
         $search = new Search();
         $form = $this->createForm(SearchType::class, $search);
@@ -120,6 +121,8 @@ class TraderController extends AbstractController
         $stat = $traderStat->getSaleForTrader($trader, $search);
         $giveReceives = $traderStat->getGiveReceivedByTrader($search, $trader->getId());
         $giveSends = $traderStat->getGiveSendByTrader($search, $trader->getId());
+        $saleByTrader = $tradeStat->getSaleByTrader($search, $trader);
+        $saleByTraderByDays = $tradeStat->getSaleByTraderByDay($search, $trader);
         return $this->render('trader/show.html.twig', [
             'trader' => $trader,
             'form'=>$form->createView(),
@@ -130,6 +133,8 @@ class TraderController extends AbstractController
             'stat' => $stat,
             'giveReceives' => $giveReceives,
             'giveSends' => $giveSends,
+            'saleByTrader' => $saleByTrader,
+            'saleByTraderByDays'=>$saleByTraderByDays
         ]);
     }
 
@@ -155,6 +160,33 @@ class TraderController extends AbstractController
             'traders' => $traders,
             'search' => $search,
             'form' => $form->createView(),
+            'traderStat' => $traderStat,
+        ]);
+    }
+
+    /**
+     * @Route("/traders/sales", name="trader_sales")
+     * @param TraderStat $traderStat
+     * @param TradeStat $tradeStat
+     * @param Request $request
+     * @return Response
+     * @throws \Exception
+     */
+    public function salesBoard(TraderStat $traderStat,TradeStat $tradeStat, Request $request)
+    {
+        $search = new Search();
+        $search->setStartAt(new \DateTime('-1 day'))
+            ->setEndAt(new \DateTime('-1 day'))
+        ;
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+
+        $traders =$this->repository->findBy(['isTrader'=>true, 'isActive'=>true],['fullName'=>'ASC'],null, null);
+        return $this->render('trader/salesBoard.html.twig', [
+            'traders' => $traders,
+            'search' => $search,
+            'form' => $form->createView(),
+            'tradeStat' => $tradeStat,
             'traderStat' => $traderStat,
         ]);
     }

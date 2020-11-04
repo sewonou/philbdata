@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+Tableau des ventes des commerciaux
+{% endblock %}
+
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-actions">
+                        {{ include('partials/_searchForm.html.twig') }}
+                    </div>
+                    <h6 class="element-header">
+                        Tableau de performance des commerciaux par zones VS Objectifs sur période
+                    </h6>
+                </div>
+            </div>
+        </div>
+        <div class="element-box">
+            <div class="table-responsive">
+                <table id="dataTable1" width="100%" class="table table-striped table-lightfont">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Photo</th>
+                        <th>Nom complet</th>
+                        <th>Région</th>
+                        <th>Numéro flooz</th>
+                        <th>Nbre PDV</th>
+
+                        <th>Vente Mensuel</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if traders %}
+                        {% for trader in traders %}
+                            <tr>
+                                <td>{{ loop.index0 + 1  }}</td>
+                                <td class="cell-image-list">
+                                    {% if trader.pictureName %}
+                                        <img class="custom-avatar custom-avatar-micro" src="{{ vich_uploader_asset(trader, 'pictureFile') }}" alt="{{ trader.fullName }}">
+                                    {% else %}
+                                        <img class="custom-avatar custom-avatar-micro" src="{{ asset('uploads/images/user.png') }}" alt="{{ trader.fullName }}">
+                                    {% endif %}
+                                </td>
+                                <td>{{ trader.fullName }}</td>
+                                <td>{{ trader.region.name }}</td>
+                                <td>{{ trader.msisdn.msisdn }}</td>
+                                <td class="text-right">{{ traderStat.traderPointofsale(trader) }}</td>
+                                {# <td class="text-right">{{ traderStat.traderInput(trader, search) | number_format(0, ',', ' ') }} F CFA</td>#}
+                                <td class="text-right">{{ tradeStat.saleByTrader(search, trader) | number_format(0, ',', ' ') ~ ' F CFA' }}</td>
+                                <td class="row-actions">
+                                    <a href="{{ path('trader_show', {'id': trader.id}) }}"><i class="fa fa-eye"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

@@ -22,6 +22,25 @@ class PointofsaleStat
         $this->tradeRepository = $tradeRepository;
     }
 
+    private function getStartDate(Search $search)
+    {
+        $startDate = new \DateTime('-1 day');
+
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        return$startDate;
+    }
+
+    private function getEndDate(Search $search)
+    {
+        $endDate = new \DateTime('-1 day') ;
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        return $endDate;
+    }
+
     public function getPointofsalesPeriodInput(?Search $search)
     {
         $startDate = new \DateTime('-1 day');
@@ -195,5 +214,29 @@ class PointofsaleStat
         }
         //dump($inactivePointofsales);
         return $inactivePointofsales;
+    }
+
+    public function getCommByProfile(Search $search,string $profile)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
+        return $this->saleRepository->findSaleByProfile($startDate, $endDate, $profile);
+    }
+
+    public function getCommissionDealer(Search $search)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
+        return $this->saleRepository->findSaleDealer($startDate, $endDate);
+    }
+
+    public function getCommissionPOS(Search $search)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
+        return $this->saleRepository->findSalePOS($startDate, $endDate);
     }
 }
