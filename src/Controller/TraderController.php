@@ -105,9 +105,11 @@ class TraderController extends AbstractController
 
     /**
      * @param Trader $trader
+     * @param Request $request
+     * @param TraderStat $traderStat
+     * @param TradeStat $tradeStat
      * @return Response
      * @Route("/traders/{id}/show", name="trader_show")
-     *
      */
     public function show(Trader $trader, Request $request, TraderStat $traderStat, TradeStat $tradeStat):Response
     {
@@ -119,10 +121,14 @@ class TraderController extends AbstractController
         $percentWeekCom = $traderStat->getLastWeekCommission($sales);
         $periodSales = $traderStat->getTraderInputByDay($trader, $search);
         $stat = $traderStat->getSaleForTrader($trader, $search);
-        $giveReceives = $traderStat->getGiveReceivedByTrader($search, $trader->getId());
-        $giveSends = $traderStat->getGiveSendByTrader($search, $trader->getId());
         $saleByTrader = $tradeStat->getSaleByTrader($search, $trader);
         $saleByTraderByDays = $tradeStat->getSaleByTraderByDay($search, $trader);
+        $virtualsToBankByTrader = $traderStat->getVirtualToBankByTrader($search, $trader);
+        $virtualsFromBankToTrader = $traderStat->getVirtualFromBankToTrader($search, $trader);
+        $virtualsToPosByTrader = $traderStat->getVirtualToPosByTrader($search, $trader);
+        $virtualsFromPosToTrader = $traderStat->getVirtualFromPosToTrader($search, $trader);
+        $virtualsToMasterByTrader = $traderStat->getVirtualToMasterByTrader($search, $trader);
+        $virtualsFromMasterToTrader = $traderStat->getVirtualFromMasterToTrader($search, $trader);
         return $this->render('trader/show.html.twig', [
             'trader' => $trader,
             'form'=>$form->createView(),
@@ -131,10 +137,14 @@ class TraderController extends AbstractController
             'percentWeekComm' => $percentWeekCom,
             'periodSales' => $periodSales,
             'stat' => $stat,
-            'giveReceives' => $giveReceives,
-            'giveSends' => $giveSends,
             'saleByTrader' => $saleByTrader,
-            'saleByTraderByDays'=>$saleByTraderByDays
+            'saleByTraderByDays'=>$saleByTraderByDays,
+            'virtualsToBankByTrader' => $virtualsToBankByTrader,
+            'virtualsFromBankToTrader' => $virtualsFromBankToTrader,
+            'virtualsToPosByTrader' => $virtualsToPosByTrader,
+            'virtualsFromPosToTrader' => $virtualsFromPosToTrader,
+            'virtualsToMasterByTrader' => $virtualsToMasterByTrader,
+            'virtualsFromMasterToTrader' => $virtualsFromMasterToTrader,
         ]);
     }
 

@@ -8,6 +8,7 @@ use App\Entity\Search;
 use App\Entity\Trader;
 use App\Repository\ControlRepository;
 use App\Repository\SaleRepository;
+use App\Repository\SimCardRepository;
 use App\Repository\TradeRepository;
 use App\Repository\TraderRepository;
 
@@ -19,13 +20,34 @@ class TraderStat
     private $tradeRepository;
     private $traderRepository;
     private $controlRepository;
+    private $simCardRepository;
 
-    public function __construct(TraderRepository $traderRepository, ControlRepository $controlRepository, SaleRepository $saleRepository, TradeRepository $tradeRepository)
+    public function __construct(TraderRepository $traderRepository, ControlRepository $controlRepository, SaleRepository $saleRepository, TradeRepository $tradeRepository, SimCardRepository $simCardRepository)
     {
         $this->traderRepository = $traderRepository;
         $this->controlRepository = $controlRepository;
         $this->saleRepository = $saleRepository;
         $this->tradeRepository = $tradeRepository;
+        $this->simCardRepository = $simCardRepository;
+    }
+
+    private function getStartDate(Search $search)
+    {
+        $startDate = new \DateTime('-1 day');
+
+        if(null != $search->getStartAt()){
+            $startDate = $search->getStartAt();
+        }
+        return$startDate;
+    }
+
+    private function getEndDate(Search $search)
+    {
+        $endDate = new \DateTime('-1 day') ;
+        if(null != $search->getEndAt()){
+            $endDate = $search->getEndAt();
+        }
+        return $endDate;
     }
 
     public function getTraderPointofsale(?Trader $trader):int
@@ -131,6 +153,8 @@ class TraderStat
         return $this->tradeRepository->findGiveSendByTrader($startDate, $endDate, $id);
     }
 
+
+
     public function getGiveReceivedByTrader(Search $search, int $id)
     {
         $startDate = new \DateTime($this->tradeRepository->findLastDate());
@@ -154,5 +178,91 @@ class TraderStat
         $inverse = array_reverse($commissions);
         $inverse = '['. implode(',', $inverse) .']';
         return $inverse;
+    }
+
+    /**
+     * Vente des gives par un Commercial groupé par jour
+     * @param Search $search
+     * @param Trader $trader
+     * @return mixed
+     */
+    public function getVirtualToBankByTrader(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        return $this->tradeRepository->findVirtualToBankByTrader($startDate, $endDate, $id);
+    }
+
+    /**
+     * Vente des gives par un Commercial groupé par jour
+     * @param Search $search
+     * @param Trader $trader
+     * @return mixed
+     */
+    public function getVirtualFromBankToTrader(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        return $this->tradeRepository->findVirtualFromBankToTrader($startDate, $endDate, $id);
+    }
+
+    /**
+     * Vente des gives par un Commercial groupé par jour
+     * @param Search $search
+     * @param Trader $trader
+     * @return mixed
+     */
+    public function getVirtualToPosByTrader(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        return $this->tradeRepository->findVirtualToPosByTrader($startDate, $endDate, $id);
+    }
+
+    /**
+     * Vente des gives par un Commercial groupé par jour
+     * @param Search $search
+     * @param Trader $trader
+     * @return mixed
+     */
+    public function getVirtualFromPosToTrader(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        return $this->tradeRepository->findVirtualFromPosToTrader($startDate, $endDate, $id);
+    }
+
+    /**
+     * Vente des gives par un Commercial groupé par jour
+     * @param Search $search
+     * @param Trader $trader
+     * @return mixed
+     */
+    public function getVirtualToMasterByTrader(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        $master = $this->simCardRepository->findOneBy(['msisdn'=>'22897391919']);
+        return $this->tradeRepository->findVirtualToMasterByTrader($startDate, $endDate, $id, $master);
+    }
+
+    /**
+     * Vente des gives par un Commercial groupé par jour
+     * @param Search $search
+     * @param Trader $trader
+     * @return mixed
+     */
+    public function getVirtualFromMasterToTrader(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        $master = $this->simCardRepository->findOneBy(['msisdn'=>'22897391919']);
+        return $this->tradeRepository->findVirtualFromMasterToTrader($startDate, $endDate, $id, $master);
     }
 }

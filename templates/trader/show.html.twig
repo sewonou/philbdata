@@ -24,12 +24,40 @@
                                 <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Résumé</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="transaction-tab" data-toggle="tab" href="#transaction" role="tab" aria-controls="transaction" aria-selected="true">Transactions</a>
+                                <a class="nav-link" id="transaction-tab" data-toggle="tab" href="#transaction" role="tab" aria-controls="transaction" aria-selected="true">
+                                    Apport Zone
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="giveR-tab" data-toggle="tab" href="#giveR" role="tab" aria-controls="giveR" aria-selected="true">Give Envoyés</a>
-                            </li><li class="nav-item">
-                                <a class="nav-link" id="giveS-tab" data-toggle="tab" href="#giveS" role="tab" aria-controls="giveS" aria-selected="true">Give Reçus</a>
+                                <a class="nav-link" id="appro-tab" data-toggle="tab" href="#appro" role="tab" aria-controls="appro" aria-selected="true">
+                                    Appro Master
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="retour-tab" data-toggle="tab" href="#retour" role="tab" aria-controls="retour" aria-selected="true">
+                                    Retour Master
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="reconversionAchat-tab" data-toggle="tab" href="#reconversionAchat" role="tab" aria-controls="reconversionAchat" aria-selected="true">
+                                    Conversion Achat
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="reconversionVente-tab" data-toggle="tab" href="#reconversionVente" role="tab" aria-controls="reconversionVente" aria-selected="true">
+                                    Conversion Vente
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="vente-tab" data-toggle="tab" href="#vente" role="tab" aria-controls="vente" aria-selected="true">
+                                    Vente
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" id="echange-tab" data-toggle="tab" href="#echange" role="tab" aria-controls="echange" aria-selected="true">
+                                    Echange
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -92,11 +120,11 @@
                         </div>
 
                     </div>
-                    <div class="tab-pane fade" id="giveR" role="tabpanel" aria-labelledby="giveR-tab">
+                    <div class="tab-pane fade" id="appro" role="tabpanel" aria-labelledby="appro-tab">
                         <div class="element-wrapper">
                             <div class="row">
                                 <h6 class="element-header">
-                                    Tableau des Give Envoyés (période)
+                                   Tableau des approvisinnement reçus du master (Appro virtuel)
                                 </h6>
                             </div>
                             <div class="element-box">
@@ -106,40 +134,61 @@
                                         <tr>
                                             <th></th>
                                             <th>Date</th>
-                                            <th>Receveur</th>
+                                            <th>Emétteur</th>
+                                            <th>Récepteur</th>
                                             <th>Valeur</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% set totalAmount = 0 %}
                                         {% set row = 0 %}
-                                        {% if giveSends %}
-                                            {% for giveSend in giveSends %}
+                                        {% if virtualsFromMasterToTrader %}
+                                            {% for virtualFromMasterToTrader in virtualsFromMasterToTrader %}
                                                 <tr>
                                                     <td>{{ loop.index0+1 }}</td>
-                                                    <td>{{ giveSend.transactionAt | date("jS F Y") }}</td>
+                                                    <td>{{ virtualFromMasterToTrader.transactionAt | date("jS F Y à g:i a") }}</td>
                                                     <td>
-                                                        {% if giveSend.toMsisdn %}
-                                                            {% if giveSend.toMsisdn.trader  %}
-                                                                {{ giveSend.toMsisdn.trader.fullName }}
-                                                            {% elseif giveSend.toMsisdn.pointofsale  %}
-                                                                {{ giveSend.toMsisdn.pointofsale.name }}
+                                                        {% if virtualFromMasterToTrader.fromMsisdn %}
+                                                            {% if virtualFromMasterToTrader.fromMsisdn.trader  %}
+                                                                {{ virtualFromMasterToTrader.fromMsisdn.trader.fullName }}
+                                                            {% elseif virtualFromMasterToTrader.fromMsisdn.pointofsale  %}
+                                                                {{ virtualFromMasterToTrader.fromMsisdn.pointofsale.name }}
                                                             {% endif %}
+                                                        {% elseif virtualFromMasterToTrader.fromMsisdn is null %}
+                                                            Banque
+                                                        {% endif %}
+                                                        {% if virtualFromMasterToTrader.fromMsisdn is not null %}
+                                                            &nbsp;({{ virtualFromMasterToTrader.fromMsisdn.msisdn }})
                                                         {% endif %}
                                                     </td>
-                                                    <td>{{ giveSend.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                                    <td>
+                                                        {% if virtualFromMasterToTrader.toMsisdn %}
+                                                            {% if virtualFromMasterToTrader.toMsisdn.trader  %}
+                                                                {{ virtualFromMasterToTrader.toMsisdn.trader.fullName }}
+                                                            {% elseif virtualFromMasterToTrader.toMsisdn.pointofsale  %}
+                                                                {{ virtualFromMasterToTrader.toMsisdn.pointofsale.name }}
+
+                                                            {% endif %}
+                                                        {% elseif virtualFromMasterToTrader.toMsisdn is null %}
+                                                            Banque
+                                                        {% endif %}
+                                                        {% if virtualFromMasterToTrader.toMsisdn is not null %}
+                                                            &nbsp;({{ virtualFromMasterToTrader.toMsisdn.msisdn }})
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ virtualFromMasterToTrader.amount | number_format(0, ',', ' ') }} F CFA</td>
                                                 </tr>
+                                                {% set totalAmount = totalAmount + virtualFromMasterToTrader.amount%}
                                                 {% set row = loop.index0 + 2 %}
-                                                {% set totalAmount = totalAmount + giveSend.amount%}
                                             {% endfor %}
                                             <tr>
                                                 <td>{{ row }}</td>
+                                                <td></td>
                                                 <td></td>
                                                 <td class="text-right">Total</td>
                                                 <td class="text-right">{{ totalAmount | number_format(0, ',', ' ') }} FCFA</td>
                                             </tr>
                                         {% endif %}
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -147,11 +196,87 @@
                         </div>
 
                     </div>
-                    <div class="tab-pane fade" id="giveS" role="tabpanel" aria-labelledby="giveS-tab">
+                    <div class="tab-pane fade" id="retour" role="tabpanel" aria-labelledby="retour-tab">
                         <div class="element-wrapper">
                             <div class="row">
                                 <h6 class="element-header">
-                                    Tableau des Give Reçus (période)
+                                    Tableau des retour de virtuel au master (retour virtuel)
+                                </h6>
+                            </div>
+                            <div class="element-box">
+                                <div class="table-responsive">
+                                    <table id="dataTable2a" width="100%" class="table table-striped table-lightfont">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Date</th>
+                                            <th>Emétteur</th>
+                                            <th>Récepteur</th>
+                                            <th>Valeur</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% set totalAmount = 0 %}
+                                        {% set row = 0 %}
+                                        {% if virtualsToMasterByTrader %}
+                                            {% for virtualToMasterByTrader in virtualsToMasterByTrader %}
+                                                <tr>
+                                                    <td>{{ loop.index0+1 }}</td>
+                                                    <td>{{ virtualToMasterByTrader.transactionAt | date("jS F Y à g:i a") }}</td>
+                                                    <td>
+                                                        {% if virtualToMasterByTrader.fromMsisdn %}
+                                                            {% if virtualToMasterByTrader.fromMsisdn.trader  %}
+                                                                {{ virtualToMasterByTrader.fromMsisdn.trader.fullName }}
+                                                            {% elseif virtualToMasterByTrader.fromMsisdn.pointofsale  %}
+                                                                {{ virtualToMasterByTrader.fromMsisdn.pointofsale.name }}
+                                                            {% endif %}
+                                                        {% elseif virtualToMasterByTrader.fromMsisdn is null %}
+                                                            Banque
+                                                        {% endif %}
+                                                        {% if virtualToMasterByTrader.fromMsisdn is not null %}
+                                                            &nbsp;({{ virtualToMasterByTrader.fromMsisdn.msisdn }})
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if virtualToMasterByTrader.toMsisdn %}
+                                                            {% if virtualToMasterByTrader.toMsisdn.trader  %}
+                                                                {{ virtualToMasterByTrader.toMsisdn.trader.fullName }}
+                                                            {% elseif virtualToMasterByTrader.toMsisdn.pointofsale  %}
+                                                                {{ virtualToMasterByTrader.toMsisdn.pointofsale.name }}
+
+                                                            {% endif %}
+                                                        {% elseif virtualToMasterByTrader.toMsisdn is null %}
+                                                            Banque
+                                                        {% endif %}
+                                                        {% if virtualToMasterByTrader.toMsisdn is not null %}
+                                                            &nbsp;({{ virtualToMasterByTrader.toMsisdn.msisdn }})
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ virtualToMasterByTrader.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                                </tr>
+                                                {% set totalAmount = totalAmount + virtualToMasterByTrader.amount%}
+                                                {% set row = loop.index0 + 2 %}
+                                            {% endfor %}
+                                            <tr>
+                                                <td>{{ row }}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-right">Total</td>
+                                                <td class="text-right">{{ totalAmount | number_format(0, ',', ' ') }} FCFA</td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="reconversionAchat" role="tabpanel" aria-labelledby="reconversionAchat-tab">
+                        <div class="element-wrapper">
+                            <div class="row">
+                                <h6 class="element-header">
+                                    Tableau des reconversion achat de virtuel en banque
                                 </h6>
                             </div>
                             <div class="element-box">
@@ -162,33 +287,283 @@
                                             <th></th>
                                             <th>Date</th>
                                             <th>Emétteur</th>
+                                            <th>Récepteur</th>
                                             <th>Valeur</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% set totalAmount = 0 %}
                                         {% set row = 0 %}
-                                        {% if giveReceives %}
-                                            {% for giveReceive in giveReceives %}
+                                        {% if virtualsToBankByTrader %}
+                                            {% for virtualToBankByTrader in virtualsToBankByTrader %}
                                                 <tr>
                                                     <td>{{ loop.index0+1 }}</td>
-                                                    <td>{{ giveReceive.transactionAt | date("jS F Y") }}</td>
+                                                    <td>{{ virtualToBankByTrader.transactionAt | date("jS F Y à g:i a") }}</td>
                                                     <td>
-                                                        {% if giveReceive.fromMsisdn %}
-                                                            {% if giveReceive.fromMsisdn.trader  %}
-                                                                {{ giveReceive.fromMsisdn.trader.fullName }}
-                                                            {% elseif giveReceive.fromMsisdn.pointofsale  %}
-                                                                {{ giveReceive.fromMsisdn.pointofsale.name }}
+                                                        {% if virtualToBankByTrader.fromMsisdn %}
+                                                            {% if virtualToBankByTrader.fromMsisdn.trader  %}
+                                                                {{ virtualToBankByTrader.fromMsisdn.trader.fullName }}
+                                                            {% elseif virtualToBankByTrader.fromMsisdn.pointofsale  %}
+                                                                {{ virtualToBankByTrader.fromMsisdn.pointofsale.name }}
                                                             {% endif %}
+                                                        {% elseif virtualToBankByTrader.fromMsisdn is null %}
+                                                            Banque
+                                                        {% endif %}
+                                                        {% if virtualToBankByTrader.fromMsisdn is not null %}
+                                                            &nbsp;({{ virtualToBankByTrader.fromMsisdn.msisdn }})
                                                         {% endif %}
                                                     </td>
-                                                    <td>{{ giveReceive.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                                    <td>
+                                                        {% if virtualToBankByTrader.toMsisdn %}
+                                                            {% if virtualToBankByTrader.toMsisdn.trader  %}
+                                                                {{ virtualToBankByTrader.toMsisdn.trader.fullName }}
+                                                            {% elseif virtualToBankByTrader.toMsisdn.pointofsale  %}
+                                                                {{ virtualToBankByTrader.toMsisdn.pointofsale.name }}
+
+                                                            {% endif %}
+                                                        {% elseif virtualToBankByTrader.toMsisdn is null %}
+                                                            Banque
+                                                        {% endif %}
+                                                        {% if virtualToBankByTrader.toMsisdn is not null %}
+                                                            &nbsp;({{ virtualToBankByTrader.toMsisdn.msisdn }})
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ virtualToBankByTrader.amount | number_format(0, ',', ' ') }} F CFA</td>
                                                 </tr>
-                                                {% set totalAmount = totalAmount + giveReceive.amount%}
+                                                {% set totalAmount = totalAmount + virtualToBankByTrader.amount%}
                                                 {% set row = loop.index0 + 2 %}
                                             {% endfor %}
                                             <tr>
                                                 <td>{{ row }}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-right">Total</td>
+                                                <td class="text-right">{{ totalAmount | number_format(0, ',', ' ') }} FCFA</td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="reconversionVente" role="tabpanel" aria-labelledby="reconversionVente-tab">
+                        <div class="element-wrapper">
+                            <div class="row">
+                                <h6 class="element-header">
+                                    Tableau des reconversion vente de virtuel en banque (Récupération en espèce)
+                                </h6>
+                            </div>
+                            <div class="element-box">
+                                <div class="table-responsive">
+                                    <table id="dataTable4" width="100%" class="table table-striped table-lightfont">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Date</th>
+                                            <th>Emétteur</th>
+                                            <th>Récepteur</th>
+                                            <th>Valeur</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% set totalAmount = 0 %}
+                                        {% set row = 0 %}
+                                        {% if virtualsFromBankToTrader %}
+                                            {% for virtualFromBankToTrader in virtualsFromBankToTrader %}
+                                                <tr>
+                                                    <td>{{ loop.index0+1 }}</td>
+                                                    <td>{{ virtualFromBankToTrader.transactionAt | date("jS F Y à g:i a") }}</td>
+                                                    <td>
+                                                        {% if virtualFromBankToTrader.fromMsisdn %}
+                                                            {% if virtualFromBankToTrader.fromMsisdn.trader  %}
+                                                                {{ virtualFromBankToTrader.fromMsisdn.trader.fullName }}
+                                                            {% elseif virtualFromBankToTrader.fromMsisdn.pointofsale  %}
+                                                                {{ virtualFromBankToTrader.fromMsisdn.pointofsale.name }}
+                                                            {% endif %}
+                                                        {% elseif  virtualFromBankToTrader.fromMsisdn is null  %}
+                                                            Banque
+                                                        {% endif %}
+                                                        {% if virtualFromBankToTrader.fromMsisdn is not null %}
+                                                            &nbsp;({{ virtualFromBankToTrader.fromMsisdn.msisdn }})
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if virtualFromBankToTrader.toMsisdn %}
+                                                            {% if virtualFromBankToTrader.toMsisdn.trader  %}
+                                                                {{ virtualFromBankToTrader.toMsisdn.trader.fullName }}
+                                                            {% elseif virtualFromBankToTrader.toMsisdn.pointofsale  %}
+                                                                {{ virtualFromBankToTrader.toMsisdn.pointofsale.name }}
+
+                                                            {% endif %}
+                                                        {% elseif  virtualFromBankToTrader.toMsisdn is null  %}
+                                                            Banque
+                                                        {% endif %}
+                                                        {% if virtualFromBankToTrader.toMsisdn is not null %}
+                                                            &nbsp;({{ virtualFromBankToTrader.toMsisdn.msisdn }})
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ virtualFromBankToTrader.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                                </tr>
+                                                {% set totalAmount = totalAmount + virtualFromBankToTrader.amount%}
+                                                {% set row = loop.index0 + 2 %}
+                                            {% endfor %}
+                                            <tr>
+                                                <td>{{ row }}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-right">Total</td>
+                                                <td class="text-right">{{ totalAmount | number_format(0, ',', ' ') }} FCFA</td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="vente" role="tabpanel" aria-labelledby="vente-tab">
+                        <div class="element-wrapper">
+                            <div class="row">
+                                <h6 class="element-header">
+                                    Tableau des vente de virtuel au PDV (Récupération en espèce)
+                                </h6>
+                            </div>
+                            <div class="element-box">
+                                <div class="table-responsive">
+                                    <table id="dataTable5" width="100%" class="table table-striped table-lightfont">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Date</th>
+                                            <th>Emétteur</th>
+                                            <th>Récepteur</th>
+                                            <th>Valeur</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% set totalAmount = 0 %}
+                                        {% set row = 0 %}
+                                        {% if virtualsToPosByTrader %}
+                                            {% for virtualToPosByTrader in virtualsToPosByTrader %}
+                                                <tr>
+                                                    <td>{{ loop.index0+1 }}</td>
+                                                    <td>{{ virtualToPosByTrader.transactionAt | date("jS F Y à g:i a") }}</td>
+                                                    <td>
+                                                        {% if virtualToPosByTrader.fromMsisdn %}
+                                                            {% if virtualToPosByTrader.fromMsisdn.trader  %}
+                                                                {{ virtualToPosByTrader.fromMsisdn.trader.fullName }}
+                                                            {% elseif virtualToPosByTrader.fromMsisdn.pointofsale  %}
+                                                                {{ virtualToPosByTrader.fromMsisdn.pointofsale.name }}
+                                                            {% endif %}
+                                                        {% elseif  virtualToPosByTrader.fromMsisdn is null  %}
+                                                            Banque
+                                                        {% endif %}
+                                                        {% if virtualToPosByTrader.fromMsisdn is not null %}
+                                                            &nbsp;({{ virtualToPosByTrader.fromMsisdn.msisdn }})
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if virtualToPosByTrader.toMsisdn %}
+                                                            {% if virtualToPosByTrader.toMsisdn.trader  %}
+                                                                {{ virtualToPosByTrader.toMsisdn.trader.fullName }}
+                                                            {% elseif virtualToPosByTrader.toMsisdn.pointofsale  %}
+                                                                {{ virtualToPosByTrader.toMsisdn.pointofsale.name }}
+
+                                                            {% endif %}
+                                                        {% elseif  virtualToPosByTrader.toMsisdn is null  %}
+                                                            Banque
+                                                        {% endif %}
+                                                        {% if virtualToPosByTrader.toMsisdn is not null %}
+                                                            &nbsp;({{ virtualToPosByTrader.toMsisdn.msisdn }})
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ virtualToPosByTrader.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                                </tr>
+                                                {% set totalAmount = totalAmount + virtualToPosByTrader.amount%}
+                                                {% set row = loop.index0 + 2 %}
+                                            {% endfor %}
+                                            <tr>
+                                                <td>{{ row }}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-right">Total</td>
+                                                <td class="text-right">{{ totalAmount | number_format(0, ',', ' ') }} FCFA</td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="echange" role="tabpanel" aria-labelledby="echange-tab">
+                        <div class="element-wrapper">
+                            <div class="row">
+                                <h6 class="element-header">
+                                    Tableau des echange de virtuel avec les PDVs (Récupération en vituel)
+                                </h6>
+                            </div>
+                            <div class="element-box">
+                                <div class="table-responsive">
+                                    <table id="dataTable6" width="100%" class="table table-striped table-lightfont">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Date</th>
+                                            <th>Emétteur</th>
+                                            <th>Récepteur</th>
+                                            <th>Valeur</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% set totalAmount = 0 %}
+                                        {% set row = 0 %}
+                                        {% if virtualsFromPosToTrader %}
+                                            {% for virtualFromPosToTrader in virtualsFromPosToTrader %}
+                                                <tr>
+                                                    <td>{{ loop.index0+1 }}</td>
+                                                    <td>{{ virtualFromPosToTrader.transactionAt | date("jS F Y à g:i a") }}</td>
+                                                    <td>
+                                                        {% if virtualFromPosToTrader.fromMsisdn %}
+                                                            {% if virtualFromPosToTrader.fromMsisdn.trader  %}
+                                                                {{ virtualFromPosToTrader.fromMsisdn.trader.fullName }}
+                                                            {% elseif virtualFromPosToTrader.fromMsisdn.pointofsale  %}
+                                                                {{ virtualFromPosToTrader.fromMsisdn.pointofsale.name }}
+                                                            {% endif %}
+                                                        {% elseif  virtualFromPosToTrader.fromMsisdn is null  %}
+                                                            Banque
+                                                        {% endif %}
+                                                        {% if virtualFromPosToTrader.fromMsisdn is not null %}
+                                                            &nbsp;({{ virtualFromPosToTrader.fromMsisdn.msisdn }})
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if virtualFromPosToTrader.toMsisdn %}
+                                                            {% if virtualFromPosToTrader.toMsisdn.trader  %}
+                                                                {{ virtualFromPosToTrader.toMsisdn.trader.fullName }}
+                                                            {% elseif virtualFromPosToTrader.toMsisdn.pointofsale  %}
+                                                                {{ virtualFromPosToTrader.toMsisdn.pointofsale.name }}
+
+                                                            {% endif %}
+                                                        {% elseif  virtualFromPosToTrader.toMsisdn is null  %}
+                                                            Banque
+                                                        {% endif %}
+                                                        {% if virtualFromPosToTrader.toMsisdn is not null %}
+                                                            &nbsp;({{ virtualFromPosToTrader.toMsisdn.msisdn }})
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ virtualFromPosToTrader.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                                </tr>
+                                                {% set totalAmount = totalAmount + virtualFromPosToTrader.amount%}
+                                                {% set row = loop.index0 + 2 %}
+                                            {% endfor %}
+                                            <tr>
+                                                <td>{{ row }}</td>
+                                                <td></td>
                                                 <td></td>
                                                 <td class="text-right">Total</td>
                                                 <td class="text-right">{{ totalAmount | number_format(0, ',', ' ') }} FCFA</td>
@@ -211,10 +586,19 @@
 {% block javascripts %}
     <script>
         $(document).ready( function () {
-            $('#dataTable2').DataTable({
+            $('#dataTable2 #dataTable2a').DataTable({
                 responsive: true
             });
             $('#dataTable3').DataTable({
+                responsive: true
+            });
+            $('#dataTable4').DataTable({
+                responsive: true
+            });
+            $('#dataTable5').DataTable({
+                responsive: true
+            });
+            $('#dataTable6').DataTable({
                 responsive: true
             });
         } );

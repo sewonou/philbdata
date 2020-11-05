@@ -253,4 +253,6 @@ class TradeStat
         $id = $trader->getMsisdn()->getId();
         return $this->tradeRepository->findSaleByTradersByDay($startDate, $endDate, $id);
     }
+
+
 }

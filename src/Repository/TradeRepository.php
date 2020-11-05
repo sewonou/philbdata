@@ -97,6 +97,102 @@ class TradeRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findVirtualToBankByTrader($date1, $date2, $id)
+{
+    return $this->createQueryBuilder('t')
+        ->innerJoin('t.type', 'type')
+        ->innerJoin('t.fromMsisdn', 's')
+        ->innerJoin('s.trader', 'trader')
+        ->andWhere('trader.id = :id')
+        ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+        ->andWhere('type.title = :val' )
+        ->andwhere('t.toMsisdn is null')
+        ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id])
+        ->getQuery()
+        ->getResult()
+        ;
+}
+
+    public function findVirtualFromBankToTrader($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('t')
+            ->innerJoin('t.type', 'type')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.trader', 'trader')
+            ->andWhere('trader.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('type.title = :val' )
+            ->andwhere('t.fromMsisdn is null')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findVirtualToPosByTrader($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('t')
+            ->innerJoin('t.type', 'type')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.trader', 'trader')
+            ->andWhere('trader.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('type.title = :val' )
+            ->andwhere('t.toMsisdn is not null')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findVirtualFromPosToTrader($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('t')
+            ->innerJoin('t.type', 'type')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.trader', 'trader')
+            ->andWhere('trader.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('type.title = :val' )
+            ->andwhere('t.fromMsisdn is  not null')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findVirtualToMasterByTrader($date1, $date2, $id, $master)
+    {
+        return $this->createQueryBuilder('t')
+            ->innerJoin('t.type', 'type')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.trader', 'trader')
+            ->andWhere('trader.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('type.title = :val' )
+            ->andwhere('t.toMsisdn = :master')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id, 'master'=>$master])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findVirtualFromMasterToTrader($date1, $date2, $id, $master)
+    {
+        return $this->createQueryBuilder('t')
+            ->innerJoin('t.type', 'type')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.trader', 'trader')
+            ->andWhere('trader.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('type.title = :val' )
+            ->andwhere('t.fromMsisdn = :master')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id, 'master'=>$master])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findLastDate()
     {
         return $this->createQueryBuilder('t')
