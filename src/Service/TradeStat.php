@@ -236,8 +236,8 @@ class TradeStat
         $startDate = $this->getStartDate($search);
         $endDate = $this->getEndDate($search) ;
         $id = $trader->getMsisdn()->getId();
-        $master = $this->simCardRepository->findBy(['msisdn'=> '22897391919']);
-        return $this->tradeRepository->findSaleByTrader($startDate, $endDate, $id, $master);
+        //$master = $this->simCardRepository->findBy(['msisdn'=> '22897391919']);
+       // return $this->tradeRepository->findSaleByTrader($startDate, $endDate, $id, $master);
     }
 
     /**

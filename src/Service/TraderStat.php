@@ -265,4 +265,91 @@ class TraderStat
         $master = $this->simCardRepository->findOneBy(['msisdn'=>'22897391919']);
         return $this->tradeRepository->findVirtualFromMasterToTrader($startDate, $endDate, $id, $master);
     }
+
+
+    /**
+     * Vente des gives par un Commercial groupé par jour
+     * @param Search $search
+     * @param Trader $trader
+     * @return mixed
+     */
+    public function getVirtualToBankByTraderTotal(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        return $this->tradeRepository->findVirtualToBankByTraderTotal($startDate, $endDate, $id);
+    }
+
+    /**
+     * Vente des gives par un Commercial groupé par jour
+     * @param Search $search
+     * @param Trader $trader
+     * @return mixed
+     */
+    public function getVirtualFromBankToTraderTotal(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        return $this->tradeRepository->findVirtualFromBankToTraderTotal($startDate, $endDate, $id);
+    }
+
+    /**
+     * Vente des gives par un Commercial groupé par jour
+     * @param Search $search
+     * @param Trader $trader
+     * @return mixed
+     */
+    public function getVirtualToPosByTraderTotal(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        return $this->tradeRepository->findVirtualToPosByTraderTotal($startDate, $endDate, $id);
+    }
+
+    /**
+     * Vente des gives par un Commercial groupé par jour
+     * @param Search $search
+     * @param Trader $trader
+     * @return mixed
+     */
+    public function getVirtualFromPosToTraderTotal(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        return $this->tradeRepository->findVirtualFromPosToTraderTotal($startDate, $endDate, $id);
+    }
+
+    /**
+     * Vente des gives par un Commercial groupé par jour
+     * @param Search $search
+     * @param Trader $trader
+     * @return mixed
+     */
+    public function getVirtualToMasterByTraderTotal(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        $master = $this->simCardRepository->findOneBy(['msisdn'=>'22897391919']);
+        return $this->tradeRepository->findVirtualToMasterByTraderTotal($startDate, $endDate, $id, $master);
+    }
+
+    /**
+     * Vente des gives par un Commercial groupé par jour
+     * @param Search $search
+     * @param Trader $trader
+     * @return mixed
+     */
+    public function getVirtualFromMasterToTraderTotal(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        $master = $this->simCardRepository->findOneBy(['msisdn'=>'22897391919']);
+        return $this->tradeRepository->findVirtualFromMasterToTraderTotal($startDate, $endDate, $id, $master);
+    }
 }
