@@ -127,7 +127,7 @@ class TownshipController extends AbstractController
         $sales = $zoningStat->getSaleInTownshipWithLimit($township->getId(), 8);
         $percentWeekCom = $zoningStat->getLastWeekCommission($sales);
         $periodSales = $zoningStat->getSaleInTownshipByDay($search, $township->getId());
-        $stat = $zoningStat->getSaleInDistrict($search, $township->getId());
+        $stat = $zoningStat->getSaleInTownship($search, $township->getId());
         return  $this->render('township/show.html.twig', [
             'township'=>$township,
             'form' => $form->createView(),

@@ -35,6 +35,11 @@ Tableau de bord par région
                     </thead>
                     <tbody>
                     {% if sales  %}
+                        {% set totalDcomm = 0 %}
+                        {% set totalPosComm = 0 %}
+                        {% set totalAmount = 0 %}
+                        {% set total = 0 %}
+                        {% set row = 0 %}
                         {% for sale in sales %}
                             <tr>
                                 <td class="text-center">{{ loop.index0+1 }}</td>
@@ -43,12 +48,47 @@ Tableau de bord par région
                                 <td>{{ zoningStat.pointofsaleInRegion(sale.id, 'AGNT') | number_format(0, ',', ' ')  }}</td>
                                 <td>{{ zoningStat.pointofsaleInRegion(sale.id, 'DISTRO') | number_format(0, ',', ' ')  }}</td>
                                 <td>{{ sale.amount | number_format(0, ',', ' ')  }} F CFA</td>
-                                <td> {{ sale.total | number_format(0, ',', ' ')  }}</td>
+                                <td>{{ sale.total | number_format(0, ',', ' ')  }}</td>
                                 <td>{{ sale.posComm | number_format(0, ',', ' ')  }} F CFA</td>
                                 <td>{{ sale.dComm | number_format(0, ',', ' ')  }} F CFA</td>
+                                {% set totalDcomm = totalDcomm + sale.dComm %}
+                                {% set totalPosComm = totalPosComm + sale.posComm %}
+                                {% set totalAmount = totalAmount + sale.amount %}
+                                {% set total = total + sale.total %}
+                                {% set row = loop.index0+2 %}
                             </tr>
 
                         {% endfor %}
+                        {% if others %}
+                            {% for other in others %}
+                            <tr>
+                                <td class="text-center">{{ row }}</td>
+                                <td>Autre</td>
+                                <td>{{ zoningStat.PointofsaleWithoutDistrict('AGNT') + zoningStat.PointofsaleWithoutDistrict('DISTRO') | number_format(0, ',', ' ') }}</td>
+                                <td>{{ zoningStat.PointofsaleWithoutDistrict('AGNT') | number_format(0, ',', ' ')  }}</td>
+                                <td>{{ zoningStat.PointofsaleWithoutDistrict('DISTRO') | number_format(0, ',', ' ') }}</td>
+                                <td>{{ other.amount | number_format(0, ',', ' ') }} F CFA</td>
+                                <td>{{ other.total | number_format(0, ',', ' ') }}</td>
+                                <td>{{ other.posComm | number_format(0, ',', ' ') }} F CFA</td>
+                                <td>{{ other.dComm | number_format(0, ',', ' ') }} F CFA</td>
+                                {% set totalDcomm = totalDcomm + other.dComm %}
+                                {% set totalPosComm = totalPosComm + other.posComm %}
+                                {% set totalAmount = totalAmount + other.amount %}
+                                {% set total = total + other.total %}
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                        <tr>
+                            <td class="text-center">{{ row+1 }}</td>
+                            <th> Total </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>{{ totalAmount | number_format(0, ',', ' ')  }} F CFA</th>
+                            <th>{{ total | number_format(0, ',', ' ')  }}</th>
+                            <th>{{ totalPosComm | number_format(0, ',', ' ')  }} F CFA</th>
+                            <th>{{ totalDcomm| number_format(0, ',', ' ')  }} F CFA</th>
+                        </tr>
                     {% endif %}
                     </tbody>
                 </table>

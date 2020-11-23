@@ -43,42 +43,27 @@ class PointofsaleStat
 
     public function getPointofsalesPeriodInput(?Search $search)
     {
-        $startDate = new \DateTime('-1 day');
-        $endDate = new \DateTime('-1 day') ;
-        if(null != $search->getStartAt()){
-            $startDate = $search->getStartAt();
-        }
-        if(null != $search->getEndAt()){
-            $endDate = $search->getEndAt();
-        }
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
         //dump($startDate, $endDate);
         return $this->pointofsaleRepository->findPointofsalesPeriodInput(true, $startDate, $endDate);
     }
 
     public function getAllPointofsalesPeriodInput(?Search $search)
     {
-        $startDate = new \DateTime('-1 day');
-        $endDate = new \DateTime('-1 day') ;
-        if(null != $search->getStartAt()){
-            $startDate = $search->getStartAt();
-        }
-        if(null != $search->getEndAt()){
-            $endDate = $search->getEndAt();
-        }
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
         //dump($startDate, $endDate);
         return $this->pointofsaleRepository->findAllPointofsalesPeriodInput( $startDate, $endDate);
     }
 
     public function getPointofsaleComm(?Search $search, ?int $id)
     {
-        $startDate = new \DateTime('-1 day');
-        $endDate = new \DateTime('-1 day') ;
-        if(null != $search->getStartAt()){
-            $startDate = $search->getStartAt();
-        }
-        if(null != $search->getEndAt()){
-            $endDate = $search->getEndAt();
-        }
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
         //dump($startDate, $endDate);
         return $this->pointofsaleRepository->findPointofsaleComm(true, $startDate, $endDate, $id);
     }
@@ -86,14 +71,8 @@ class PointofsaleStat
 
     public function getPointofsaleGoal(?Search $search)
     {
-        $startDate = new \DateTime('-1 day');
-        $endDate = new \DateTime('-1 day') ;
-        if(null != $search->getStartAt()){
-            $startDate = $search->getStartAt();
-        }
-        if(null != $search->getEndAt()){
-            $endDate = $search->getEndAt();
-        }
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
 
         $length = $startDate->diff($endDate);
         $length = $length->format('%d');
@@ -121,67 +100,48 @@ class PointofsaleStat
 
     public function getSaleByDay(?Search $search)
     {
-        $startDate = new \DateTime('-1 day');
-        $endDate = new \DateTime('-1 day') ;
-        if(null != $search->getStartAt()){
-            $startDate = $search->getStartAt();
-        }
-        if(null != $search->getEndAt()){
-            $endDate = $search->getEndAt();
-        }
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
         return $this->saleRepository->findSaleByDay($startDate, $endDate);
     }
 
     public function getGiveComByDay(?Search $search)
     {
-        $startDate = new \DateTime('-1 day');
-        $endDate = new \DateTime('-1 day') ;
-        if(null != $search->getStartAt()){
-            $startDate = $search->getStartAt();
-        }
-        if(null != $search->getEndAt()){
-            $endDate = $search->getEndAt();
-        }
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
         return $this->saleRepository->findGiveComByDay($startDate, $endDate);
+    }
+
+    public function getGiveComByPeriod(?Search $search)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
+        return $this->saleRepository->findGiveComByPeriod($startDate, $endDate);
     }
 
     public function getSaleByRegion(?Search $search)
     {
-        $startDate = new \DateTime('-1 day');
-        $endDate = new \DateTime('-1 day') ;
-        if(null != $search->getStartAt()){
-            $startDate = $search->getStartAt();
-        }
-        if(null != $search->getEndAt()){
-            $endDate = $search->getEndAt();
-        }
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
         return $this->saleRepository->findSaleByRegion($startDate, $endDate);
     }
 
     public function getGiveReceivedByPos(Search $search, int $id)
     {
-        $startDate = new \DateTime('-1 day');
-        $endDate = new \DateTime('-1 day') ;
-        if(null != $search->getStartAt()){
-            $startDate = $search->getStartAt();
-        }
-        if(null != $search->getEndAt()){
-            $endDate = $search->getEndAt();
-        }
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
 
         return $this->tradeRepository->findGiveReceivedByPos($startDate, $endDate, $id);
     }
 
     public function getGiveSendByPos(Search $search, int $id)
     {
-        $startDate = new \DateTime('-1 day');
-        $endDate = new \DateTime('-1 day') ;
-        if(null != $search->getStartAt()){
-            $startDate = $search->getStartAt();
-        }
-        if(null != $search->getEndAt()){
-            $endDate = $search->getEndAt();
-        }
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
 
         return $this->tradeRepository->findGiveSendByPos($startDate, $endDate, $id);
     }
@@ -205,7 +165,7 @@ class PointofsaleStat
     {
         $activePointofsales = $this->getPointofsales($values);
 
-        $pointofsales = $this->pointofsaleRepository->findAll();
+        $pointofsales = $this->pointofsaleRepository->findPointofsaleWithoutProfile(true, 'POSCAGNT');
         $inactivePointofsales = [];
         foreach ($pointofsales as $pointofsale){
             if(!(in_array($pointofsale, $activePointofsales))  ){
@@ -238,5 +198,13 @@ class PointofsaleStat
         $endDate = $this->getEndDate($search) ;
 
         return $this->saleRepository->findSalePOS($startDate, $endDate);
+    }
+
+    public function getSaleInRegionForPointofsaleWithoutDistrict(Search $search)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
+        return $this->saleRepository->findSaleWithoutDistrict($startDate, $endDate);
     }
 }

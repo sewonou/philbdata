@@ -27,7 +27,7 @@
                         <th>Nom complet</th>
                         <th>Région</th>
                         <th>Commune</th>
-                        <th>Objectif</th>
+                        <th>Commercial</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -41,7 +41,14 @@
                                 <td>{{ pointofsale.name }}</td>
                                 <td>{% if pointofsale.district  %}{{ pointofsale.district.township.prefecture.town.region.name }} {% endif %}</td>
                                 <td>{% if pointofsale.district  %}{{ pointofsale.district.township.prefecture.town.name }}{% endif %}</td>
-                                <td>{{ goal | number_format(0, ',', ' ')  }} F CFA</td>
+                                <td>
+                                    {% if pointofsale.controls %}
+                                        {% for control in pointofsale.controls  %}
+                                            {% if control.isActive == true %} {{ control.trader.fullName }} {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+
+                                </td>
                                 <td class="row-actions">
                                     <a href="{{ path('pointofsale_show', {'id': pointofsale.id}) }}"><i class="fa fa-eye"></i></a>
                                 </td>

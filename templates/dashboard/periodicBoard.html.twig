@@ -11,7 +11,7 @@
                         {{ include('partials/_searchForm.html.twig') }}
                     </div>
                     <h6 class="element-header">
-                        Dashboard Box
+                       Tableau de résumé périodique
                     </h6>
                     <div class="element-box">
                         <div class="element-info">
@@ -23,11 +23,9 @@
                                         </div>
                                         <div class="element-info-text">
                                             <h5 class="element-inner-header">
-                                                Sales Statistics
+                                                Tableau de résumé périoque
                                             </h5>
-                                            <div class="element-inner-desc">
-                                                Discharge best employed your phase each the of shine. Be met even.
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -81,10 +79,10 @@
                                     <div class="col-sm-4">
                                         <div class="el-tablo centered padded">
                                             <div class="label">
-                                                Total Give Acheté en Banque
+                                                Total GiveCom
                                             </div>
                                             <div class="value">
-                                                12
+                                                {{ pointofsaleStat.giveComByPeriod(search) | number_format(0, ',', ' ') ~ ' F CFA' }}
                                             </div>
                                         </div>
                                     </div>

@@ -42,6 +42,39 @@ class PointofsaleRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param string|null $profile
+     * @return mixed
+     */
+    public function findPointofsaleWithoutDistrict(?string $profile)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.msisdn', 's')
+            ->innerJoin('s.profile', 'pro')
+            ->where('pro.title = :profile')
+            ->andWhere('p.district is null')
+            ->setParameters(['profile'=>$profile])
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findPointofsaleByProfile($value, ?string  $profile)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.msisdn', 's')
+            ->innerJoin('s.profile', 'pro')
+            ->where('pro.title = :profile')
+            ->andWhere('s.isActive = :val')
+            ->andWhere('p.isActive = :val')
+            ->setParameters(['val'=>$value, 'profile'=>$profile])
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
      * @param $value
      * @return Pointofsale[] Returns an array of Pointofsale objects
      */
@@ -271,7 +304,6 @@ class PointofsaleRepository extends ServiceEntityRepository
 
     public function findPointofsalesPeriodInput(?bool $val, $date1, $date2)
     {
-        //dump($date1, $date2);
         return $this->createQueryBuilder('pos')
             ->select("pos as pointofsale, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount")
             ->innerJoin('pos.msisdn', 'sim')
@@ -289,7 +321,6 @@ class PointofsaleRepository extends ServiceEntityRepository
 
     public function findAllPointofsalesPeriodInput($date1, $date2)
     {
-        //dump($date1, $date2);
         return $this->createQueryBuilder('pos')
             ->select("pos as pointofsale, SUM(s.dComm) as dComm, SUM(s.posComm) as posComm, SUM(s.amount) as amount")
             ->innerJoin('pos.msisdn', 'sim')
@@ -305,7 +336,6 @@ class PointofsaleRepository extends ServiceEntityRepository
 
     public function findPointofsaleComm(?bool $val, $date1, $date2, $id)
     {
-        //dump($date1, $date2);
         return $this->createQueryBuilder('pos')
             ->select("SUM(s.dComm) as dComm, SUM(s.posComm) as posComm")
             ->innerJoin('pos.msisdn', 'sim')
@@ -320,6 +350,8 @@ class PointofsaleRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
+
+
 
 
 

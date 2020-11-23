@@ -24,7 +24,7 @@
                 </div>
                 <div class="value">
                     {% if simCardStat.activeSimCard  %}
-                        {{ simCardStat.activePointofsale }}
+                        {{ (simCardStat.activePointofsale - simCardStat.activePointofsaleByProfile('POSCAGNT')) }}
                     {% else %}
                         0
                     {% endif %}

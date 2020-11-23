@@ -152,6 +152,20 @@ class SaleRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
+
+    public function findGiveComByPeriod($date1, $date2)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("SUM(s.amount) as amount")
+            ->innerJoin('s.type', 't')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andwhere('t.title = :val')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM'])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
     public function findSaleByDate($startDate, $endDate)
     {
         return $this->createQueryBuilder('s')
@@ -225,6 +239,22 @@ class SaleRepository extends ServiceEntityRepository
             ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM'])
             ->orderBy('r.name', 'DESC')
             ->groupBy('r.id')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findSaleWithoutDistrict($date1, $date2)
+    {
+        return $this->createQueryBuilder('s')
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm")
+            ->innerJoin('s.type', 't')
+            ->innerJoin('s.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->where('DATE(s.transactionAt) BETWEEN :date1 AND :date2')
+            ->andwhere('t.title != :val')
+            ->andwhere('pos.district is null')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVECOM'])
             ->getQuery()
             ->getResult()
             ;
@@ -529,7 +559,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInTownship($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, r.name as name, tws.id as id")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, tws.name as name, tws.id as id")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')

@@ -130,6 +130,23 @@ class TradeRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findVirtualToBankByPointofsaleTotal($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount')
+            ->innerJoin('t.type', 'type')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.pointofsale', 'pointofsale')
+            ->andWhere('pointofsale.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('type.title = :val' )
+            ->andwhere('t.toMsisdn is null')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
     public function findVirtualFromBankToTrader($date1, $date2, $id)
     {
         return $this->createQueryBuilder('t')
@@ -154,6 +171,23 @@ class TradeRepository extends ServiceEntityRepository
             ->innerJoin('t.toMsisdn', 's')
             ->innerJoin('s.trader', 'trader')
             ->andWhere('trader.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('type.title = :val' )
+            ->andwhere('t.fromMsisdn is null')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
+    public function findVirtualFromBankToPointofsaleTotal($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount')
+            ->innerJoin('t.type', 'type')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.pointofsale', 'pointofsale')
+            ->andWhere('pointofsale.id = :id')
             ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
             ->andWhere('type.title = :val' )
             ->andwhere('t.fromMsisdn is null')
@@ -196,6 +230,23 @@ class TradeRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findVirtualToOtherByPosTotal($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount')
+            ->innerJoin('t.type', 'type')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.pointofsale', 'pointofsale')
+            ->andWhere('pointofsale.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('type.title = :val' )
+            ->andwhere('t.toMsisdn is not null')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
     public function findVirtualFromPosToTrader($date1, $date2, $id)
     {
         return $this->createQueryBuilder('t')
@@ -220,6 +271,23 @@ class TradeRepository extends ServiceEntityRepository
             ->innerJoin('t.toMsisdn', 's')
             ->innerJoin('s.trader', 'trader')
             ->andWhere('trader.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('type.title = :val' )
+            ->andwhere('t.fromMsisdn is  not null')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
+    public function findVirtualFromPosToOtherTotal($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount')
+            ->innerJoin('t.type', 'type')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.pointofsale', 'pointofsale')
+            ->andWhere('pointofsale.id = :id')
             ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
             ->andWhere('type.title = :val' )
             ->andwhere('t.fromMsisdn is  not null')
@@ -262,6 +330,23 @@ class TradeRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findVirtualToMasterByPosTotal($date1, $date2, $id, $master)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount')
+            ->innerJoin('t.type', 'type')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.pointofsale', 'pointofsale')
+            ->andWhere('pointofsale.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('type.title = :val' )
+            ->andwhere('t.toMsisdn = :master')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id, 'master'=>$master])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
     public function findVirtualFromMasterToTrader($date1, $date2, $id, $master)
     {
         return $this->createQueryBuilder('t')
@@ -286,6 +371,23 @@ class TradeRepository extends ServiceEntityRepository
             ->innerJoin('t.toMsisdn', 's')
             ->innerJoin('s.trader', 'trader')
             ->andWhere('trader.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('type.title = :val' )
+            ->andwhere('t.fromMsisdn = :master')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id, 'master'=>$master])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
+    public function findVirtualFromMasterToPosTotal($date1, $date2, $id, $master)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount')
+            ->innerJoin('t.type', 'type')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.pointofsale', 'pointofsale')
+            ->andWhere('pointofsale.id = :id')
             ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
             ->andWhere('type.title = :val' )
             ->andwhere('t.fromMsisdn = :master')

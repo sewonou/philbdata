@@ -35,6 +35,13 @@ Tableau des ventes des commerciaux
                     </tr>
                     </thead>
                     <tbody>
+                    {% set row = 0 %}
+                    {% set totalFromMaster = 0 %}
+                    {% set totalToMaster = 0 %}
+                    {% set totalFromBank = 0 %}
+                    {% set totalToBank = 0 %}
+                    {% set totalFromPos = 0 %}
+                    {% set totalToPos = 0 %}
                     {% if traders %}
                         {% for trader in traders %}
                             <tr>
@@ -49,9 +56,27 @@ Tableau des ventes des commerciaux
                                 <td class="text-right">{{ traderStat.virtualToBankByTraderTotal(search, trader) | number_format(0, ',', ' ') ~ ' F CFA' }}</td>
                                 <td class="text-right">{{ traderStat.virtualToPosByTraderTotal(search, trader) | number_format(0, ',', ' ') ~ ' F CFA' }}</td>
                                 <td class="text-right">{{ traderStat.virtualFromPosToTraderTotal(search, trader) | number_format(0, ',', ' ') ~ ' F CFA' }}</td>
-
+                                {% set totalFromMaster = totalFromMaster + traderStat.virtualFromMasterToTraderTotal(search, trader) %}
+                                {% set totalToMaster = totalToMaster + traderStat.virtualToMasterByTraderTotal(search, trader) %}
+                                {% set totalFromBank = totalFromBank + traderStat.virtualFromBankToTraderTotal(search, trader) %}
+                                {% set totalToBank = totalToBank + traderStat.virtualToBankByTraderTotal(search, trader) %}
+                                {% set totalFromPos = totalFromPos + traderStat.virtualToPosByTraderTotal(search, trader) %}
+                                {% set totalToPos = totalToPos + traderStat.virtualFromPosToTraderTotal(search, trader) %}
                             </tr>
+                            {% set row = loop.index0+2 %}
                         {% endfor %}
+                        <tr>
+                            <td>{{ row }}</td>
+                            <td class="text-left">Total</td>
+                            <td></td>
+                            <td class="text-right"></td>
+                            <td class="text-right">{{ totalFromMaster  | number_format(0, ',', ' ') ~ ' F CFA' }}</td>
+                            <td class="text-right">{{ totalToMaster  | number_format(0, ',', ' ') ~ ' F CFA' }}</td>
+                            <td class="text-right">{{ totalFromBank  | number_format(0, ',', ' ') ~ ' F CFA' }}</td>
+                            <td class="text-right">{{ totalToBank  | number_format(0, ',', ' ') ~ ' F CFA' }}</td>
+                            <td class="text-right">{{ totalFromPos  | number_format(0, ',', ' ') ~ ' F CFA' }}</td>
+                            <td class="text-right">{{ totalToPos | number_format(0, ',', ' ') ~ ' F CFA'  }}</td>
+                        </tr>
                     {% endif %}
                     </tbody>
                 </table>

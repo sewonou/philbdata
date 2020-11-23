@@ -28,6 +28,7 @@
                         <th>Commission PDV</th>
                         <th>Commission Dealer</th>
                         <th>Objectif</th>
+                        <th>Commercial</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -44,6 +45,14 @@
                                     <td>{{ sale.posComm | number_format(0, ',', ' ') }} F CFA</td>
                                     <td>{{ sale.dComm | number_format(0, ',', ' ') }} F CFA</td>
                                     <td>{{ goal }} F CFA</td>
+                                    <td>
+                                        {% if sale.pointofsale.controls %}
+                                            {% for control in sale.pointofsale.controls  %}
+                                                {% if control.isActive == true and control.trader is not null %} {{ control.trader.fullName }} {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+
+                                    </td>
                                     <td class="row-actions">
                                         <a href="{{ path('pointofsale_show', {'id': sale.pointofsale.id}) }}"><i class="fa fa-eye"></i></a>
                                     </td>

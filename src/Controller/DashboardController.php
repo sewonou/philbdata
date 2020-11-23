@@ -6,6 +6,7 @@ use App\Entity\Search;
 use App\Form\SearchType;
 use App\Repository\PointofsaleRepository;
 use App\Repository\SaleRepository;
+use App\Service\agentStat;
 use App\Service\PointofsaleStat;
 use App\Service\SimCardStat;
 use App\Service\TradeStat;
@@ -150,10 +151,13 @@ class DashboardController extends AbstractController
         $form = $this->createForm(SearchType::class, $search);
         $form->handleRequest($request);
         $sales = $pointofsaleStat->getSaleByRegion($search);
+        $others = $pointofsaleStat->getSaleInRegionForPointofsaleWithoutDistrict($search);
+
 
         return $this->render('dashboard/regionBoard.html.twig', [
             'form' => $form->createView(),
             'sales' => $sales,
+            'others' => $others,
             'zoningStat' => $zoningStat
         ]);
     }
@@ -197,6 +201,28 @@ class DashboardController extends AbstractController
             'saleByTraders' => $saleByTraders,
             'pointofsaleStat' => $pointofsaleStat,
             'tradeStat' => $tradeStat,
+            'search' => $search,
+        ]);
+    }
+
+    /**
+     * @Route("/boards/agent_board", name="agentBoard")
+     * @param Request $request
+     * @param agentStat $agentStat
+     * @param PointofsaleRepository $pointofsaleRepository
+     * @return Response
+     */
+    public function agentBoard(Request $request, agentStat $agentStat, PointofsaleRepository $pointofsaleRepository):Response
+    {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $pointofsales = $pointofsaleRepository->findPointofsaleByProfile(true, 'AGNT');
+
+        return $this->render('dashboard/agentBoard.html.twig', [
+            'form' => $form->createView(),
+            'pointofsales' => $pointofsales,
+            'agentStat' => $agentStat,
             'search' => $search,
         ]);
     }

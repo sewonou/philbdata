@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+Suivi des PDV AGNT
+{% endblock %}
+
+{% block body %}
+<div class="content-box">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="element-wrapper">
+                <div class="element-actions">
+                    {{ include('partials/_searchForm.html.twig') }}
+                </div>
+                <h6 class="element-header">
+                    Dashboard Box
+                </h6>
+            </div>
+        </div>
+    </div>
+    <div class="element-box">
+        <div class="table-responsive">
+            <table id="dataTable1" width="100%" class="table table-striped table-lightfont">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Nom PDV</th>
+                    <th>Numéro Flooz</th>
+                    <th>Appro Master</th>
+                    <th>Retour Master</th>
+                    <th>Appro Banque</th>
+                    <th>Echange Banque</th>
+                    <th>Appro Commerciaux</th>
+                    <th>Retour Commerciaux</th>
+                    <th>Commercial</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if pointofsales %}
+                    {% for pointofsale in pointofsales  %}
+                    <tr>
+                        <td>{{ loop.index0+1 }}</td>
+                        <td>{{ pointofsale.name }}</td>
+                        <td>{{ pointofsale.msisdn.msisdn }}</td>
+                        <td>{{ (agentStat.virtualFromMasterToPointofsaleTotal(search, pointofsale) ? agentStat.virtualFromMasterToPointofsaleTotal(search, pointofsale) : 0) ~ ' F CFA' }}</td>
+                        <td>{{ (agentStat.virtualToMasterByPointofsaleTotal(search, pointofsale) ? agentStat.virtualToMasterByPointofsaleTotal(search, pointofsale) : 0) ~' F CFA' }}</td>
+                        <td>{{ (agentStat.virtualFromBankToPointofsaleTotal(search, pointofsale) ? agentStat.virtualFromBankToPointofsaleTotal(search, pointofsale) : 0) ~ ' F CFA'  }}</td>
+                        <td>{{ (agentStat.virtualToBankByPointofsaleTotal(search, pointofsale) ? agentStat.virtualToBankByPointofsaleTotal(search, pointofsale) : 0) ~' F CFA'  }}</td>
+                        <td>{{ (agentStat.virtualFromPosToPointofsaleTotal(search, pointofsale) ? agentStat.virtualFromPosToPointofsaleTotal(search, pointofsale) : 0) ~' F CFA'  }}</td>
+                        <td>{{ (agentStat.virtualToPosByPointofsaleTotal(search, pointofsale) ? agentStat.virtualToPosByPointofsaleTotal(search, pointofsale) : 0) ~' F CFA'  }}</td>
+                        <td>
+                            {% if pointofsale.controls %}
+                                {% for control in pointofsale.controls  %}
+                                    {% if control.isActive == true %} {{ control.trader.fullName }} {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
+                        </td>
+                        <td class="row-actions">
+                            <a href="{{ path('pointofsale_show', {'id': pointofsale.id}) }}"><i class="fa fa-eye"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
