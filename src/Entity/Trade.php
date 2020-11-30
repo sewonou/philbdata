@@ -63,6 +63,16 @@ class Trade
      */
     private $updateAt;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isBankGive;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isOpenGive;
+
 
     public function getId(): ?int
     {
@@ -158,6 +168,30 @@ class Trade
     public function setUpdateAt(?\DateTimeInterface $updateAt): self
     {
         $this->updateAt = $updateAt;
+
+        return $this;
+    }
+
+    public function getIsBankGive(): ?bool
+    {
+        return $this->isBankGive;
+    }
+
+    public function setIsBankGive(?bool $isBankGive): self
+    {
+        $this->isBankGive = $isBankGive;
+
+        return $this;
+    }
+
+    public function getIsOpenGive(): ?bool
+    {
+        return $this->isOpenGive;
+    }
+
+    public function setIsOpenGive(?bool $isOpenGive): self
+    {
+        $this->isOpenGive = $isOpenGive;
 
         return $this;
     }

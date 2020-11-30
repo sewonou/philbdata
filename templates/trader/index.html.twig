@@ -45,7 +45,7 @@
                                         {% endif %}
                                     </td>
                                     <td>{{ trader.fullName }}</td>
-                                    <td>{{ trader.msisdn.msisdn }}</td>
+                                    <td>{% if trader.msisdn %}{{ trader.msisdn.msisdn }}{% endif %}</td>
                                     <td class="text-center">{{ traderStat.traderPointofsaleByProfile(trader, 'AGNT') }}</td>
                                     <td class="text-center">{{ traderStat.traderPointofsaleByProfile(trader, 'DISTRO') }}</td>
                                     <td class="text-center">{{ traderStat.traderPointofsale(trader) }}</td>

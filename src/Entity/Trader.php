@@ -79,15 +79,7 @@ class Trader
      */
     private $isActive = true;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $msisdnName;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Control::class, mappedBy="trader", cascade={"persist"})
@@ -219,30 +211,6 @@ class Trader
         return $this;
     }
 
-    public function getMsisdnName(): ?string
-    {
-        return $this->msisdnName;
-    }
-
-    public function setMsisdnName(?string $msisdnName): self
-    {
-        $this->msisdnName = $msisdnName;
-
-        return $this;
-    }
-
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(?string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Control[]
@@ -273,5 +241,10 @@ class Trader
         }
 
         return $this;
+    }
+
+    public function getName()
+    {
+        return $this->getMsisdn()->getName();
     }
 }

@@ -28,11 +28,6 @@ class Pointofsale
      */
     private $msisdn;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Veuillez saisir un nom valide")
-     */
-    private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=District::class)
@@ -114,17 +109,6 @@ class Pointofsale
         return $this;
     }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(?string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
 
     public function getDistrict(): ?District
     {
@@ -252,5 +236,10 @@ class Pointofsale
         }
 
         return $this;
+    }
+
+    public function getName()
+    {
+        return $this->getMsisdn()->getName();
     }
 }

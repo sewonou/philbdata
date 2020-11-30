@@ -8,7 +8,7 @@
                     <div class="element-box">
                         <h5 class="form-header">
                             {% if pointofsale is defined %}
-                                Modification du point de vente {{ pointofsale.name }}
+                                Modification du point de vente {% if pointofsale.msisdn %}{{ pointofsale.msisdn.name }}{% endif %}
                             {% else %}
                                 Enregistrement d'un nouveau point de vente
                             {% endif %}
@@ -18,7 +18,6 @@
                             <div class="col-lg-6">
                                 <fieldset class="form-group">
                                     <legend><span>Identification</span></legend>
-                                    {{ form_row(form.name) }}
                                     {{ form_row(form.msisdn) }}
                                     {{ form_row(form.activity) }}
                                     {{ form_row(form.isActive) }}

@@ -6,7 +6,7 @@
     <div class="content-box">
         <div class="element-wrapper">
             <div class="element-header">
-                Statistique du commercial :  {% if trader %}{{ trader.fullName }}{% endif %}
+                Statistique du commercial :  {% if trader %}{{ trader.fullName }}{% endif %} | {% if trader.msisdn %}{{ trader.msisdn.msisdn }}{% endif %}
                 <div class="element-actions">
                     {{ include('partials/_searchForm.html.twig') }}
                 </div>
@@ -57,6 +57,12 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="echange-tab" data-toggle="tab" href="#echange" role="tab" aria-controls="echange" aria-selected="true">
                                     Echange
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" id="univers-tab" data-toggle="tab" href="#echange" role="tab" aria-controls="univers" aria-selected="true">
+                                    Univers
                                 </a>
                             </li>
                         </ul>

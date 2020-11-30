@@ -17,7 +17,6 @@ class PointofsaleType extends ApplicationType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, $this->getConfiguration('Nom du PDV', "Saisir le nom du PDV"))
             ->add('activity', TextType::class, $this->getConfiguration('Activité du PDV', "Saisir l'activité du PDV"))
             ->add('position', TextType::class, $this->getConfiguration('Position du PDV', "Saisir le point de repérage du PDV"))
             ->add('longitude', TextType::class, $this->getConfiguration('Longitude', "Saisir le GPS : Longitude"))

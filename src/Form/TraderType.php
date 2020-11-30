@@ -39,7 +39,6 @@ class TraderType extends ApplicationType
                 'choice_label' => 'name',
                 'placeholder' => "Choisir la région du commercial",
             ]))
-            ->add('name', TextType::class, $this->getConfiguration('Intitulé de la SIM', "Sasir l'intitulé de la carte SIM"))
         ;
     }
 

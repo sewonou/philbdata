@@ -283,6 +283,7 @@ class Save
             $profile= $this->addProfile($value);
             $msisdn->setMsisdn($value['msisdn'])
                 ->setProfile($profile)
+                ->setName($value['posName'])
                 ->setIsActive(false)
                 ->setMaster($this->master)
             ;
@@ -316,7 +317,6 @@ class Save
                 ->setMsisdn($msisdn)
                 ->setRegion($region)
                 ->setFullName($value['name'])
-                ->setName($value['posName'])
                 ->setIsActive(true)
                 ->setIsTrader((isset($town)? true : false))
             ;
@@ -341,7 +341,6 @@ class Save
             }
             $pointofsale
                 ->setMsisdn($msisdn)
-                ->setName($value['posName'])
                 ->setActivity('Numéro POSCAGNT')
                 ->setIsActive(true)
             ;
@@ -373,7 +372,6 @@ class Save
 
             $pointofsale
                 ->setMsisdn($msisdn)
-                ->setName($value['posName'])
                 ->setDistrict($district)
                 ->setIsActive(false)
             ;
@@ -478,7 +476,11 @@ class Save
         $toSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['toSim']]);
         $fromSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['fromSim']]);
         $msisdn = (isset($toSim)) ? $toSim : $fromSim;
+
         if($value['id'] && $value['type'] != 'GIVE'){
+            if($msisdn == null){
+                $msisdn = $this->addSimT($value);
+            }
             $sale = new Sale();
             $sale->setMsisdn($msisdn)
                 ->setType($type)
@@ -490,6 +492,7 @@ class Save
             ;
             $this->manager->persist($sale);
         }elseif ($value['id'] && $value['type'] == 'GIVE'){
+
             $trade = new Trade();
             $trade->setToMsisdn($toSim)
                 ->setFromMsisdn($fromSim)
@@ -497,7 +500,33 @@ class Save
                 ->setRefId($value['id'])
                 ->setAmount($value['amount'])
                 ->setTransactionAt($value['transactionAt'])
+                ->setIsBankGive(false)
+                ->setIsOpenGive(false)
             ;
+            if($toSim == null){
+                switch ($value['toSimProfile']){
+                    case 'BNKAGNT' :
+                        $trade->setIsBankGive(true)
+                            ->setIsOpenGive(false);
+                        break;
+                    default :
+                        $trade->setIsBankGive(false)
+                            ->setIsOpenGive(true);
+                        break;
+                }
+            }elseif($fromSim == null){
+                switch ($value['fromSimProfile']){
+                    case 'BNKAGNT' :
+                        $trade->setIsBankGive(true)
+                            ->setIsOpenGive(false);
+                        break;
+                    default :
+                        $trade->setIsBankGive(false)
+                            ->setIsOpenGive(true);
+                        break;
+                }
+            }
+
             $this->manager->persist($trade);
         }
     }
@@ -523,4 +552,34 @@ class Save
             $this->manager->persist($balance);
         }
     }
+
+    public function addSimT($value)
+    {
+
+        $sim = new SimCard();
+        if($value['type'] == 'AGNT'){
+            $profile = $this->profileRepository->findOneBy(['title'=>$value['toSimProfile']]);
+
+            $sim->setName($value['toSimName'])
+                ->setMsisdn($value['toSim'])
+                ->setProfile($profile)
+           ;
+        }elseif($value['type'] == 'CSIN'){
+            $profile = $this->profileRepository->findOneBy(['title'=>$value['fromSimProfile']]);
+            $sim->setName($value['fromSimName'])
+                ->setMsisdn($value['fromSim'])
+                ->setProfile($profile)
+            ;
+
+        }
+        $sim->setIsActive(false)
+            ->setMaster(null)
+            ;
+
+        $this->manager->persist($sim);
+        $this->manager->flush();
+        return $sim;
+    }
+
+
 }

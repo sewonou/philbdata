@@ -17,7 +17,8 @@ class SimCardType extends ApplicationType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('msisdn', TextType::class, $this->getConfiguration('Numéro MSISDN', "Saisir le numléro MSISDN MOOV précédé de l'indicatif"))
+            ->add('name', TextType::class, $this->getConfiguration('Nom de la SIM', "Saisir le nom de la SIM"))
+            ->add('msisdn', TextType::class, $this->getConfiguration('Numéro MSISDN', "Saisir le numéro MSISDN MOOV précédé de l'indicatif"))
             ->add('isActive', CheckboxType::class, $this->getConfiguration('Actif', ''))
             ->add('profile', EntityType::class, $this->getConfiguration('Profil', "", [
                 'class' => Profile::class,

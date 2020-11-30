@@ -289,7 +289,12 @@ class Sale
 
     public function getSimProfile()
     {
-        return $this->getMsisdn()->getProfile()->getTitle();
+        if($this->getMsisdn()){
+            return $this->getMsisdn()->getProfile()->getTitle();
+        }else{
+            return null;
+        }
+
     }
 
     public function getDCommCalc(): ?float
