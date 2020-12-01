@@ -30,12 +30,13 @@ class ConfigFileRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findTransactionFile($value)
+    public function findTransactionFile($value, $value2)
     {
         return $this->createQueryBuilder('c')
             ->innerJoin('c.category', 'fc')
             ->andWhere('fc.slug = :value')
-            ->setParameters(['value'=>$value])
+            ->orWhere('fc.slug = :value2')
+            ->setParameters(['value'=>$value, 'value2'=>$value2])
             ->orderBy('c.id', 'DESC')
             ->getQuery()
             ->getResult();

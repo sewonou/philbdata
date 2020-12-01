@@ -8,6 +8,7 @@ use App\Repository\SimCardRepository;
 use App\Repository\TraderRepository;
 use App\Service\Reader;
 use App\Service\SaveBalance;
+use App\Service\SaveOneTransaction;
 use App\Service\SavePosCagnt;
 use App\Service\SaveTrader;
 use App\Service\SaveTransaction;
@@ -220,6 +221,35 @@ class UploaderController extends AbstractController
         }
         $this->addFlash('success', "$count enregistrement ont été ajouté dans la base de donnée" );
         $file->setIsLoad(true);
+        $this->manager->persist($file);
+        $this->manager->flush();
+        return $this->redirectToRoute('transaction_file', [
+
+        ]);
+    }
+
+    /**
+     * @Route("/admin/uploads/oneTransaction/{id}", name="uploader_one_transaction")
+     * @param ConfigFile $file
+     * @param SaveOneTransaction $save
+     * @return Response
+     * @IsGranted("ROLE_SUPER_ADMIN")
+     */
+    public function uploadOneTransaction(ConfigFile $file, SaveOneTransaction $save):Response
+    {
+        $input = $this->helper->asset($file, 'file');
+        $this->reader->setInputFile(substr($input, 1))
+        ;
+
+        $values = $this->reader->getValues();
+        $title = $save->getLine($this->reader);
+        $count = 0 ;
+        foreach ($values as $key=>$value){
+            $save->save($save->getValue($value, $title));
+            $count ++;
+        }
+        $this->addFlash('success', "$count enregistrement ont été ajouté dans la base de donnée" );
+        $file->setIsUpload(true);
         $this->manager->persist($file);
         $this->manager->flush();
         return $this->redirectToRoute('transaction_file', [

@@ -51,8 +51,12 @@
                                             <td>{% if file.config %}{{ file.config.content }}{% endif %}</td>
                                             <th><a href="{{ vich_uploader_asset(file) }}">{{ file.fileName }}</a></th>
                                             <td class="row-actions">
+                                                {% if file.category.slug == 'transaction' %}
                                                 <a href="{{ path('uploader_transaction', {'id' : file.id}) }}" class="btn btn-rounded btn-sm btn-outline-primary  {% if file.isUpload %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder les transactions"><i class="fa fa-upload"></i></a>
                                                 <a href="{{ path('uploader_balance', {'id' : file.id}) }}" class="btn btn-rounded btn-sm btn-outline-primary  {% if file.isLoad %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder les solde"><i class="fa fa-balance-scale"></i></a>
+                                                {% elseif file.category.slug =='postransaction' %}
+                                                    <a href="{{ path('uploader_one_transaction', {'id' : file.id}) }}" class="btn btn-rounded btn-sm btn-outline-primary  {% if file.isUpload %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder la  transactions d'un PDV"><i class="fa fa-upload"></i></a>
+                                                {% endif %}
                                             </td>
                                             <td class="row-actions">
                                                 <a href="{{ path('file_edit', {'id' : file.config.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>

@@ -30,7 +30,7 @@ class ConfigFileController extends AbstractController
      */
     public function index(ConfigFileRepository $repository)
     {
-        $files = $repository->findTransactionFile('transaction');
+        $files = $repository->findTransactionFile('transaction', 'postransaction');
         $configs = $repository->findConfigFile('transaction');
         return $this->render('config_file/index.html.twig', [
             'files' => $files,

@@ -53,9 +53,10 @@ class Save
     private $simCardRepository;
     private $controlRepository;
     private $user;
-    private  $master;
+    private $master;
+    private $calcCommission;
 
-    public function __construct(EntityManagerInterface $manager, ZoneRepository $zoneRepository, RegionRepository $regionRepository, TownRepository $townRepository, PrefectureRepository $prefectureRepository, TownshipRepository $townshipRepository, DistrictRepository $districtRepository, ProfileRepository $profileRepository, TraderRepository $traderRepository, PointofsaleRepository $pointofsaleRepository, TypeRepository $typeRepository, SimCardRepository $simCardRepository, ControlRepository $controlRepository, Security $security, MasterSimRepository $masterRepository)
+    public function __construct(EntityManagerInterface $manager, ZoneRepository $zoneRepository, RegionRepository $regionRepository, TownRepository $townRepository, PrefectureRepository $prefectureRepository, TownshipRepository $townshipRepository, DistrictRepository $districtRepository, ProfileRepository $profileRepository, TraderRepository $traderRepository, PointofsaleRepository $pointofsaleRepository, TypeRepository $typeRepository, SimCardRepository $simCardRepository, ControlRepository $controlRepository, Security $security, MasterSimRepository $masterRepository, CalcCommission $calcCommission)
     {
         $this->manager = $manager;
         $this->zoneRepository = $zoneRepository;
@@ -72,6 +73,7 @@ class Save
         $this->controlRepository = $controlRepository;
         $this->master = $masterRepository->findOneBy(['name'=>'PHIL']);
         $this->user = $security->getUser();
+        $this->calcCommission = $calcCommission;
     }
 
     /**
@@ -465,6 +467,34 @@ class Save
         return $type ;
     }
 
+    public function addSimT($value)
+    {
+
+        $sim = new SimCard();
+        if($value['type'] == 'AGNT'){
+            $profile = $this->profileRepository->findOneBy(['title'=>$value['toSimProfile']]);
+
+            $sim->setName($value['toSimName'])
+                ->setMsisdn($value['toSim'])
+                ->setProfile($profile)
+            ;
+        }elseif($value['type'] == 'CSIN'){
+            $profile = $this->profileRepository->findOneBy(['title'=>$value['fromSimProfile']]);
+            $sim->setName($value['fromSimName'])
+                ->setMsisdn($value['fromSim'])
+                ->setProfile($profile)
+            ;
+
+        }
+        $sim->setIsActive(false)
+            ->setMaster(null)
+        ;
+
+        $this->manager->persist($sim);
+        $this->manager->flush();
+        return $sim;
+    }
+
     /**
      * @param $value
      *
@@ -553,32 +583,33 @@ class Save
         }
     }
 
-    public function addSimT($value)
+    public function addOnePosTransaction($value)
     {
-
-        $sim = new SimCard();
-        if($value['type'] == 'AGNT'){
-            $profile = $this->profileRepository->findOneBy(['title'=>$value['toSimProfile']]);
-
-            $sim->setName($value['toSimName'])
-                ->setMsisdn($value['toSim'])
-                ->setProfile($profile)
-           ;
-        }elseif($value['type'] == 'CSIN'){
-            $profile = $this->profileRepository->findOneBy(['title'=>$value['fromSimProfile']]);
-            $sim->setName($value['fromSimName'])
-                ->setMsisdn($value['fromSim'])
-                ->setProfile($profile)
+        $type = $this->addType($value);
+        $toSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['toSim']]);
+        $fromSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['fromSim']]);
+        $msisdn = (isset($toSim)) ? $toSim : $fromSim;
+        $d_comm = 0;
+        $pos_comm = 0;
+        if($value && $value['type'] != 'GIVE'){
+            $commission = $this->calcCommission->getCommission($value);
+            if($msisdn->getProfile()->getTitle() == 'AGNT'){
+                $d_comm = $commission;
+                $pos_comm = 0;
+            }elseif (($msisdn->getProfile()->getTitle() == 'DISTRO')){
+                $d_comm = $this->calcCommission->getDealerComm($value);
+                $pos_comm = $this->calcCommission->getPosComm($value);
+            }
+            $sale = new Sale();
+            $sale->setMsisdn($msisdn)
+                ->setType($type)
+                ->setAmount($value['amount'])
+                ->setDealerCommission($d_comm)
+                ->setPosComm($pos_comm)
+                ->setTransactionAt($value['transactionAt'])
             ;
-
+            $this->manager->persist($sale);
         }
-        $sim->setIsActive(false)
-            ->setMaster(null)
-            ;
-
-        $this->manager->persist($sim);
-        $this->manager->flush();
-        return $sim;
     }
 
 

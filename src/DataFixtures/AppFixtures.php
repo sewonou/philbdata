@@ -84,6 +84,14 @@ class AppFixtures extends Fixture
         ;
         $manager->persist($fileCategory);
 
+        $fileCategory = new FileCategory();
+        $fileCategory->setTitle('Fiche de transaction d\'un PDV')
+            ->setSlug('postransaction')
+            ->setAuthor($adminUser)
+
+        ;
+        $manager->persist($fileCategory);
+
 
 
         $manager->flush();

@@ -434,16 +434,6 @@ class TradeRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findLastDate()
-    {
-        return $this->createQueryBuilder('t')
-            ->select('DATE(t.transactionAt) as day')
-            ->orderBy('day', 'DESC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getSingleScalarResult()
-            ;
-    }
 
     /**
      *
@@ -467,6 +457,28 @@ class TradeRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     *
+     * @param $date1
+     * @param $date2
+     * @return mixed
+     */
+    public function findOpenGiveInByTraders($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title = :profile')
+            ->andwhere('t.fromMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.isOpenGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT', 'bool'=>true])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findGiveInBankByTradersByDay($date1, $date2)
     {
         return $this->createQueryBuilder('t')
@@ -484,6 +496,23 @@ class TradeRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findOpenGiveInByTradersByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title = :profile')
+            ->andwhere('t.fromMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.isOpenGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT', 'bool'=>true])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findGiveOutBankByTraders($date1, $date2)
     {
         return $this->createQueryBuilder('t')
@@ -494,6 +523,22 @@ class TradeRepository extends ServiceEntityRepository
             ->andwhere('t.toMsisdn is null')
             ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
             ->andWhere('t.isBankGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT', 'bool'=>true])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findOpenGiveOutByTraders($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title = :profile')
+            ->andwhere('t.toMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.isOpenGive = :bool')
             ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT', 'bool'=>true])
             ->getQuery()
             ->getResult()
@@ -518,6 +563,23 @@ class TradeRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findOpenGiveOutByTradersByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title = :profile')
+            ->andwhere('t.toMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.isOpenGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT', 'bool'=>true])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 
     public function findGiveInBankByPointofsales($date1, $date2)
     {
@@ -535,6 +597,22 @@ class TradeRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findOpenGiveInByPointofsales($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title != :profile')
+            ->andwhere('t.fromMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.isOpenGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT', 'bool'=>true])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findGiveInBankByPointofsalesByDay($date1, $date2)
     {
         return $this->createQueryBuilder('t')
@@ -545,6 +623,23 @@ class TradeRepository extends ServiceEntityRepository
             ->andwhere('t.fromMsisdn is null')
             ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
             ->andWhere('t.isBankGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT', 'bool'=>true])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findOpenGiveInByPointofsalesByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.toMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title != :profile')
+            ->andwhere('t.fromMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.isOpenGive = :bool')
             ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT', 'bool'=>true])
             ->groupBy('day')
             ->getQuery()
@@ -579,6 +674,39 @@ class TradeRepository extends ServiceEntityRepository
             ->andwhere('t.toMsisdn is null')
             ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
             ->andWhere('t.isBankGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT', 'bool'=>true])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findOpenGiveOutByPointofsales($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title != :profile')
+            ->andwhere('t.toMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.isOpenGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT', 'bool'=>true])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findOpenGiveOutByPointofsalesByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.profile', 'p')
+            ->where('p.title != :profile')
+            ->andwhere('t.toMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.isOpenGive = :bool')
             ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'profile'=>'CAGNT', 'bool'=>true])
             ->groupBy('day')
             ->getQuery()
@@ -637,6 +765,64 @@ class TradeRepository extends ServiceEntityRepository
             ->andwhere('t.toMsisdn is null')
             ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
             ->andWhere('t.isBankGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'bool'=>true])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findOpenGiveOut($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->andwhere('t.toMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.isOpenGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'bool'=>true])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findOpenGiveIn($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, COUNT(t.id) as total')
+            ->innerJoin('t.toMsisdn', 's')
+            ->andwhere('t.fromMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.isOpenGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'bool'=>true])
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findOpenGiveOutByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->andwhere('t.toMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.isOpenGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'bool'=>true])
+            ->groupBy('day')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findOpenGiveInByDay($date1, $date2)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount, DATE(t.transactionAt) as day, COUNT(t.id) as total')
+            ->innerJoin('t.toMsisdn', 's')
+            ->andwhere('t.fromMsisdn is null')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('t.isOpenGive = :bool')
             ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'bool'=>true])
             ->groupBy('day')
             ->getQuery()
@@ -714,6 +900,17 @@ class TradeRepository extends ServiceEntityRepository
             ->groupBy('day')
             ->getQuery()
             ->getResult()
+            ;
+    }
+
+    public function findLastDate()
+    {
+        return $this->createQueryBuilder('t')
+            ->select('DATE(t.transactionAt) as day')
+            ->orderBy('day', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleScalarResult()
             ;
     }
     /*
