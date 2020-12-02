@@ -26,6 +26,7 @@ use App\Repository\PointofsaleRepository;
 use App\Repository\PrefectureRepository;
 use App\Repository\ProfileRepository;
 use App\Repository\RegionRepository;
+use App\Repository\SaleRepository;
 use App\Repository\SimCardRepository;
 use App\Repository\TownRepository;
 use App\Repository\TownshipRepository;
@@ -55,8 +56,9 @@ class Save
     private $user;
     private $master;
     private $calcCommission;
+    private $saleRepository;
 
-    public function __construct(EntityManagerInterface $manager, ZoneRepository $zoneRepository, RegionRepository $regionRepository, TownRepository $townRepository, PrefectureRepository $prefectureRepository, TownshipRepository $townshipRepository, DistrictRepository $districtRepository, ProfileRepository $profileRepository, TraderRepository $traderRepository, PointofsaleRepository $pointofsaleRepository, TypeRepository $typeRepository, SimCardRepository $simCardRepository, ControlRepository $controlRepository, Security $security, MasterSimRepository $masterRepository, CalcCommission $calcCommission)
+    public function __construct(EntityManagerInterface $manager, ZoneRepository $zoneRepository, RegionRepository $regionRepository, TownRepository $townRepository, PrefectureRepository $prefectureRepository, TownshipRepository $townshipRepository, DistrictRepository $districtRepository, ProfileRepository $profileRepository, TraderRepository $traderRepository, PointofsaleRepository $pointofsaleRepository, TypeRepository $typeRepository, SimCardRepository $simCardRepository, ControlRepository $controlRepository, Security $security, MasterSimRepository $masterRepository, CalcCommission $calcCommission, SaleRepository $saleRepository)
     {
         $this->manager = $manager;
         $this->zoneRepository = $zoneRepository;
@@ -74,6 +76,7 @@ class Save
         $this->master = $masterRepository->findOneBy(['name'=>'PHIL']);
         $this->user = $security->getUser();
         $this->calcCommission = $calcCommission;
+        $this->saleRepository = $saleRepository;
     }
 
     /**
@@ -471,20 +474,18 @@ class Save
     {
 
         $sim = new SimCard();
-        if($value['type'] == 'AGNT'){
+        if($value['fromSimName'] == 'NA'){
             $profile = $this->profileRepository->findOneBy(['title'=>$value['toSimProfile']]);
-
             $sim->setName($value['toSimName'])
                 ->setMsisdn($value['toSim'])
                 ->setProfile($profile)
             ;
-        }elseif($value['type'] == 'CSIN'){
+        }elseif($value['toSimProfile'] == 'NA'){
             $profile = $this->profileRepository->findOneBy(['title'=>$value['fromSimProfile']]);
             $sim->setName($value['fromSimName'])
                 ->setMsisdn($value['fromSim'])
                 ->setProfile($profile)
             ;
-
         }
         $sim->setIsActive(false)
             ->setMaster(null)
@@ -585,6 +586,7 @@ class Save
 
     public function addOnePosTransaction($value)
     {
+
         $type = $this->addType($value);
         $toSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['toSim']]);
         $fromSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['fromSim']]);
@@ -607,10 +609,13 @@ class Save
                 ->setDealerCommission($d_comm)
                 ->setPosComm($pos_comm)
                 ->setTransactionAt($value['transactionAt'])
+                ->setRefId($value['id'])
             ;
             $this->manager->persist($sale);
         }
     }
+
+
 
 
 }

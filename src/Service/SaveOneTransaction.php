@@ -12,11 +12,12 @@ class SaveOneTransaction
     {
 
         $this->save = $save;
+
     }
 
     public function getLine(Reader $reader)
     {
-        $idTitle = $reader->getTitle('REFERENCEID');
+        $idTitle = $reader->getTitle('ID');
         $amountTitle = $reader->getTitle('AMOUNT');
         $transactionDateTitle = $reader->getTitle('TRANSACTION DATE');
         $typeTitle= $reader->getTitle('TYPE');
@@ -35,10 +36,9 @@ class SaveOneTransaction
         $fromSim = $value[$title['fromSimTitle']];
         $toSim = $value[$title['toSimTitle']];
         $type = $value[$title['typeTitle']];
+        $id = $value[$title['idTitle']];
 
-
-
-        return compact('id', 'transactionAt', 'amount', 'fromSim', 'toSim', 'type');
+        return compact('id', 'transactionAt', 'amount', 'fromSim', 'toSim', 'type' );
     }
 
     public function save($value)

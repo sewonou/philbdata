@@ -272,6 +272,8 @@ class TraderStat
      * @param Search $search
      * @param Trader $trader
      * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getVirtualToBankByTraderTotal(Search $search, Trader $trader)
     {
@@ -286,6 +288,8 @@ class TraderStat
      * @param Search $search
      * @param Trader $trader
      * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getVirtualFromBankToTraderTotal(Search $search, Trader $trader)
     {
@@ -300,6 +304,8 @@ class TraderStat
      * @param Search $search
      * @param Trader $trader
      * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getVirtualToPosByTraderTotal(Search $search, Trader $trader)
     {
@@ -351,5 +357,29 @@ class TraderStat
         $id = $trader->getMsisdn()->getId();
         $master = $this->simCardRepository->findOneBy(['msisdn'=>'22897391919']);
         return $this->tradeRepository->findVirtualFromMasterToTraderTotal($startDate, $endDate, $id, $master);
+    }
+
+    public function getOpenGiveInByTraders(Search $search)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
+        return $this->tradeRepository->findOpenGiveInByTraders($startDate, $endDate);
+    }
+
+    public function getOpenGiveOutByTraders(Search $search)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+
+        return $this->tradeRepository->findOpenGiveOutByTraders($startDate, $endDate);
+    }
+
+    public function getOpenGiveInByTrader(Search $search, Trader $trader)
+    {
+        $startDate = $this->getStartDate($search);
+        $endDate = $this->getEndDate($search) ;
+        $id = $trader->getMsisdn()->getId();
+        return $this->tradeRepository->findOpenGiveByTrader($startDate, $endDate, $id);
     }
 }
