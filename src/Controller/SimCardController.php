@@ -32,7 +32,7 @@ class SimCardController extends AbstractController
      */
     public function index(SimCardStat $simCardStat)
     {
-        $simCards = $this->repository->findBy(['isActive'=>true], ['msisdn' => 'ASC'], null, null);
+        $simCards = $this->repository->findBy(['isActive'=>true], ['profile' => 'ASC'], null, null);
         return $this->render('sim_card/index.html.twig', [
             'simCards' => $simCards,
             'simCardStat' => $simCardStat,

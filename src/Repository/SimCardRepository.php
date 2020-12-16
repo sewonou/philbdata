@@ -58,7 +58,7 @@ class SimCardRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->innerJoin('s.profile', 'p')
-            //->andWhere('s.isActive = true')
+            ->andWhere('s.isActive = true')
             ->orderBy('s.id', 'ASC')
             ->getQuery()
             ->getResult();
@@ -69,8 +69,8 @@ class SimCardRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->innerJoin('s.pointofsale', 'pos')
             ->innerJoin('s.profile', 'p')
-            //->andWhere('pos.isActive = true')
-            //->andWhere('s.isActive = true')
+            ->andWhere('pos.isActive = true')
+            ->andWhere('s.isActive = true')
             ->orderBy('s.id', 'ASC')
             ->getQuery()
             ->getResult();
@@ -82,8 +82,7 @@ class SimCardRepository extends ServiceEntityRepository
             ->innerJoin('s.profile', 'p')
             ->innerJoin('s.pointofsale', 'pos')
             ->andWhere('p.title = :val1')
-            //->andWhere('pos.isActive = true')
-            //->andWhere('s.isActive = true')
+            ->andWhere('s.isActive = true')
             ->setParameters(['val1' => $profile])
             ->orderBy('s.id', 'ASC')
             ->getQuery()

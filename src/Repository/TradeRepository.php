@@ -391,6 +391,25 @@ class TradeRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findVirtualToOtherByPosTotal($date1, $date2, $id)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('SUM(t.amount) as amount')
+            ->innerJoin('t.type', 'type')
+            ->innerJoin('t.fromMsisdn', 's')
+            ->innerJoin('s.pointofsale', 'pointofsale')
+            ->andWhere('pointofsale.id = :id')
+            ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
+            ->andWhere('type.title = :val' )
+            ->andwhere('t.toMsisdn is  not null')
+            ->andWhere('t.isBankGive = :bool')
+            ->andWhere('t.isOpenGive = :bool')
+            ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id, 'bool'=>false])
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
     public function findVirtualToMasterByTrader($date1, $date2, $id, $master)
     {
         return $this->createQueryBuilder('t')

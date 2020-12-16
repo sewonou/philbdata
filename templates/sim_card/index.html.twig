@@ -25,6 +25,7 @@
                         <tr>
                             <th></th>
                             <th>Numéro</th>
+                            <th>Nom</th>
                             <th>Profil</th>
                             <th>Dernier mise à jour</th>
                             <th>Action</th>
@@ -36,6 +37,7 @@
                                 <tr>
                                     <td>{{ loop.index0 + 1  }}</td>
                                     <td>{{ simCard.msisdn }}</td>
+                                    <td>{{ simCard.name }}</td>
                                     <td>{% if simCard.profile %}{{ simCard.profile.title }}{% else %}Aucun profil enregistrer{% endif %}</td>
                                     <td>{{ simCard.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">

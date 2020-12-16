@@ -105,9 +105,21 @@ class User implements UserInterface, \Serializable
      */
     private $userRoles;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Syntax::class, mappedBy="author")
+     */
+    private $syntaxes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PriceList::class, mappedBy="author")
+     */
+    private $priceLists;
+
     public function __construct()
     {
         $this->userRoles = new ArrayCollection();
+        $this->syntaxes = new ArrayCollection();
+        $this->priceLists = new ArrayCollection();
     }
 
     /**
@@ -306,6 +318,68 @@ class User implements UserInterface, \Serializable
             $this->firstName,
             $this->lastName,
             ) = unserialize($serialized);
+    }
+
+    /**
+     * @return Collection|Syntax[]
+     */
+    public function getSyntaxes(): Collection
+    {
+        return $this->syntaxes;
+    }
+
+    public function addSyntax(Syntax $syntax): self
+    {
+        if (!$this->syntaxes->contains($syntax)) {
+            $this->syntaxes[] = $syntax;
+            $syntax->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSyntax(Syntax $syntax): self
+    {
+        if ($this->syntaxes->contains($syntax)) {
+            $this->syntaxes->removeElement($syntax);
+            // set the owning side to null (unless already changed)
+            if ($syntax->getAuthor() === $this) {
+                $syntax->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PriceList[]
+     */
+    public function getPriceLists(): Collection
+    {
+        return $this->priceLists;
+    }
+
+    public function addPriceList(PriceList $priceList): self
+    {
+        if (!$this->priceLists->contains($priceList)) {
+            $this->priceLists[] = $priceList;
+            $priceList->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removePriceList(PriceList $priceList): self
+    {
+        if ($this->priceLists->contains($priceList)) {
+            $this->priceLists->removeElement($priceList);
+            // set the owning side to null (unless already changed)
+            if ($priceList->getAuthor() === $this) {
+                $priceList->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
 
 }

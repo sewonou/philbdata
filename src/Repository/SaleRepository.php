@@ -682,7 +682,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInPointofsale($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, pos.name as name, pos.id as id")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, sim.name as name, pos.id as id")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -699,7 +699,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInPointofsaleByDay($date1, $date2, $id)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, pos.name as name, pos.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, sim.name as name, pos.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')
@@ -717,7 +717,7 @@ class SaleRepository extends ServiceEntityRepository
     public function findSaleInPointofsaleWithLimit($id, $limit)
     {
         return $this->createQueryBuilder('s')
-            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, pos.name as name, pos.id as id, DATE(s.transactionAt) as day")
+            ->select("COUNT(s.id) as total, SUM(s.dComm) as dComm, SUM(s.amount) as amount, SUM(s.posComm) as posComm, SUM(s.dCommCalc) as dCommCalc, SUM(s.posCommCalc) as posCommCalc, sim.name as name, pos.id as id, DATE(s.transactionAt) as day")
             ->innerJoin('s.type', 't')
             ->innerJoin('s.msisdn', 'sim')
             ->innerJoin('sim.pointofsale', 'pos')

@@ -74,7 +74,7 @@ class Pointofsale
     private $updateAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Control::class, mappedBy="pointofsale", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Control::class, mappedBy="pointofsale", cascade={"persist", "remove"})
      */
     private $controls;
 

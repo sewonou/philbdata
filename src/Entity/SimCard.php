@@ -70,9 +70,19 @@ class SimCard
     private $pointofsale;
 
     /**
-     * @ORM\OneToMany(targetEntity=Sale::class, mappedBy="msisdn")
+     * @ORM\OneToMany(targetEntity=Sale::class, mappedBy="msisdn", cascade={"persist", "remove"})
      */
     private $sales;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Trade::class, mappedBy="fromMsisdn", cascade={"persist", "remove"})
+     */
+    private $fromTrades;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Trade::class, mappedBy="toMsisdn", cascade={"persist", "remove"})
+     */
+    private $toTrades;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -82,6 +92,8 @@ class SimCard
     public function __construct()
     {
         $this->sales = new ArrayCollection();
+        $this->fromTrades = new ArrayCollection();
+        $this->toTrades = new ArrayCollection();
     }
 
     /**
@@ -240,6 +252,7 @@ class SimCard
 
         return $this;
     }
+
 
     public function getName(): ?string
     {

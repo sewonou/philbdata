@@ -14,7 +14,7 @@ class Reader
     public function __construct()
     {
         ini_set('max_execution_time', -1);
-        ini_set('memory_limit', '1024M');
+        ini_set('memory_limit', '1524M');
         $this->reader = new  Xlsx();
     }
 
