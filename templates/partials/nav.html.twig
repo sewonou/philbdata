@@ -95,16 +95,16 @@
                 <div class="sub-menu-i">
                     <ul class="sub-menu">
                         <li>
-                            <a href="#">Syntaxe flooz</a>
+                            <a href="{{ path('syntax') }}">Syntaxe flooz</a>
                         </li>
                         <li>
-                            <a href="#">Frais de retrait</a>
+                            <a href="{{ path('price_list', {'slug':'frais_de_retrait'}) }}">Frais de retrait</a>
                         </li>
                         <li>
-                            <a href="">Frais de retrait autres pays</a>
+                            <a href="{{ path('price_list', {'slug':'frais_de_retrait_autres_pays'}) }}">Frais de retrait autres pays</a>
                         </li>
                         <li>
-                            <a href="">Grille des commissions</a>
+                            <a href="{{ path('price_list', {'slug':'grille_des_commissions'}) }}">Grille des commissions</a>
                         </li>
                     </ul>
                 </div>
