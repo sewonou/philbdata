@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'price_list/_collection.html.twig' %}
+{% block title %}Grille des prix et commission{% endblock %}
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <h5 class="form-header">
+                            Ajouter une grille de prix et de commission
+                        </h5>
+                        {{ include('price_list/_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('assets/js/priceList.js') }}"></script>
+{% endblock %}
