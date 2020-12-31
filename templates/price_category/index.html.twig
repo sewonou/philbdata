@@ -32,10 +32,11 @@
                             {% for category in priceCategories %}
                                 <tr>
                                     <td>{{ loop.index0 + 1  }}</td>
-                                    <td class="text-left"><h3>{{ category.title }}</h3></td>
+                                    <td class="text-left"><a href="{{ path('price_list', {'slug': category.slug}) }}">{{ category.title }}</a></td>
                                     <td>{{ category.slug }}</td>
                                     <td>{{ category.priceLists | length }}</td>
                                     <td class="row-actions">
+                                        <a href="{{ path('price_list', {'slug': category.slug}) }}"><i class="fa fa-eye"></i></a>
                                         <a href="{{ path('setting_category_edit', {'id': category.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
                                         <a class="danger" href="{{ path('price_category_delete', {'id':category.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer la catégprie{{ category.id }}')"><i class="os-icon os-icon-ui-15"></i></a>
                                     </td>

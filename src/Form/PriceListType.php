@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\PriceCategory;
 use App\Entity\PriceList;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,6 +22,11 @@ class PriceListType extends ApplicationType
             ->add('commission', TextType::class, $this->getConfiguration('Commission réseau', 'Commission du réseau'))
             ->add('posCommission', TextType::class, $this->getConfiguration('Commission PDV', 'Commission PDV'))
             ->add('dealerCommission', TextType::class, $this->getConfiguration('Commission Dealer', 'Commission dealer'))
+            ->add('priceCategory', EntityType::class, $this->getConfiguration('Catégorie','', [
+                'placeholder' => "Choisir la catégorie",
+                'class'  => PriceCategory::class,
+                'choice_label' => 'title'
+            ]))
         ;
     }
 
