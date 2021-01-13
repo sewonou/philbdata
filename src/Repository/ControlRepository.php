@@ -28,8 +28,8 @@ class ControlRepository extends ServiceEntityRepository
             ->innerJoin('p.msisdn', 's')
             ->innerJoin('s.profile', 'pr')
             ->andWhere('c.isActive = :val')
-            ->andWhere('p.isActive = :val')
-            ->andWhere('s.isActive = :val')
+            /*->andWhere('p.isActive = :val')
+            ->andWhere('s.isActive = :val')*/
             ->andWhere('c.trader = :trader')
             ->setParameters(['val'=>$value, 'trader'=>$trader])
             ->orderBy('p.id', 'ASC')

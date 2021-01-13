@@ -1,0 +1,36 @@
+{{ form_start(form) }}
+<div class="row">
+    <fieldset class="form-group">
+        <legend><span>Identification</span></legend>
+        {{ form_row(form.msisdn) }}
+    </fieldset>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+        <fieldset class="form-group">
+            <legend><span>Valeur des transactions</span></legend>
+            <div class="row">
+                <div class="col-lg-6">{{ form_row(form.depositCount) }}</div>
+                <div class="col-lg-6">{{ form_row(form.depositValue) }}</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">{{ form_row(form.withdrawalCount) }}</div>
+                <div class="col-lg-6">{{ form_row(form.withdrawalValue) }}</div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-lg-6">
+        <fieldset class="form-group">
+            <legend><span>Commission</span></legend>
+            {{ form_row(form.dealerCommission) }}
+            {{ form_row(form.posCommission) }}
+        </fieldset>
+    </div>
+</div>
+
+
+<div class="form-buttons-w text-right compact">
+    <button class="btn btn-primary" type="submit"> Valider</button>
+</div>
+{{ form_end(form) }}
+

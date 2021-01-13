@@ -92,6 +92,14 @@ class AppFixtures extends Fixture
         ;
         $manager->persist($fileCategory);
 
+        $fileCategory = new FileCategory();
+        $fileCategory->setTitle('Fiche de Reporting Mensuel')
+            ->setSlug('monthlyReport')
+            ->setAuthor($adminUser)
+
+        ;
+        $manager->persist($fileCategory);
+
 
 
         $manager->flush();

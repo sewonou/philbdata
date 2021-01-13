@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Performance des commerciaux{% endblock %}
+{% block title %}Hello MonthlyReportController!{% endblock %}
 
 {% block body %}
     <div class="content-box">
@@ -34,10 +34,6 @@
                     </thead>
                     <tbody>
                     {% if traders %}
-                        {% set totalCommission = 0 %}
-                        {% set totalPos = 0  %}
-                        {% set totalGoal = 0 %}
-                        {% set row = 0 %}
                         {% for trader in traders %}
                             <tr>
                                 <td>{{ loop.index0 + 1  }}</td>
@@ -52,28 +48,13 @@
                                 <td>{{ trader.region.name }}</td>
                                 <td>{% if trader.msisdn %}{{ trader.msisdn.msisdn }}{% endif %}</td>
                                 <td class="text-right">{{ traderStat.traderPointofsale(trader) }}</td>
-                                <td class="text-right">{{ traderStat.traderInput(trader, search) | number_format(0, ',', ' ') }} F CFA</td>
-                                <td class="text-right">{{ traderStat.traderPeriodGoal(trader, search) | number_format(0, ',', ' ') }} F CFA</td>
-                                {% set totalCommission = traderStat.traderInput(trader, search) + totalCommission %}
-                                {% set totalPos = traderStat.traderPointofsale(trader) + totalPos %}
-                                {% set totalGoal = traderStat.traderPeriodGoal(trader, search) + totalGoal %}
+                                <td class="text-right">{{ 0 | number_format(0, ',', ' ') }} F CFA</td>
+                                <td class="text-right">{{ traderStat.getTraderMonthlyGoal(trader, search) | number_format(0, ',', ' ') }} F CFA</td>
                                 <td class="row-actions">
                                     <a href="{{ path('trader_show', {'id': trader.id}) }}"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
-                            {% set row = loop.index0+2 %}
                         {% endfor %}
-                        <tr>
-                            <td>{{ row }}</td>
-                            <td></td>
-                            <td class="text-left">Total</td>
-                            <td></td>
-                            <td></td>
-                            <td class="text-right">{{ totalPos | number_format(0, ',', ' ') }}</td>
-                            <td class="text-right">{{ totalCommission | number_format(0, ',', ' ')  }} F CFA</td>
-                            <td class="text-right">{{ totalGoal | number_format(0, ',', ' ') }} F CFA</td>
-                            <td></td>
-                        </tr>
                     {% endif %}
                     </tbody>
                 </table>

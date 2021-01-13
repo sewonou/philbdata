@@ -34,8 +34,8 @@ class ConfigFileRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->innerJoin('c.category', 'fc')
-            ->andWhere('fc.slug = :value')
-            ->orWhere('fc.slug = :value2')
+            ->andWhere('fc.slug != :value')
+            ->orWhere('fc.slug != :value2')
             ->setParameters(['value'=>$value, 'value2'=>$value2])
             ->orderBy('c.id', 'DESC')
             ->getQuery()

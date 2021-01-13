@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Entity\Balance;
 use App\Entity\Control;
 use App\Entity\District;
+use App\Entity\MonthlyReport;
 use App\Entity\Pointofsale;
 use App\Entity\Prefecture;
 use App\Entity\Profile;
@@ -612,6 +613,22 @@ class Save
                 ->setRefId($value['id'])
             ;
             $this->manager->persist($sale);
+        }
+    }
+
+    public function addMonthlyReport($value)
+    {
+        $msisdn = $this->simCardRepository->findOneBy(['msisdn'=>$value['msisdn']]);
+        if($value && $msisdn){
+            $monthlyReport = new MonthlyReport();
+            $monthlyReport->setMsisdn($msisdn)
+                ->setDepositCount($value['depositCount'])
+                ->setDepositValue($value['depositValue'])
+                ->setWithdrawalCount($value['withdrawalCount'])
+                ->setWithdrawalValue($value['withdrawalValue'])
+                ->setDealerCommission($value['dealerCommission'])
+                ->setPosCommission($value['posCommission'])
+            ;
         }
     }
 

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Rapport Mensuel{% endblock %}
+
+{% block body %}
+    <div class="content-box">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <h5 class="form-header">
+                            {% if monthly is defined %}
+                                Modification du report  : <strong>{{ monthly.id }}</strong>
+                            {% else %}
+                                Enregistrement d'un nouveau report mensuel.
+                            {% endif %}
+                        </h5>
+                        {{ include('monthly_report/_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

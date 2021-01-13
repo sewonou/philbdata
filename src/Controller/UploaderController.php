@@ -8,6 +8,7 @@ use App\Repository\SimCardRepository;
 use App\Repository\TraderRepository;
 use App\Service\Reader;
 use App\Service\SaveBalance;
+use App\Service\SaveMonthlyReport;
 use App\Service\SaveOneTransaction;
 use App\Service\SavePosCagnt;
 use App\Service\SaveTrader;
@@ -244,6 +245,35 @@ class UploaderController extends AbstractController
         $values = $this->reader->getValues();
         $title = $save->getLine($this->reader);
         $count = 0 ;
+        foreach ($values as $key=>$value){
+            $save->save($save->getValue($value, $title));
+            $count ++;
+        }
+        $this->addFlash('success', "$count enregistrement ont été ajouté dans la base de donnée" );
+        $file->setIsUpload(true);
+        $this->manager->persist($file);
+        $this->manager->flush();
+        return $this->redirectToRoute('transaction_file', [
+
+        ]);
+    }
+
+    /**
+     * @Route("/admin/uploads/monthlyReport/{id}", name="uploader_monthly_report")
+     * @param ConfigFile $file
+     * @param SaveMonthlyReport $save
+     * @return Response
+     */
+    public function uploadMonthlyReport(ConfigFile $file, SaveMonthlyReport $save):Response
+    {
+        $input = $this->helper->asset($file, 'file');
+        $this->reader->setInputFile(substr($input, 1))
+        ;
+
+        $values = $this->reader->getValues();
+        $title = $save->getLine($this->reader);
+        $count = 0 ;
+        $name = $file->getConfig()->getContent();
         foreach ($values as $key=>$value){
             $save->save($save->getValue($value, $title));
             $count ++;

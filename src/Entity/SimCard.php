@@ -89,11 +89,17 @@ class SimCard
      */
     private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity=MonthlyReport::class, mappedBy="msisdn")
+     */
+    private $monthlyReports;
+
     public function __construct()
     {
         $this->sales = new ArrayCollection();
         $this->fromTrades = new ArrayCollection();
         $this->toTrades = new ArrayCollection();
+        $this->monthlyReports = new ArrayCollection();
     }
 
     /**
@@ -262,6 +268,37 @@ class SimCard
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MonthlyReport[]
+     */
+    public function getMonthlyReports(): Collection
+    {
+        return $this->monthlyReports;
+    }
+
+    public function addMonthlyReport(MonthlyReport $monthlyReport): self
+    {
+        if (!$this->monthlyReports->contains($monthlyReport)) {
+            $this->monthlyReports[] = $monthlyReport;
+            $monthlyReport->setMsisdn($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMonthlyReport(MonthlyReport $monthlyReport): self
+    {
+        if ($this->monthlyReports->contains($monthlyReport)) {
+            $this->monthlyReports->removeElement($monthlyReport);
+            // set the owning side to null (unless already changed)
+            if ($monthlyReport->getMsisdn() === $this) {
+                $monthlyReport->setMsisdn(null);
+            }
+        }
 
         return $this;
     }

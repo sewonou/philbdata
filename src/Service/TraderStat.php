@@ -38,7 +38,7 @@ class TraderStat
         if(null != $search->getStartAt()){
             $startDate = $search->getStartAt();
         }
-        return$startDate;
+        return $startDate;
     }
 
     private function getEndDate(Search $search)
