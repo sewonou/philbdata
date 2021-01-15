@@ -49,6 +49,7 @@ class SaveMonthlyReport
 
     public function save($value)
     {
-        $this->save->addTransaction($value);
+
+        $this->save->addMonthlyReport($value);
     }
 }

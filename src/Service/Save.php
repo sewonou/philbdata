@@ -619,6 +619,12 @@ class Save
     public function addMonthlyReport($value)
     {
         $msisdn = $this->simCardRepository->findOneBy(['msisdn'=>$value['msisdn']]);
+        $theDate = new \DateTime();
+        $date = date_format( $theDate, 'Y-m-d');
+        $day = date_format($theDate, 'd');
+        $day = intval($day);
+        $monthEarly = date('Y-m-d',strtotime("-$day day",strtotime($date)));
+        $date = new \DateTime($monthEarly);
         if($value && $msisdn){
             $monthlyReport = new MonthlyReport();
             $monthlyReport->setMsisdn($msisdn)
@@ -628,8 +634,11 @@ class Save
                 ->setWithdrawalValue($value['withdrawalValue'])
                 ->setDealerCommission($value['dealerCommission'])
                 ->setPosCommission($value['posCommission'])
+                ->setCreatedAt($date);
             ;
+            $this->manager->persist($monthlyReport);
         }
+
     }
 
 

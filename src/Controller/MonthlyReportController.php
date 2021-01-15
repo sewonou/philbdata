@@ -39,9 +39,7 @@ class MonthlyReportController extends AbstractController
     {
         $traders =$this->traderRepository->findBy(['isTrader'=>true, 'isActive'=>true],['fullName'=>'ASC'],null, null);
         $search = new Search();
-        $search->setStartAt(new \DateTime('-1 day'))
-            ->setEndAt(new \DateTime('-1 day'))
-        ;
+
         $form = $this->createForm(SearchType::class, $search);
         $form->handleRequest($request);
         return $this->render('monthly_report/index.html.twig', [

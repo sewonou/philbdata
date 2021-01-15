@@ -269,11 +269,9 @@ class UploaderController extends AbstractController
         $input = $this->helper->asset($file, 'file');
         $this->reader->setInputFile(substr($input, 1))
         ;
-
         $values = $this->reader->getValues();
         $title = $save->getLine($this->reader);
         $count = 0 ;
-        $name = $file->getConfig()->getContent();
         foreach ($values as $key=>$value){
             $save->save($save->getValue($value, $title));
             $count ++;

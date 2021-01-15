@@ -64,7 +64,12 @@ class MonthlyReport
      */
     public function initialized()
     {
-        $this->createdAt = new \DateTime();
+        $theDate = new \DateTime();
+        $date = date_format( $theDate, 'Y-m-d');
+        $day = date_format($theDate, 'd');
+        $day = intval($day);
+        $monthEarly = date('Y-m-d',strtotime("-$day day",strtotime($date)));
+        $this->createdAt = $monthEarly;
     }
 
     public function getId(): ?int
