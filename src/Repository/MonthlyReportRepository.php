@@ -19,6 +19,26 @@ class MonthlyReportRepository extends ServiceEntityRepository
         parent::__construct($registry, MonthlyReport::class);
     }
 
+
+    public function findSaleByTrader($val, $trader, $date1, $date2)
+    {
+        return $this->createQueryBuilder('m')
+            ->select("SUM(m.dealerCommission) as dComm")
+            ->innerJoin('m.msisdn', 'sim')
+            ->innerJoin('sim.pointofsale', 'pos')
+            ->innerJoin('pos.controls', 'c')
+            ->innerJoin('c.trader', 't')
+            ->andWhere('sim.isActive = :val')
+            ->andWhere('pos.isActive = :val')
+            ->andWhere('c.isActive = :val')
+            ->andWhere('c.trader = :trader')
+            ->andWhere('DATE(m.createdAt) BETWEEN :date1 AND :date2')
+            ->setParameters(['val'=>$val, 'trader'=>$trader, 'date1'=>$date1, 'date2'=>$date2])
+            ->orderBy('t.id')
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
     // /**
     //  * @return MonthlyReport[] Returns an array of MonthlyReport objects
     //  */

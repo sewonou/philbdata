@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MonthlyReportController!{% endblock %}
+{% block title %}Reporting mensuel{% endblock %}
 
 {% block body %}
     <div class="content-box">
@@ -29,6 +29,7 @@
                         <th>Nbre PDV</th>
                         <th>Apport Commercial</th>
                         <th>Objectif Mensuel</th>
+                        <th></th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -46,10 +47,21 @@
                                 </td>
                                 <td>{{ trader.fullName }}</td>
                                 <td>{{ trader.region.name }}</td>
-                                <td>{% if trader.msisdn %}{{ trader.msisdn.msisdn }}{% endif %}</td>
-                                <td class="text-right">{{ traderStat.traderPointofsale(trader) }}</td>
-                                <td class="text-right">{{ 0 | number_format(0, ',', ' ') }} F CFA</td>
-                                <td class="text-right">{{ traderStat.getTraderMonthlyGoal(trader, search) | number_format(0, ',', ' ') }} F CFA</td>
+                                <td>{% if trader.msisdn %}
+                                        {{ trader.msisdn.msisdn }}{% endif %}
+                                </td>
+                                <td class="text-right">
+                                    {{ traderStat.traderPointofsale(trader) }}
+                                </td>
+                                <td class="text-right">
+                                    {{ traderStat.monthlyReport(trader, search) | number_format(0, ',', ' ') }} F CFA
+                                </td>
+                                <td class="text-right">
+                                    {{ traderStat.saleForTrader(trader, search) | number_format(0, ',', ' ') }} F CFA
+                                </td>
+                                <td class="text-right">
+                                    {{ traderStat.getTraderMonthlyGoal(trader, search) | number_format(0, ',', ' ') }} F CFA
+                                </td>
                                 <td class="row-actions">
                                     <a href="{{ path('trader_show', {'id': trader.id}) }}"><i class="fa fa-eye"></i></a>
                                 </td>
