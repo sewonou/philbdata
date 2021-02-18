@@ -28,11 +28,11 @@ class FileCategory
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=15, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Veuillez saisir un slug valide")
      * @Assert\Length(
-     *     max=12,
-     *     maxMessage="Le slug ne peut pas dépasser 12 carrectères"
+     *     max=255,
+     *     maxMessage="Le slug ne peut pas dépasser 255 carrectères"
      * )
      * @Assert\Regex(
      *     pattern = "/^[a-z0-9]+$/i",

@@ -68,6 +68,21 @@ class ConfigFile
      */
     private $isLoad;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isLoadDeposit;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isLoadWithdrawal;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isLoadOther;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -180,6 +195,42 @@ class ConfigFile
     public function setIsLoad(?bool $isLoad): self
     {
         $this->isLoad = $isLoad;
+
+        return $this;
+    }
+
+    public function getIsLoadDeposit(): ?bool
+    {
+        return $this->isLoadDeposit;
+    }
+
+    public function setIsLoadDeposit(?bool $isLoadDeposit): self
+    {
+        $this->isLoadDeposit = $isLoadDeposit;
+
+        return $this;
+    }
+
+    public function getIsLoadWithdrawal(): ?bool
+    {
+        return $this->isLoadWithdrawal;
+    }
+
+    public function setIsLoadWithdrawal(?bool $isLoadWithdrawal): self
+    {
+        $this->isLoadWithdrawal = $isLoadWithdrawal;
+
+        return $this;
+    }
+
+    public function getIsLoadOther(): ?bool
+    {
+        return $this->isLoadOther;
+    }
+
+    public function setIsLoadOther(?bool $isLoadOther): self
+    {
+        $this->isLoadOther = $isLoadOther;
 
         return $this;
     }

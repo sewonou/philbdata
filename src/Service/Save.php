@@ -497,19 +497,13 @@ class Save
         return $sim;
     }
 
-    /**
-     * @param $value
-     *
-     */
-    public function addTransaction($value)
+    public function addDeposit($value)
     {
-
         $type = $this->addType($value);
         $toSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['toSim']]);
         $fromSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['fromSim']]);
         $msisdn = (isset($toSim)) ? $toSim : $fromSim;
-
-        if($value['id'] && $value['type'] != 'GIVE'){
+        if($value['id'] && $value['type'] == 'CSIN'){
             if($msisdn == null){
                 $msisdn = $this->addSimT($value);
             }
@@ -523,7 +517,67 @@ class Save
                 ->setTransactionAt($value['transactionAt'])
             ;
             $this->manager->persist($sale);
-        }elseif ($value['id'] && $value['type'] == 'GIVE'){
+        }
+    }
+
+    public function addWithdrawal($value)
+    {
+        $type = $this->addType($value);
+        $toSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['toSim']]);
+        $fromSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['fromSim']]);
+        $msisdn = (isset($toSim)) ? $toSim : $fromSim;
+        if($value['id'] && $value['type'] == 'AGNT'){
+            if($msisdn == null){
+                $msisdn = $this->addSimT($value);
+            }
+            $sale = new Sale();
+            $sale->setMsisdn($msisdn)
+                ->setType($type)
+                ->setRefId($value['id'])
+                ->setAmount($value['amount'])
+                ->setDealerCommission($value['dealerCommission'])
+                ->setPosComm($value['posCommission'])
+                ->setTransactionAt($value['transactionAt'])
+            ;
+            $this->manager->persist($sale);
+        }
+    }
+
+    public function addOtherTransaction($value)
+    {
+        $type = $this->addType($value);
+        $toSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['toSim']]);
+        $fromSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['fromSim']]);
+        $msisdn = (isset($toSim)) ? $toSim : $fromSim;
+        if($value['id'] && $value['type'] != 'CSIN' && $value['type'] != 'AGNT' && $value['type'] != 'GIVE'){
+            if($msisdn == null){
+                $msisdn = $this->addSimT($value);
+            }
+            $sale = new Sale();
+            $sale->setMsisdn($msisdn)
+                ->setType($type)
+                ->setRefId($value['id'])
+                ->setAmount($value['amount'])
+                ->setDealerCommission($value['dealerCommission'])
+                ->setPosComm($value['posCommission'])
+                ->setTransactionAt($value['transactionAt'])
+            ;
+            $this->manager->persist($sale);
+        }
+    }
+
+    /**
+     * @param $value
+     *
+     */
+    public function addTransaction($value)
+    {
+
+        $type = $this->addType($value);
+        $toSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['toSim']]);
+        $fromSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['fromSim']]);
+
+        if ($value['id'] && $value['type'] == 'GIVE'){
 
             $trade = new Trade();
             $trade->setToMsisdn($toSim)

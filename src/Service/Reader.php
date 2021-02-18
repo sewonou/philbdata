@@ -124,4 +124,38 @@ class Reader
 
         return $data ;
     }
+
+    public function getTransactionValues($type)
+    {
+        $data = [];
+        $sheetData = $this->getData();
+        foreach ($sheetData as $key=>$value){
+            if($key != 1){
+
+                if($value['B']==$type){
+                    $data[$key] = $value ;
+                }
+
+            }
+        }
+
+        return $data ;
+    }
+
+    public function getOtherValues()
+    {
+        $data = [];
+        $sheetData = $this->getData();
+        foreach ($sheetData as $key=>$value){
+            if($key != 1){
+
+                if($value['B']!='AGNT' && $value['B']!='CSIN' && $value['B']!='GIVE'){
+                    $data[$key] = $value ;
+                }
+
+            }
+        }
+
+        return $data ;
+    }
 }
