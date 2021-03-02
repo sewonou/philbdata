@@ -66,22 +66,22 @@ class ConfigFile
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $isLoad;
+    private $isLoad = 0;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $isLoadDeposit;
+    private $isLoadDeposit = 0;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $isLoadWithdrawal;
+    private $isLoadWithdrawal = 0;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $isLoadOther;
+    private $isLoadOther = 0;
 
     public function getId(): ?int
     {

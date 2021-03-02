@@ -24,7 +24,7 @@
                                     <th>Date</th>
                                     <th>Configuration</th>
                                     <th>Fichier</th>
-                                    <th></th>
+                                    <th style="width:150px">Actions</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -38,10 +38,18 @@
                                             <th><a href="{{ vich_uploader_asset(file) }}">{{ file.fileName }}</a></th>
                                             <td class="row-actions">
                                                 {% if file.category.slug == 'transaction' %}
-                                                        <a href="{{ path('uploader_transaction', {'id' : file.id}) }}" class="btn btn-rounded btn-sm btn-outline-primary  {% if file.isUpload %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder les transactions"><i class="fa fa-upload"></i></a>
-                                                        <a href="{{ path('uploader_transaction_deposit', {'id' : file.id}) }}" class="btn btn-rounded btn-sm btn-outline-primary  {% if file.isLoadDeposit %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder la  transactions d'un PDV"><i class="fa fa-upload"></i></a>
-                                                        <a href="{{ path('uploader_transaction_withdrawal', {'id' : file.id}) }}" class="btn btn-rounded btn-sm btn-outline-primary  {% if file.isLoadWithdrawal %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder la  transactions d'un PDV"><i class="fa fa-upload"></i></a>
-                                                        <a href="{{ path('uploader_transaction_other', {'id' : file.id}) }}" class="btn btn-rounded btn-sm btn-outline-primary  {% if file.isLoadOther %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder la  transactions d'un PDV"><i class="fa fa-upload"></i></a>
+                                                        <a href="{{ path('uploader_transaction', {'id' : file.id}) }}" class="btn btn-outline-info btn-sm {% if file.isUpload %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder les transactions GIVE">
+                                                            <i class="os-icon os-icon-bar-chart-up"></i>
+                                                        </a>
+                                                        <a href="{{ path('uploader_transaction_deposit', {'id' : file.id}) }}" class="btn btn-outline-info btn-sm {% if file.isLoadDeposit %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder les Transaction AGNT">
+                                                            <i class="os-icon os-icon-bar-chart-down"></i>
+                                                        </a>
+                                                        <a href="{{ path('uploader_transaction_withdrawal', {'id' : file.id}) }}" class="btn btn-outline-info btn-sm {% if file.isLoadWithdrawal %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder les transactions CSIN">
+                                                            <i class="os-icon os-icon-bar-chart-stats-up"></i>
+                                                        </a>
+                                                        <a href="{{ path('uploader_transaction_other', {'id' : file.id}) }}" class="btn btn-outline-info btn-sm {% if file.isLoadOther %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder les autres transactions">
+                                                            <i class="os-icon os-icon-bar-chart-2"></i>
+                                                        </a>
                                                 {#<a href="{{ path('uploader_balance', {'id' : file.id}) }}" class="btn btn-rounded btn-sm btn-outline-primary  {% if file.isLoad %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder les solde"><i class="fa fa-balance-scale"></i></a>#}
                                                 {% elseif file.category.slug =='postransaction' %}
                                                     <a href="{{ path('uploader_one_transaction', {'id' : file.id}) }}" class="btn btn-rounded btn-sm btn-outline-primary  {% if file.isUpload %} disabled {% endif %}" data-toggle="tooltip" title="" data-original-title="Sauvegarder la  transactions d'un PDV"><i class="fa fa-upload"></i></a>
