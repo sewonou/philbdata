@@ -36,7 +36,7 @@ class PointofsaleType extends ApplicationType
                 },
                 'choice_label' => 'fullName',
             ]))
-            ->add('district', EntityType::class, $this->getConfiguration('Quartier', "", [
+            ->add('district', EntityType::class, $this->getConfiguration('', "", [
                 'placeholder' => "Choisir le quartier ou se localise le PDV",
                 'class'  => District::class,
                 'choice_label' => 'name'

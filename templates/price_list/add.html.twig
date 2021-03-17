@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% form_theme form 'price_list/_collection.html.twig' %}
 {% block title %}Grille des prix et commission{% endblock %}
 {% block body %}
     <div class="content-box">
@@ -7,38 +8,9 @@
                 <div class="element-wrapper">
                     <div class="element-box">
                         <h5 class="form-header">
-                            {% if price is defined %}
-                                Modification du prix id: {{ price.id }}
-                            {% else %}
-                                Enregistrement d'un nouveau prix
-                            {% endif %}
+                            Ajouter une grille de prix et de commission
                         </h5>
-                        {{ form_start(form) }}
-                        <fieldset class="form-group">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    {{ form_row(form.priceCategory) }}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">{{ form_row(form.minRange) }}</div>
-                                <div class="col-sm-6">{{ form_row(form.maxRange) }}</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">{{ form_row(form.minPrice) }}</div>
-                                <div class="col-sm-6">{{ form_row(form.maxPrice) }}</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4">{{ form_row(form.posCommission) }}</div>
-                                <div class="col-sm-4">{{ form_row(form.dealerCommission) }}</div>
-                                <div class="col-sm-4">{{ form_row(form.commission) }}</div>
-                            </div>
-
-                        </fieldset>
-                        <div class="form-buttons-w text-right compact">
-                            <button class="btn btn-primary" type="submit"> Valider</button>
-                        </div>
-                        {{ form_end(form) }}
+                        {{ include('price_list/_form.html.twig') }}
                     </div>
                 </div>
             </div>

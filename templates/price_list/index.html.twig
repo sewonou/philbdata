@@ -20,27 +20,23 @@
                         <thead>
                         <tr>
                             <th></th>
-                            <th>Plage</th>
-                            <th>Tarif client</th>
-                            <th>Commission PDV</th>
-                            <th>Commission Dealer</th>
-                            <th>Commission Réseau</th>
+                            <th>Syntaxe</th>
+                            <th>Description</th>
+                            <th>Dernière mise à jour</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {% if category is defined%}
-                            {% for price in category.priceLists %}
+                        {% if prices is defined%}
+                            {% for price in prices %}
                                 <tr>
                                     <td>{{ loop.index0 + 1  }}</td>
-                                    <td class="text-left">Entre {{ price.minRange }} et  {{ price.maxRange }}</td>
-                                    <td class="text-left">Entre {{ price.minPrice }} et  {{ price.maxPrice }}</td>
-                                    <td class="text-left">{{ price.posCommission }}</td>
-                                    <td class="text-left">{{ price.dealerCommission }}</td>
-                                    <td class="text-left">{{ price.commission }}</td>
+                                    <td class="text-left"><h3>{{ syntax.title }}</h3></td>
+                                    <td>{{ syntax.description }}</td>
+                                    <td>{{ syntax.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">
-                                        <a href="{{ path('price_list_edit', {'id': price.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
-                                        <a class="danger" href="{{ path('price_list_delete', {'id':price.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer le prix id : {{ price.id }}')"><i class="os-icon os-icon-ui-15"></i></a>
+                                        <a href="{{ path('syntax_edit', {'id': syntax.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
+                                        <a class="danger" href="{{ path('syntax_delete', {'id':syntax.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer la syntaxe{{ syntax.id }}')"><i class="os-icon os-icon-ui-15"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}
