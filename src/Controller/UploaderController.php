@@ -183,7 +183,7 @@ class UploaderController extends AbstractController
             ->setSheetName('POS_TRANSACTIONS')
         ;
 
-        $values = $this->reader->getTransactionValues('GIVE');
+        $values = $this->reader->getValues();
         $title = $save->getLine($this->reader);
         $count = 0 ;
         foreach ($values as $key=>$value){
