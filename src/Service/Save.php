@@ -543,28 +543,6 @@ class Save
         }
     }
 
-    public function addOtherTransaction($value)
-    {
-        $type = $this->addType($value);
-        $toSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['toSim']]);
-        $fromSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['fromSim']]);
-        $msisdn = (isset($toSim)) ? $toSim : $fromSim;
-        if($value['id'] && $value['type'] != 'CSIN' && $value['type'] != 'AGNT' && $value['type'] != 'GIVE'){
-            if($msisdn == null){
-                $msisdn = $this->addSimT($value);
-            }
-            $sale = new Sale();
-            $sale->setMsisdn($msisdn)
-                ->setType($type)
-                ->setRefId($value['id'])
-                ->setAmount($value['amount'])
-                ->setDealerCommission($value['dealerCommission'])
-                ->setPosComm($value['posCommission'])
-                ->setTransactionAt($value['transactionAt'])
-            ;
-            $this->manager->persist($sale);
-        }
-    }
 
     /**
      * @param $value
@@ -614,6 +592,19 @@ class Save
             }
 
             $this->manager->persist($trade);
+        }else{
+            $msisdn = (isset($toSim)) ? $toSim : $fromSim;
+            $sale = new Sale();
+            $sale->setMsisdn($msisdn)
+                ->setType($type)
+                ->setAmount($value['amount'])
+                ->setDealerCommission($value['dealerCommission'])
+                ->setPosComm($value['posCommission'])
+                ->setTransactionAt($value['transactionAt'])
+                ->setRefId($value['id'])
+            ;
+            $this->manager->persist($sale);
+
         }
     }
 
@@ -639,36 +630,7 @@ class Save
         }
     }
 
-    public function addOnePosTransaction($value)
-    {
 
-        $type = $this->addType($value);
-        $toSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['toSim']]);
-        $fromSim = $this->simCardRepository->findOneBy(['msisdn'=>$value['fromSim']]);
-        $msisdn = (isset($toSim)) ? $toSim : $fromSim;
-        $d_comm = 0;
-        $pos_comm = 0;
-        if($value && $value['type'] != 'GIVE'){
-            $commission = $this->calcCommission->getCommission($value);
-            if($msisdn->getProfile()->getTitle() == 'AGNT'){
-                $d_comm = $commission;
-                $pos_comm = 0;
-            }elseif (($msisdn->getProfile()->getTitle() == 'DISTRO')){
-                $d_comm = $this->calcCommission->getDealerComm($value);
-                $pos_comm = $this->calcCommission->getPosComm($value);
-            }
-            $sale = new Sale();
-            $sale->setMsisdn($msisdn)
-                ->setType($type)
-                ->setAmount($value['amount'])
-                ->setDealerCommission($d_comm)
-                ->setPosComm($pos_comm)
-                ->setTransactionAt($value['transactionAt'])
-                ->setRefId($value['id'])
-            ;
-            $this->manager->persist($sale);
-        }
-    }
 
     public function addMonthlyReport($value)
     {

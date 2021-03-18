@@ -60,18 +60,5 @@ class SaveTransaction
         $this->save->addTransaction($value);
     }
 
-    public function saveDeposit($value)
-    {
-        $this->save->addDeposit($value);
-    }
 
-    public function saveWithdrawal($value)
-    {
-        $this->save->addWithdrawal($value);
-    }
-
-    public function saveOtherTransaction($value)
-    {
-        $this->save->addOtherTransaction($value);
-    }
 }

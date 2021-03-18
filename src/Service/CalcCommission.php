@@ -32,7 +32,6 @@ class CalcCommission
      */
     public function getPosComm($commission)
     {
-
         return $commission*(80/100);
     }
 
@@ -43,7 +42,6 @@ class CalcCommission
      */
     public function getDealerComm($commission)
     {
-
         return $commission*(20/100);
     }
 
