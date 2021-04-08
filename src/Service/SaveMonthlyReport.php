@@ -15,7 +15,7 @@ class SaveMonthlyReport
 
     public function getLine(Reader $reader)
     {
-        $msisdnTitle = $reader->getTitle('NUMEROS DES PDV');
+        $msisdnTitle = $reader->getTitle('NUMERO DES PDV');
         $posNameTitle = $reader->getTitle('NOMS DES PDV');
         $profileTitle = $reader->getTitle('PROFIL');
         $depositCountTitle = $reader->getTitle('VOLUME DES DEPOTS');

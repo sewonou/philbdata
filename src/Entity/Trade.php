@@ -73,6 +73,11 @@ class Trade
      */
     private $isOpenGive;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $bankName;
+
 
     public function getId(): ?int
     {
@@ -192,6 +197,18 @@ class Trade
     public function setIsOpenGive(?bool $isOpenGive): self
     {
         $this->isOpenGive = $isOpenGive;
+
+        return $this;
+    }
+
+    public function getBankName(): ?string
+    {
+        return $this->bankName;
+    }
+
+    public function setBankName(?string $bankName): self
+    {
+        $this->bankName = $bankName;
 
         return $this;
     }

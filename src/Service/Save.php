@@ -526,7 +526,9 @@ class Save
                 switch ($value['toSimProfile']){
                     case 'BNKAGNT' :
                         $trade->setIsBankGive(true)
-                            ->setIsOpenGive(false);
+                            ->setIsOpenGive(false)
+                            ->setBankName($value['toSimName'])
+                        ;
                         break;
                     default :
                         $trade->setIsBankGive(false)
@@ -537,7 +539,9 @@ class Save
                 switch ($value['fromSimProfile']){
                     case 'BNKAGNT' :
                         $trade->setIsBankGive(true)
-                            ->setIsOpenGive(false);
+                            ->setIsOpenGive(false)
+                            ->setBankName($value['fromSimName'])
+                        ;
                         break;
                     default :
                         $trade->setIsBankGive(false)
