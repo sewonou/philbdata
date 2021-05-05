@@ -22,12 +22,12 @@
                         <thead>
                         <tr>
                             <th></th>
-                            <th>Commune</th>
+                            <th>Région</th>
                             <th>Préfecture</th>
+                            <th>Nbre Commune</th>
                             <th>PDV Agnt</th>
                             <th>PDV Distro</th>
                             <th>Total PDV</th>
-                            <th>Dernière mise à jour</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -36,12 +36,12 @@
                             {% for prefecture in prefectures %}
                                 <tr>
                                     <td>{{ loop.index0 + 1  }}</td>
-                                    <td>{% if prefecture.town %}{{ prefecture.town.name }}{% else %}Commune inexistante{% endif %}</td>
+                                    <td>{% if prefecture.region %}{{ prefecture.region.name }}{% else %}Région inexistante{% endif %}</td>
                                     <td>{{ prefecture.name }}</td>
+                                    <td>{{ prefecture.towns | length }}</td>
                                     <td>{{ zoningStat.pointofsaleInPrefecture(prefecture.id, 'AGNT') }}</td>
                                     <td>{{ zoningStat.pointofsaleInPrefecture(prefecture.id, 'DISTRO') }}</td>
                                     <td>{{ zoningStat.pointofsaleInPrefecture(prefecture.id, 'AGNT') + zoningStat.pointofsaleInPrefecture(prefecture.id, 'DISTRO') }}</td>
-                                    <td>{{ prefecture.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">
                                         <a href="{{ path('prefecture_edit', {'id': prefecture.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
                                         <a href="{{ path('prefecture_show', {'id': prefecture.id}) }}"><i class="fa fa-eye"></i></a>

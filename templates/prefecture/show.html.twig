@@ -105,8 +105,8 @@
                                                     <th></th>
                                                     <th>Point de vente</th>
                                                     <th>Numéro Flooz</th>
-                                                    <th>Profil</th>
                                                     <th>Commune</th>
+                                                    <th>Quartier</th>
                                                     <th>Commercial</th>
                                                     <th class="text-center" style="width: 90px;">Action</th>
                                                 </tr>
@@ -116,10 +116,14 @@
                                                     {% for pointofsale in pointofsales %}
                                                         <tr>
                                                             <td>{{ loop.index0 + 1  }}</td>
-                                                            <td><a href="{{ path('pointofsale_show', {'id': pointofsale.id}) }}">{{ pointofsale.name }}</a></td>
-                                                            <td>{% if pointofsale.msisdn %}{{ pointofsale.msisdn.msisdn }}{% endif %}</td>
-                                                            <td>{% if pointofsale.msisdn %}{{ pointofsale.msisdn.profile.title }}{% endif %}</td>
-                                                            <td>{% if pointofsale.district %}{{ pointofsale.district.township.prefecture.town.name }}{% endif %}</td>
+                                                            <td>
+                                                                <a href="{{ path('pointofsale_show', {'id': pointofsale.id}) }}">
+                                                                    {{ pointofsale.name }} | {% if pointofsale.msisdn %}{{ pointofsale.msisdn.profile.title }}{% endif %}
+                                                                </a>
+                                                            </td>
+                                                            <td>{% if pointofsale.msisdn %}{{ pointofsale.msisdn.msisdn }}{% endif %} </td>
+                                                            <td>{% if pointofsale.district %}{{ pointofsale.district.town.name }}{% endif %}</td>
+                                                            <td>{% if pointofsale.district %}{{ pointofsale.district.name }}{% endif %}</td>
                                                             <td>
                                                                 {% if pointofsale.controls %}
                                                                     {% for control in pointofsale.controls  %}

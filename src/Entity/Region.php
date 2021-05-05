@@ -45,21 +45,21 @@ class Region
     private $zone;
 
     /**
-     * @ORM\OneToMany(targetEntity=Town::class, mappedBy="region")
-     */
-    private $towns;
-
-    /**
      * @ORM\OneToMany(targetEntity=Trader::class, mappedBy="region")
      */
     private $traders;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Prefecture::class, mappedBy="region")
+     */
+    private $prefectures;
+
+
     public function __construct()
     {
-        $this->towns = new ArrayCollection();
         $this->traders = new ArrayCollection();
+        $this->prefectures = new ArrayCollection();
     }
-
 
     /**
      * @ORM\PrePersist()
@@ -113,37 +113,6 @@ class Region
     }
 
     /**
-     * @return Collection|Town[]
-     */
-    public function getTowns(): Collection
-    {
-        return $this->towns;
-    }
-
-    public function addTown(Town $town): self
-    {
-        if (!$this->towns->contains($town)) {
-            $this->towns[] = $town;
-            $town->setRegion($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTown(Town $town): self
-    {
-        if ($this->towns->contains($town)) {
-            $this->towns->removeElement($town);
-            // set the owning side to null (unless already changed)
-            if ($town->getRegion() === $this) {
-                $town->setRegion(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Trader[]
      */
     public function getTraders(): Collection
@@ -173,4 +142,36 @@ class Region
 
         return $this;
     }
+
+    /**
+     * @return Collection|Prefecture[]
+     */
+    public function getPrefectures(): Collection
+    {
+        return $this->prefectures;
+    }
+
+    public function addPrefecture(Prefecture $prefecture): self
+    {
+        if (!$this->prefectures->contains($prefecture)) {
+            $this->prefectures[] = $prefecture;
+            $prefecture->setRegion($this);
+        }
+
+        return $this;
+    }
+
+    public function removePrefecture(Prefecture $prefecture): self
+    {
+        if ($this->prefectures->contains($prefecture)) {
+            $this->prefectures->removeElement($prefecture);
+            // set the owning side to null (unless already changed)
+            if ($prefecture->getRegion() === $this) {
+                $prefecture->setRegion(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

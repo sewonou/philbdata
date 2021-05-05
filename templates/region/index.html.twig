@@ -25,10 +25,10 @@
                             <th></th>
                             <th>Zone</th>
                             <th>Region</th>
+                            <th>Nbre de Prefecture</th>
                             <th>PDV Agnt</th>
                             <th>PDV Distro</th>
                             <th>Total PDV</th>
-                            <th>Dernière mise à jour</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -39,10 +39,10 @@
                                     <td>{{ loop.index0 + 1  }}</td>
                                     <td>{% if region.zone %}{{ region.zone.name }}{% else %}Zone inexistante{% endif %}</td>
                                     <td>{{ region.name }}</td>
+                                    <td>{{ region.prefectures | length }}</td>
                                     <td>{{ zoningStat.pointofsaleInRegion(region.id, 'AGNT') }}</td>
                                     <td>{{ zoningStat.pointofsaleInRegion(region.id, 'DISTRO') }}</td>
                                     <td>{{ zoningStat.pointofsaleInRegion(region.id, 'AGNT') + zoningStat.pointofsaleInRegion(region.id, 'DISTRO') }}</td>
-                                    <td>{{ region.updateAt | date("F jS à g:ia") }}</td>
                                     <td class="row-actions">
                                         <a href="{{ path('region_edit', {'id': region.id}) }}"><i class="os-icon os-icon-ui-49"></i></a>
                                         <a href="{{ path('region_show', {'id': region.id}) }}"><i class="fa fa-eye"></i></a>

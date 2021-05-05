@@ -46,7 +46,6 @@ class Save
     private $regionRepository;
     private $townRepository;
     private $prefectureRepository;
-    private $townshipRepository;
     private $districtRepository;
     private $profileRepository;
     private $traderRepository;
@@ -59,14 +58,13 @@ class Save
     private $calcCommission;
     private $saleRepository;
 
-    public function __construct(EntityManagerInterface $manager, ZoneRepository $zoneRepository, RegionRepository $regionRepository, TownRepository $townRepository, PrefectureRepository $prefectureRepository, TownshipRepository $townshipRepository, DistrictRepository $districtRepository, ProfileRepository $profileRepository, TraderRepository $traderRepository, PointofsaleRepository $pointofsaleRepository, TypeRepository $typeRepository, SimCardRepository $simCardRepository, ControlRepository $controlRepository, Security $security, MasterSimRepository $masterRepository, CalcCommission $calcCommission, SaleRepository $saleRepository)
+    public function __construct(EntityManagerInterface $manager, ZoneRepository $zoneRepository, RegionRepository $regionRepository, TownRepository $townRepository, PrefectureRepository $prefectureRepository, DistrictRepository $districtRepository, ProfileRepository $profileRepository, TraderRepository $traderRepository, PointofsaleRepository $pointofsaleRepository, TypeRepository $typeRepository, SimCardRepository $simCardRepository, ControlRepository $controlRepository, Security $security, MasterSimRepository $masterRepository, CalcCommission $calcCommission, SaleRepository $saleRepository)
     {
         $this->manager = $manager;
         $this->zoneRepository = $zoneRepository;
         $this->regionRepository = $regionRepository;
         $this->townRepository = $townRepository;
         $this->prefectureRepository = $prefectureRepository;
-        $this->townshipRepository = $townshipRepository;
         $this->districtRepository = $districtRepository;
         $this->profileRepository = $profileRepository;
         $this->traderRepository = $traderRepository;
@@ -110,22 +108,50 @@ class Save
 
         $region = null ;
         if( isset($value['region'])){
-            $zone = $this->addZone($value);
-            $region = $this->regionRepository->findOneBy(['name' => $value['region'], 'zone'=>$zone]);
+            $region = $this->regionRepository->findOneBy(['name' => $value['region']]);
             if(empty($region)) {
                 $region = new Region();
             }
             $region
                 ->setName($value['region'])
-                ->setZone($zone)
             ;
             $this->manager->persist($region);
             $this->manager->flush();
-            $region = $this->regionRepository->findOneBy(['name'=>$value['region'], 'zone'=>$zone]);
+            $region = $this->regionRepository->findOneBy(['name'=>$value['region']]);
 
         }
 
         return $region;
+    }
+
+
+    /**
+     * @param $value
+     * @return Prefecture|null
+     */
+    public function addPrefecture($value)
+    {
+        $prefecture = null ;
+        if(isset($value['prefecture'])){
+            $region = $this->addRegion($value);
+            $prefecture = (empty($this->prefectureRepository->findOneBy(['name' => $value['prefecture'], 'region'=>$region]))) ?
+                $this->prefectureRepository->findOneBy(['name' => $value['prefecture']]) :
+                $this->prefectureRepository->findOneBy(['name' => $value['prefecture'], 'region'=>$region])
+            ;
+            if(empty($prefecture)) {
+                $prefecture = new Prefecture();
+            }
+            $prefecture
+                ->setName($value['prefecture'])
+                ->setRegion($region)
+            ;
+            $this->manager->persist($prefecture);
+            $this->manager->flush();
+            $prefecture = $this->prefectureRepository->findOneBy(['name'=>$value['prefecture'], 'region'=>$region]);
+        }
+
+
+        return $prefecture;
     }
 
     /**
@@ -136,72 +162,24 @@ class Save
 
         $town = null ;
         if(isset($value['town'])){
-            $region = $this->addRegion($value);
-            $town = $this->townRepository->findOneBy(['name' => $value['town'],'region'=>$region]);
+            $prefecture = $this->addPrefecture($value);
+            $town = (empty($this->townRepository->findOneBy(['name' => $value['town'],'prefecture'=>$prefecture])))?
+                $this->townRepository->findOneBy(['name' => $value['town']]) :
+                $this->townRepository->findOneBy(['name' => $value['town'],'prefecture'=>$prefecture])
+            ;
             if(empty($town)) {
                 $town = new Town();
             }
             $town
                 ->setName($value['town'])
-                ->setRegion($region)
+                ->setPrefecture($prefecture)
             ;
             $this->manager->persist($town);
             $this->manager->flush();
-            $town = $this->townRepository->findOneBy(['name'=>$value['town'],'region'=>$region]);
+            $town = $this->townRepository->findOneBy(['name'=>$value['town'],'prefecture'=>$prefecture]);
         }
 
         return $town;
-    }
-
-    /**
-     * @param $value
-     * @return Prefecture|null
-     */
-    public function addPrefecture($value)
-    {
-        $prefecture = null ;
-        if(isset($value['prefecture'])){
-            $town = $this->addTown($value);
-            $prefecture = $this->prefectureRepository->findOneBy(['name' => $value['prefecture'], 'town'=>$town]);
-            if(empty($prefecture)) {
-                $prefecture = new Prefecture();
-            }
-            $prefecture
-                ->setName($value['prefecture'])
-                ->setTown($town)
-            ;
-            $this->manager->persist($prefecture);
-            $this->manager->flush();
-            $prefecture = $this->prefectureRepository->findOneBy(['name'=>$value['prefecture'], 'town'=>$town]);
-        }
-
-
-        return $prefecture;
-    }
-
-    /**
-     * @param $value
-     * @return Township|null
-     */
-    public function addTownship($value){
-        $township = null ;
-        if (isset($value['township'])){
-            $prefecture = $this->addPrefecture($value);
-            $township = $this->townshipRepository->findOneBy(['name' => $value['township'], 'prefecture'=>$prefecture]);
-
-            if(empty($township)) {
-                $township = new Township();
-            }
-            $township
-                ->setName($value['township'])
-                ->setPrefecture($prefecture)
-            ;
-            $this->manager->persist($township);
-            $this->manager->flush();
-            $township = $this->townshipRepository->findOneBy(['name'=>$value['township'], 'prefecture'=>$prefecture]);
-        }
-
-        return $township;
     }
 
     /**
@@ -214,19 +192,22 @@ class Save
 
         if(isset($value['district'])){
 
-            $township = $this->addTownship($value);
-            $district = $this->districtRepository->findOneBy(['name'=>$value['district'], 'township'=> $township]);
+            $town = $this->addTown($value);
+            $district = (empty($this->districtRepository->findOneBy(['name'=>$value['district'], 'town'=> $town])))?
+                $this->districtRepository->findOneBy(['name'=>$value['district']]) :
+                $this->districtRepository->findOneBy(['name'=>$value['district'], 'town'=> $town])
+            ;
 
             if(empty($district)){
                 $district = new District();
             }
             $district
                 ->setName($value['district'])
-                ->setTownship($township)
+                ->setTown($town)
             ;
             $this->manager->persist($district);
             $this->manager->flush();
-            $district = $this->districtRepository->findOneBy(['name'=>$value['district'], 'township'=> $township]);
+            $district = $this->districtRepository->findOneBy(['name'=>$value['district'], 'town'=> $town]);
         }
 
 

@@ -32,15 +32,15 @@ class District
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Township::class, inversedBy="districts")
-     * @Assert\NotBlank(message="Veuillez choisir un canton valide")
-     */
-    private $township;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updateAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Town::class, inversedBy="districts")
+     */
+    private $town;
+
 
 
     /**
@@ -70,17 +70,7 @@ class District
         return $this;
     }
 
-    public function getTownship(): ?Township
-    {
-        return $this->township;
-    }
 
-    public function setTownship(?Township $township): self
-    {
-        $this->township = $township;
-
-        return $this;
-    }
 
     public function getUpdateAt(): ?\DateTimeInterface
     {
@@ -94,8 +84,17 @@ class District
         return $this;
     }
 
-    public function getPointofsale()
+    public function getTown(): ?Town
     {
-
+        return $this->town;
     }
+
+    public function setTown(?Town $town): self
+    {
+        $this->town = $town;
+
+        return $this;
+    }
+
+
 }

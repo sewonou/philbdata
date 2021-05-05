@@ -27,13 +27,11 @@ class SaveUniverse
         $longitudeTitle = $reader->getTitle('LONGITUDE');
         $contactTitle = $reader->getTitle('AUTRE CONTACT');
         $districtTitle = $reader->getTitle('QUARTIER');
-        $townshipTitle = $reader->getTitle('CANTON');
-        $prefectureTitle = $reader->getTitle('PREFECTURE');
         $townTitle = $reader->getTitle('COMMUNE');
+        $prefectureTitle = $reader->getTitle('PREFECTURE');
         $regionTitle = $reader->getTitle('REGION');
-        $zoneTitle = $reader->getTitle('ZONE');
         $traderTitle = $reader->getTitle('COMMERCIAL');
-        $title = compact('msisdnTitle', 'profileTitle', 'posTitle', 'activityTitle', 'localizationTitle', 'latitudeTitle', 'longitudeTitle', 'contactTitle', 'traderTitle',  'districtTitle', 'townshipTitle', 'prefectureTitle', 'townTitle', 'regionTitle', 'zoneTitle');
+        $title = compact('msisdnTitle', 'profileTitle', 'posTitle', 'activityTitle', 'localizationTitle', 'latitudeTitle', 'longitudeTitle', 'contactTitle', 'traderTitle',  'districtTitle', 'prefectureTitle', 'townTitle', 'regionTitle');
 
         return $title ;
     }
@@ -49,14 +47,12 @@ class SaveUniverse
         $longitude = strval($value[$title['longitudeTitle']]);
         $contact = mb_strtoupper($value[$title['contactTitle']]);
         $district = $value[$title['districtTitle']];
-        $township = $value[$title['townshipTitle']];
-        $prefecture = $value[$title['prefectureTitle']];
         $town = $value[$title['townTitle']];
+        $prefecture = $value[$title['prefectureTitle']];
         $region = $value[$title['regionTitle']];
-        $zone = $value[$title['zoneTitle']];
         $trader = $value[$title['traderTitle']];
 
-        return compact('msisdn', 'posName', 'profile', 'activity', 'localization', 'latitude', 'longitude', 'contact', 'trader', 'district', 'township', 'prefecture', 'town', 'region', 'zone');
+        return compact('msisdn', 'posName', 'profile', 'activity', 'localization', 'latitude', 'longitude', 'contact', 'trader', 'district', 'prefecture', 'town', 'region');
     }
 
     public function save($value)

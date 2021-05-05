@@ -35,9 +35,9 @@
                 </div>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div class="element-box">
+                        <div class="element-wrapper">
                             <div class="row">
-                                <div class="col-sm-8">
+                                <div class="col-sm-7">
                                     <div class="el-tablo bigger">
                                         <div class="label">
                                             Commission du : {% if lastSale %}{{ lastSale[0].day | date("jS F Y") }} {% endif %}
@@ -50,7 +50,7 @@
                                         <canvas height="170px" id="tradeChart" width="600px"></canvas>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-5">
                                     <div class="element-wrapper">
                                         <h6 class="element-header">
                                             Fiche du PDV
@@ -105,17 +105,7 @@
                                                         </td>
                                                         <td class="text-right">
                                                             {% if pointofsale.district %}
-                                                                {{ pointofsale.district.township.prefecture.town.region.name }}
-                                                            {% endif %}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="nowrap">
-                                                            Commune
-                                                        </td>
-                                                        <td class="text-right">
-                                                            {% if pointofsale.district %}
-                                                                {{ pointofsale.district.township.prefecture.town.name }}
+                                                                {{ pointofsale.district.town.prefecture.region.name }}
                                                             {% endif %}
                                                         </td>
                                                     </tr>
@@ -125,17 +115,17 @@
                                                         </td>
                                                         <td class="text-right">
                                                             {% if pointofsale.district %}
-                                                                {{ pointofsale.district.township.prefecture.name }}
+                                                                {{ pointofsale.district.town.prefecture.name }}
                                                             {% endif %}
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td class="nowrap">
-                                                            Canton
+                                                            Commune
                                                         </td>
                                                         <td class="text-right">
                                                             {% if pointofsale.district %}
-                                                                {{ pointofsale.district.township.name }}
+                                                                {{ pointofsale.district.town.name }}
                                                             {% endif %}
                                                         </td>
                                                     </tr>

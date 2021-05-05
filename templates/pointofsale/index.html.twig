@@ -39,7 +39,7 @@
                                     <td><a href="{{ path('pointofsale_show', {'id': pointofsale.id}) }}">{{ pointofsale.name }}</a></td>
                                     <td>{% if pointofsale.msisdn %}{{ pointofsale.msisdn.msisdn }}{% endif %}</td>
                                     <td>{% if pointofsale.msisdn %}{{ pointofsale.msisdn.profile.title }}{% endif %}</td>
-                                    <td>{% if pointofsale.district %}{{ pointofsale.district.township.prefecture.town.name }}{% endif %}</td>
+                                    <td>{% if pointofsale.district %}{{ pointofsale.district.town.name }}{% endif %}</td>
                                     <td>{% if pointofsale.district %}{{ pointofsale.district.name }}{% endif %}</td>
                                     <td>
                                         {% if pointofsale.controls %}

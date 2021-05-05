@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\District;
-use App\Entity\Township;
+use App\Entity\Town;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,10 +16,10 @@ class DistrictType extends ApplicationType
     {
         $builder
             ->add('name', TextType::class, $this->getConfiguration('Dénommination', "Sasir la dénommination du quartier"))
-            ->add('township',EntityType::class, $this->getConfiguration("Canton", "Choisir le canton d'appartenance", [
-                'class' => Township::class,
+            ->add('town',EntityType::class, $this->getConfiguration("Commune", "Choisir la commune d'appartenance", [
+                'class' => Town::class,
                 'choice_label' => 'name',
-                'placeholder' => "Choisir le canton d'appartenance..."
+                'placeholder' => "Choisir le commune d'appartenance..."
             ]))
         ;
     }

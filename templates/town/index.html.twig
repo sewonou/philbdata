@@ -22,7 +22,7 @@
                         <thead>
                         <tr>
                             <th></th>
-                            <th>Région</th>
+                            <th>Préfecture</th>
                             <th>Commune</th>
                             <th>PDV Agnt</th>
                             <th>PDV Distro</th>
@@ -36,7 +36,7 @@
                             {% for town in towns %}
                                 <tr>
                                     <td>{{ loop.index0 + 1  }}</td>
-                                    <td>{% if town.region %}{{ town.region.name }}{% else %}Region inexistante{% endif %}</td>
+                                    <td>{% if town.prefecture %}{{ town.prefecture.name }}{% else %}Préfecture inexistante{% endif %}</td>
                                     <td>{{ town.name }}</td>
                                     <td>{{ zoningStat.pointofsaleInTown(town.id, 'AGNT') }}</td>
                                     <td>{{ zoningStat.pointofsaleInTown(town.id, 'DISTRO') }}</td>

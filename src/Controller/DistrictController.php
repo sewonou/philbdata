@@ -9,6 +9,7 @@ use App\Form\SearchType;
 use App\Repository\DistrictRepository;
 use App\Repository\PointofsaleRepository;
 use App\Service\SimCardStat;
+use App\Service\ZoningSaleStat;
 use App\Service\ZoningStat;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -114,10 +115,10 @@ class DistrictController extends AbstractController
      * @param District $district
      * @param Request $request
      * @param PointofsaleRepository $pointofsaleRepository
-     * @param ZoningStat $zoningStat
+     * @param ZoningSaleStat $zoningStat
      * @return Response
      */
-    public function show(District $district, Request $request, PointofsaleRepository $pointofsaleRepository, ZoningStat $zoningStat):Response
+    public function show(District $district, Request $request, PointofsaleRepository $pointofsaleRepository, ZoningSaleStat $zoningStat):Response
     {
         $search = new Search();
         $form = $this->createForm(SearchType::class, $search);

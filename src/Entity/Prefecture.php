@@ -33,26 +33,26 @@ class Prefecture
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Town::class, inversedBy="prefectures")
-     * @Assert\NotBlank(message="Veuillez choisir une commune valide")
-     */
-    private $town;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updateAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Township::class, mappedBy="prefecture")
+     * @ORM\OneToMany(targetEntity=Town::class, mappedBy="prefecture")
      */
-    private $townships;
+    private $towns;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Region::class, inversedBy="prefectures")
+     */
+    private $region;
+
+
 
     public function __construct()
     {
-        $this->townships = new ArrayCollection();
+        $this->towns = new ArrayCollection();
     }
-
 
     /**
      * @ORM\PrePersist()
@@ -81,18 +81,6 @@ class Prefecture
         return $this;
     }
 
-    public function getTown(): ?Town
-    {
-        return $this->town;
-    }
-
-    public function setTown(?Town $town): self
-    {
-        $this->town = $town;
-
-        return $this;
-    }
-
     public function getUpdateAt(): ?\DateTimeInterface
     {
         return $this->updateAt;
@@ -106,33 +94,46 @@ class Prefecture
     }
 
     /**
-     * @return Collection|Township[]
+     * @return Collection|Town[]
      */
-    public function getTownships(): Collection
+    public function getTowns(): Collection
     {
-        return $this->townships;
+        return $this->towns;
     }
 
-    public function addTownship(Township $township): self
+    public function addTown(Town $town): self
     {
-        if (!$this->townships->contains($township)) {
-            $this->townships[] = $township;
-            $township->setPrefecture($this);
+        if (!$this->towns->contains($town)) {
+            $this->towns[] = $town;
+            $town->setPrefecture($this);
         }
 
         return $this;
     }
 
-    public function removeTownship(Township $township): self
+    public function removeTown(Town $town): self
     {
-        if ($this->townships->contains($township)) {
-            $this->townships->removeElement($township);
+        if ($this->towns->contains($town)) {
+            $this->towns->removeElement($town);
             // set the owning side to null (unless already changed)
-            if ($township->getPrefecture() === $this) {
-                $township->setPrefecture(null);
+            if ($town->getPrefecture() === $this) {
+                $town->setPrefecture(null);
             }
         }
 
         return $this;
     }
+
+    public function getRegion(): ?Region
+    {
+        return $this->region;
+    }
+
+    public function setRegion(?Region $region): self
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
 }

@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Prefecture;
-use App\Entity\Town;
+use App\Entity\Region;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,10 +15,10 @@ class PrefectureType extends ApplicationType
     {
         $builder
             ->add('name', TextType::class, $this->getConfiguration('Dénommination', "Saisir la dénommination de la préfecture"))
-            ->add('town',EntityType::class, $this->getConfiguration("Commune", "Choisir la commune d'appartenance", [
-                'class' => Town::class,
+            ->add('town',EntityType::class, $this->getConfiguration("Région", "Choisir la région d'appartenance", [
+                'class' => Region::class,
                 'choice_label' => 'name',
-                'placeholder' => "Choisir la commune d'appartenance ..."
+                'placeholder' => "Choisir la région d'appartenance ..."
             ]))
         ;
     }

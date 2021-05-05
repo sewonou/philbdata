@@ -32,26 +32,25 @@ class Town
      */
     private $name;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Region::class, inversedBy="towns")
-     * @Assert\NotBlank(message="Veuillez choisir une région valide")
-     */
-    private $region;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updateAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity=District::class, mappedBy="town")
+     */
+    private $districts;
 
     /**
-     * @ORM\OneToMany(targetEntity=Prefecture::class, mappedBy="town")
+     * @ORM\ManyToOne(targetEntity=Prefecture::class, inversedBy="towns")
      */
-    private $prefectures;
+    private $prefecture;
 
     public function __construct()
     {
-        $this->prefectures = new ArrayCollection();
+        $this->districts = new ArrayCollection();
     }
 
 
@@ -82,18 +81,6 @@ class Town
         return $this;
     }
 
-    public function getRegion(): ?Region
-    {
-        return $this->region;
-    }
-
-    public function setRegion(?Region $region): self
-    {
-        $this->region = $region;
-
-        return $this;
-    }
-
     public function getUpdateAt(): ?\DateTimeInterface
     {
         return $this->updateAt;
@@ -107,33 +94,46 @@ class Town
     }
 
     /**
-     * @return Collection|Prefecture[]
+     * @return Collection|District[]
      */
-    public function getPrefectures(): Collection
+    public function getDistricts(): Collection
     {
-        return $this->prefectures;
+        return $this->districts;
     }
 
-    public function addPrefecture(Prefecture $prefecture): self
+    public function addDistrict(District $district): self
     {
-        if (!$this->prefectures->contains($prefecture)) {
-            $this->prefectures[] = $prefecture;
-            $prefecture->setTown($this);
+        if (!$this->districts->contains($district)) {
+            $this->districts[] = $district;
+            $district->setTown($this);
         }
 
         return $this;
     }
 
-    public function removePrefecture(Prefecture $prefecture): self
+    public function removeDistrict(District $district): self
     {
-        if ($this->prefectures->contains($prefecture)) {
-            $this->prefectures->removeElement($prefecture);
+        if ($this->districts->contains($district)) {
+            $this->districts->removeElement($district);
             // set the owning side to null (unless already changed)
-            if ($prefecture->getTown() === $this) {
-                $prefecture->setTown(null);
+            if ($district->getTown() === $this) {
+                $district->setTown(null);
             }
         }
 
         return $this;
     }
+
+    public function getPrefecture(): ?Prefecture
+    {
+        return $this->prefecture;
+    }
+
+    public function setPrefecture(?Prefecture $prefecture): self
+    {
+        $this->prefecture = $prefecture;
+
+        return $this;
+    }
+
 }
