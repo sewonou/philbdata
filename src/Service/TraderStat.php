@@ -204,7 +204,8 @@ class TraderStat
         $startDate = $this->getStartDate($search);
         $endDate = $this->getEndDate($search) ;
         $id = $trader->getMsisdn()->getId();
-        return $this->tradeRepository->findVirtualFromPosToTrader($startDate, $endDate, $id);
+        $master = $this->simCardRepository->findOneBy(['msisdn'=>'22897391919']);
+        return $this->tradeRepository->findVirtualFromPosToTrader($startDate, $endDate, $id, $master);
     }
 
     /**
@@ -297,7 +298,8 @@ class TraderStat
         $startDate = $this->getStartDate($search);
         $endDate = $this->getEndDate($search) ;
         $id = $trader->getMsisdn()->getId();
-        return $this->tradeRepository->findVirtualFromPosToTraderTotal($startDate, $endDate, $id);
+        $master = $this->simCardRepository->findOneBy(['msisdn'=>'22897391919']);
+        return $this->tradeRepository->findVirtualFromPosToTraderTotal($startDate, $endDate, $id, $master);
     }
 
     /**

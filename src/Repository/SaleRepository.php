@@ -20,6 +20,11 @@ class SaleRepository extends ServiceEntityRepository
         parent::__construct($registry, Sale::class);
     }
 
+    public function findSaleByPointofsale($val, $date1, $date2, $pointofsale)
+    {
+
+    }
+
     public function findSaleByTrader($val, $trader, $date1, $date2)
     {
         return $this->createQueryBuilder('s')

@@ -39,8 +39,8 @@
                                 <th>{{ pointofsale.msisdn.profile.title }}</th>
                                 <td>{{ pointofsale.msisdn.msisdn }}</td>
                                 <td>{{ pointofsale.name }}</td>
-                                <td>{% if pointofsale.district  %}{{ pointofsale.district.township.prefecture.town.region.name }} {% endif %}</td>
-                                <td>{% if pointofsale.district  %}{{ pointofsale.district.township.prefecture.town.name }}{% endif %}</td>
+                                <td>{% if pointofsale.district  %}{{ pointofsale.district.town.prefecture.region.name }} {% endif %}</td>
+                                <td>{% if pointofsale.district  %}{{ pointofsale.district.town.name }}{% endif %}</td>
                                 <td>
                                     {% if pointofsale.controls %}
                                         {% for control in pointofsale.controls  %}

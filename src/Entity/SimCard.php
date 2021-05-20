@@ -29,11 +29,7 @@ class SimCard
     /**
      * @ORM\Column(type="string", length=25)
      * @Assert\NotBlank(message="Veuillez sasir un numéro valide")
-     * @Assert\Regex(
-     *     pattern="^[0-9]+$",
-     *     htmlPattern="^[0-9]+$",
-     *     message="Le numéro doit être composé de chiffre uniquement"
-     * )
+     *
      */
     private $msisdn;
 
