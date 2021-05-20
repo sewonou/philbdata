@@ -345,6 +345,7 @@ class TradeRepository extends ServiceEntityRepository
             ->andWhere('DATE(t.transactionAt) BETWEEN :date1 AND :date2')
             ->andWhere('type.title = :val' )
             ->andwhere('t.fromMsisdn is  not null')
+            ->andWhere('t.fromMsisdn != :master')
             ->andWhere('t.isBankGive = :bool')
             ->andWhere('t.isOpenGive = :bool')
             ->setParameters(['date1'=>$date1, 'date2'=>$date2, 'val'=> 'GIVE', 'id'=>$id, 'bool'=>false, 'master' => $master])
